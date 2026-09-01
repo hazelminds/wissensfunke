@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissensfunke – Quiz-Prototyp v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #FAFAFF;
+    --surface: #FFFFFF;
+    --ink: #1B1B2F;
+    --primary: #6C5CE7;
+    --primary-dark: #4E3FC4;
+    --primary-soft: #EFECFF;
+    --coral: #FF7A59;
+    --coral-dark: #E85A38;
+    --coral-soft: #FFEDE7;
+    --green: #00C896;
+    --green-dark: #00A67D;
+    --green-soft: #DFFBF3;
+    --red: #FF5A6E;
+    --red-dark: #E04054;
+    --red-soft: #FFE6E9;
+    --gold: #FFB800;
+    --gold-dark: #E29E00;
+    --gold-soft: #FFF4D9;
+    --muted: #8A8AA3;
+    --line: rgba(27,27,47,0.08);
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      radial-gradient(700px 400px at 100% -5%, rgba(108,92,231,0.10), transparent 55%),
+      radial-gradient(600px 380px at -5% 100%, rgba(255,122,89,0.10), transparent 55%),
+      var(--bg);
+    color: var(--ink);
+    font-family:'Nunito', sans-serif;
+    min-height:100vh;
+  }
+  .app{ max-width: 500px; margin: 0 auto; min-height:100vh; display:flex; flex-direction:column; padding: 0 18px 46px; }
+
+  .topbar{ display:flex; align-items:center; justify-content:space-between; padding: 22px 0 18px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand .mark{
+    width:38px; height:38px; border-radius:50%; background: linear-gradient(135deg, var(--primary), #9B8CFF);
+    display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow: 0 4px 0 var(--primary-dark);
+  }
+  .brand span{ font-family:'Fredoka'; font-weight:700; font-size:19px; color: var(--ink); }
+  .proto-badge{
+    font-family:'Nunito'; font-weight:700; font-size:10.5px; letter-spacing:0.04em; text-transform:uppercase; color: var(--primary);
+    background: var(--primary-soft); padding: 5px 11px; border-radius:20px;
+  }
+
+  .screen{ display:none; flex:1; flex-direction:column; }
+  .screen.active{ display:flex; }
+
+  /* START */
+  .start-hero{ padding: 12px 0 6px; }
+  .start-hero h1{ font-family:'Fredoka'; font-weight:700; font-size: 30px; line-height:1.2; margin:0 0 12px; }
+  .start-hero p{ font-size:15px; line-height:1.6; margin:0 0 22px; color:#54536B; max-width:400px; }
+
+  .cat-icons{ display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap; }
+  .cat-bubble{
+    width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:20px; box-shadow: 0 3px 0 rgba(27,27,47,0.12); background: var(--surface); border: 2px solid var(--line);
+  }
+
+  .meta-row{ display:flex; gap:9px; margin-bottom:30px; flex-wrap:wrap; }
+  .meta-chip{
+    font-family:'Nunito'; font-weight:700; font-size:12.5px; padding:9px 14px; border-radius:30px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .meta-chip.c1{ background: var(--primary-soft); color: var(--primary-dark); }
+  .meta-chip.c2{ background: var(--coral-soft); color: var(--coral-dark); }
+  .meta-chip.c3{ background: var(--green-soft); color: var(--green-dark); }
+
+  .btn3d{
+    font-family:'Fredoka'; font-weight:600; font-size:16px; border:none; border-radius:16px;
+    padding:16px 22px; cursor:pointer; width:100%; color:#fff; background: var(--primary);
+    box-shadow: 0 5px 0 var(--primary-dark); transition: transform .08s ease, box-shadow .08s ease;
+  }
+  .btn3d:active{ transform: translateY(4px); box-shadow: 0 1px 0 var(--primary-dark); }
+  .btn3d.ghost{ background: var(--surface); color: var(--ink); border:2px solid var(--line); box-shadow: 0 5px 0 var(--line); }
+  .btn3d.ghost:active{ box-shadow: 0 1px 0 var(--line); }
+  .btn3d.small{ width:auto; padding:13px 20px; font-size:14.5px; }
+
+  /* QUIZ */
+  .progress-wrap{ padding: 16px 0 4px; }
+  .progress-track{ height:12px; background: var(--line); border-radius:20px; overflow:hidden; }
+  .progress-fill{ height:100%; background: linear-gradient(90deg, var(--primary), var(--coral)); border-radius:20px; transition: width .4s ease; width:2%; }
+  .steps-row{ display:flex; justify-content:space-between; margin: 12px 4px 0; }
+  .step-node{
+    width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Fredoka'; font-weight:600; font-size:12px; border:2px solid var(--line); color: var(--muted); background: var(--surface);
+    transition: all .25s ease;
+  }
+  .step-node.current{ border-color: var(--primary); color: var(--primary); box-shadow: 0 0 0 4px var(--primary-soft); }
+  .step-node.ok{ background: var(--green); border-color: var(--green); color:#fff; }
+  .step-node.no{ background: var(--red); border-color: var(--red); color:#fff; }
+
+  .q-card{ margin-top: 26px; }
+  .q-cat{
+    display:inline-flex; align-items:center; gap:7px; font-family:'Nunito'; font-weight:700; font-size:12.5px;
+    color: var(--primary-dark); background: var(--primary-soft); padding:7px 13px; border-radius:20px; margin:0 0 16px;
+  }
+  .q-text{ font-family:'Fredoka'; font-weight:600; font-size: 21px; line-height:1.35; margin:0 0 22px; }
+
+  .options{ display:flex; flex-direction:column; gap:11px; }
+  .option{
+    text-align:left; font-family:'Nunito'; font-size:15px; font-weight:700; color: var(--ink);
+    background: var(--surface); border:2px solid var(--line); border-radius:14px; padding:12px 14px;
+    cursor:pointer; display:flex; align-items:center; gap:12px;
+    box-shadow: 0 3px 0 var(--line); transition: transform .08s ease, box-shadow .08s ease, background .15s ease, border-color .15s ease;
+  }
+  .option:hover:not(.disabled){ transform: translateY(-2px); box-shadow: 0 5px 0 var(--line); }
+  .option:active:not(.disabled){ transform: translateY(1px); box-shadow: 0 1px 0 var(--line); }
+  .opt-badge{
+    width:30px; height:30px; border-radius:9px; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Fredoka'; font-weight:700; font-size:13.5px; color:#fff;
+  }
+  .opt-badge.b0{ background: var(--primary); } .opt-badge.b1{ background: var(--coral); }
+  .opt-badge.b2{ background: var(--green); } .opt-badge.b3{ background: var(--gold); }
+  .option.correct{ background: var(--green-soft); border-color: var(--green); box-shadow: 0 3px 0 var(--green); }
+  .option.correct .opt-badge{ background: var(--green); }
+  .option.wrong{ background: var(--red-soft); border-color: var(--red); box-shadow: 0 3px 0 var(--red); }
+  .option.wrong .opt-badge{ background: var(--red); }
+  .option.disabled{ cursor:default; }
+  .option.dim{ opacity:0.45; }
+  .opt-result-icon{ margin-left:auto; font-size:16px; }
+
+  .explain{
+    margin-top:18px; padding:14px 16px; background: var(--primary-soft); border-radius:12px;
+    font-size:14px; color:#3B3860; line-height:1.55; display:none;
+  }
+  .explain.show{ display:block; }
+  .next-wrap{ margin-top:22px; display:none; }
+  .next-wrap.show{ display:block; }
+
+  /* RESULT */
+  .result-top{ text-align:center; padding: 14px 0 6px; }
+  .badge-wrap{ margin: 10px auto 16px; width:150px; height:150px; }
+  .score-badge{
+    width:150px; height:150px; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    animation: popIn .5s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes popIn{ 0%{ transform:scale(0.5); opacity:0; } 100%{ transform:scale(1); opacity:1; } }
+  .score-badge .emoji{ font-size:40px; margin-bottom:2px; }
+  .score-badge .num{ font-family:'Fredoka'; font-weight:700; font-size:19px; color:#fff; }
+  .rank-title{ font-family:'Fredoka'; font-weight:700; font-size:23px; margin: 0 0 8px; }
+  .rank-sub{ color:#54536B; font-size:14px; margin: 0 0 28px; }
+
+  .shop-card{
+    background: var(--surface); border:2px solid var(--line); border-radius:18px; padding:20px; margin-bottom:18px;
+  }
+  .shop-card h3{ font-family:'Fredoka'; font-size:16.5px; margin:0 0 3px; display:flex; align-items:center; gap:8px; }
+  .shop-card .sc-sub{ font-size:12.5px; color: var(--muted); margin:0 0 18px; }
+  .bars{ display:flex; flex-direction:column; gap:12px; margin-bottom:18px; }
+  .bar-row{ display:flex; align-items:center; gap:10px; }
+  .bar-row .lbl{ width:120px; font-size:12.5px; font-weight:700; flex-shrink:0; display:flex; align-items:center; gap:6px; }
+  .bar-track{ flex:1; height:10px; background: var(--line); border-radius:6px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:6px; width:0%; transition: width .5s ease .1s; }
+  .bar-fill.ok{ background: var(--green); }
+  .bar-fill.no{ background: var(--red); }
+  .bar-icon{ font-size:13px; width:16px; text-align:center; }
+  .blurred{ filter: blur(6px); opacity:0.55; pointer-events:none; user-select:none; }
+
+  .price-row{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
+  .price-tag{ font-family:'Fredoka'; font-weight:700; font-size:21px; color: var(--gold-dark); }
+  .price-note{ font-size:10.5px; color: var(--muted); font-weight:700; margin-top:2px; }
+  .unlocked-note{ font-size:13.5px; color: var(--green-dark); font-weight:800; display:flex; align-items:center; gap:6px; }
+
+  .share-row{ display:flex; gap:10px; margin-top: 4px; }
+  .share-row .btn3d{ flex:1; font-size:14px; padding:14px; }
+
+  .toast{
+    position: fixed; left:50%; bottom: 28px; transform: translateX(-50%) translateY(16px); opacity:0;
+    background: var(--ink); color: #fff; font-family:'Fredoka'; font-weight:600; font-size:13px;
+    padding:11px 20px; border-radius:30px; transition: all .25s ease; pointer-events:none; white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
+
+  .restart-link{ text-align:center; margin-top:16px; }
+  .confetti-piece{ position:fixed; top:-16px; width:8px; height:12px; z-index:50; pointer-events:none; border-radius:2px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand"><span class="mark">⚡</span><span>Wissensfunke</span></div>
+    <span class="proto-badge">Prototyp · v4</span>
+  </div>
+
+  <!-- START -->
+  <div class="screen active" id="screen-start">
+    <div class="start-hero">
+      <h1>Wie viel Funke steckt in dir? 🔥</h1>
+      <p>Fünf kurze Fragen quer durch fünf Themenwelten. Direkt nach der letzten Antwort siehst du dein Ergebnis.</p>
+      <div class="cat-icons">
+        <span class="cat-bubble">🌍</span><span class="cat-bubble">🧬</span><span class="cat-bubble">🏛️</span><span class="cat-bubble">⚗️</span><span class="cat-bubble">🎨</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-chip c1">⏱ 2 Min.</span>
+        <span class="meta-chip c2">❓ 5 Fragen</span>
+        <span class="meta-chip c3">🆓 Gratis-Ergebnis</span>
+      </div>
+    </div>
+    <button class="btn3d" onclick="startQuiz()">Quiz starten 🚀</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screen-quiz">
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="steps-row" id="stepsRow"></div>
+    </div>
+    <div class="q-card">
+      <span class="q-cat" id="qCat"><span id="qCatIcon">🌍</span><span id="qCatText">Kategorie</span></span>
+      <h2 class="q-text" id="qText">Frage</h2>
+      <div class="options" id="qOptions"></div>
+      <div class="explain" id="qExplain"></div>
+      <div class="next-wrap" id="nextWrap"><button class="btn3d" onclick="nextQuestion()" id="nextBtn">Weiter</button></div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-top">
+      <div class="badge-wrap"><div class="score-badge" id="scoreBadge"><span class="emoji" id="scoreEmoji">🌱</span><span class="num" id="scoreNum">0/5</span></div></div>
+      <h2 class="rank-title" id="rankTitle">–</h2>
+      <p class="rank-sub" id="rankSub">–</p>
+    </div>
+
+    <div class="shop-card">
+      <h3>📊 Themen-Analyse</h3>
+      <p class="sc-sub">Wo du wirklich glänzt – nach Kategorie sortiert</p>
+      <div class="bars blurred" id="bars"></div>
+      <div class="price-row" id="priceRow">
+        <div>
+          <div class="price-tag">2,99 €</div>
+          <div class="price-note">EINMALIG · KEIN ABO</div>
+        </div>
+        <button class="btn3d small" onclick="unlock()">🔓 Freischalten</button>
+      </div>
+    </div>
+
+    <div class="share-row">
+      <button class="btn3d ghost">🔗 Teilen</button>
+      <button class="btn3d ghost" onclick="restart()">🔁 Nochmal</button>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<script>
+  const catIcons = { 'Geografie':'🌍', 'Biologie':'🧬', 'Geschichte':'🏛️', 'Chemie':'⚗️', 'Kunst':'🎨' };
+  const questions = [
+    { cat:'Geografie', q:'Welches Land hat aktuell die meisten Einwohner der Welt?', opts:['China','Indien','USA','Indonesien'], correct:1, exp:'Indien hat China laut UN-Schätzungen um 2023 als bevölkerungsreichstes Land der Welt abgelöst.' },
+    { cat:'Biologie', q:'Wie viele Knochen hat ein erwachsener Mensch normalerweise?', opts:['186','206','226','246'], correct:1, exp:'Ein erwachsenes Skelett besteht aus 206 Knochen – Babys kommen mit deutlich mehr zur Welt, viele wachsen später zusammen.' },
+    { cat:'Geschichte', q:'In welchem Jahr fiel die Berliner Mauer?', opts:['1987','1989','1991','1993'], correct:1, exp:'Am 9. November 1989 öffneten sich die Grenzübergänge in Berlin.' },
+    { cat:'Chemie', q:'Für welches Element steht das chemische Symbol „Au"?', opts:['Silber','Aluminium','Gold','Argon'], correct:2, exp:'„Au" kommt vom lateinischen Wort „aurum" für Gold.' },
+    { cat:'Kunst', q:'Wer malte die Mona Lisa?', opts:['Michelangelo','Raffael','Botticelli','Leonardo da Vinci'], correct:3, exp:'Leonardo da Vinci begann das Gemälde um 1503 – es hängt heute im Louvre in Paris.' }
+  ];
+
+  let current = 0, score = 0, answered = false;
+  const results = [];
+
+  function startQuiz(){
+    current = 0; score = 0; answered = false; results.length = 0;
+    show('screen-quiz');
+    renderSteps();
+    renderQuestion();
+  }
+
+  function show(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  function renderSteps(){
+    const row = document.getElementById('stepsRow');
+    row.innerHTML = '';
+    questions.forEach((q,i) => {
+      const el = document.createElement('div');
+      el.className = 'step-node';
+      el.id = 'step-' + i;
+      el.textContent = (i+1);
+      row.appendChild(el);
+    });
+  }
+
+  function updateSteps(){
+    questions.forEach((q,i) => {
+      const el = document.getElementById('step-' + i);
+      el.classList.remove('current','ok','no');
+      if(i < results.length){ el.classList.add(results[i].ok ? 'ok' : 'no'); el.textContent = results[i].ok ? '✓' : '✕'; }
+      else if(i === current){ el.classList.add('current'); el.textContent = (i+1); }
+      else { el.textContent = (i+1); }
+    });
+  }
+
+  function renderQuestion(){
+    answered = false;
+    const q = questions[current];
+    document.getElementById('progressFill').style.width = ((current)/questions.length*100) + '%';
+    updateSteps();
+    document.getElementById('qCatIcon').textContent = catIcons[q.cat] || '❔';
+    document.getElementById('qCatText').textContent = q.cat;
+    document.getElementById('qText').textContent = q.q;
+    document.getElementById('qExplain').classList.remove('show');
+    document.getElementById('qExplain').textContent = '';
+    document.getElementById('nextWrap').classList.remove('show');
+    document.getElementById('nextBtn').textContent = (current === questions.length-1) ? 'Ergebnis ansehen 🎉' : 'Weiter';
+
+    const letters = ['A','B','C','D'];
+    const wrap = document.getElementById('qOptions');
+    wrap.innerHTML = '';
+    q.opts.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.innerHTML = '<span class="opt-badge b'+i+'">'+letters[i]+'</span><span>' + opt + '</span><span class="opt-result-icon"></span>';
+      btn.onclick = () => selectAnswer(i, btn);
+      wrap.appendChild(btn);
+    });
+  }
+
+  function selectAnswer(i, btn){
+    if(answered) return;
+    answered = true;
+    const q = questions[current];
+    const correct = i === q.correct;
+    if(correct) score++;
+    results.push({ cat:q.cat, ok: correct });
+
+    document.querySelectorAll('#qOptions .option').forEach((el, idx) => {
+      el.classList.add('disabled');
+      if(idx === q.correct){ el.classList.add('correct'); el.querySelector('.opt-result-icon').textContent = '✓'; }
+      else if(idx === i){ el.classList.add('wrong'); el.querySelector('.opt-result-icon').textContent = '✕'; }
+      else el.classList.add('dim');
+    });
+
+    updateSteps();
+    const exp = document.getElementById('qExplain');
+    exp.textContent = q.exp;
+    exp.classList.add('show');
+    document.getElementById('nextWrap').classList.add('show');
+  }
+
+  function nextQuestion(){
+    current++;
+    if(current >= questions.length){ showResult(); return; }
+    renderQuestion();
+  }
+
+  function showResult(){
+    show('screen-result');
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('scoreNum').textContent = score + '/' + questions.length;
+
+    const ranks = [
+      { min:0, title:'Neugieriger Anfänger', sub:'Da geht noch was – guter Einstieg trotzdem!', emoji:'🌱', color: 'linear-gradient(135deg, #00C896, #00A67D)' },
+      { min:2, title:'Solides Grundwissen', sub:'Die Basics sitzen sicher.', emoji:'🥉', color: 'linear-gradient(135deg, #FF7A59, #E85A38)' },
+      { min:4, title:'Wissens-Ass', sub:'Fast alles richtig – sehr stark!', emoji:'🥈', color: 'linear-gradient(135deg, #6C5CE7, #4E3FC4)' },
+      { min:5, title:'Trivia-Champion', sub:'Perfekte Runde. Alle 5 Fragen richtig!', emoji:'🏆', color: 'linear-gradient(135deg, #FFB800, #E29E00)' }
+    ];
+    let rank = ranks[0];
+    ranks.forEach(r => { if(score >= r.min) rank = r; });
+    document.getElementById('rankTitle').textContent = rank.title;
+    document.getElementById('rankSub').textContent = rank.sub;
+    document.getElementById('scoreEmoji').textContent = rank.emoji;
+    document.getElementById('scoreBadge').style.background = rank.color;
+    document.getElementById('scoreBadge').style.boxShadow = '0 8px 0 rgba(0,0,0,0.12)';
+
+    const bars = document.getElementById('bars');
+    bars.innerHTML = '';
+    results.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'bar-row';
+      row.innerHTML = '<span class="lbl"><span class="bar-icon">'+(catIcons[r.cat]||'❔')+'</span>' + r.cat + '</span><div class="bar-track"><div class="bar-fill ' + (r.ok?'ok':'no') + '" data-w="' + (r.ok?100:15) + '"></div></div>';
+      bars.appendChild(row);
+    });
+
+    if(score === questions.length){ setTimeout(burstConfetti, 250); }
+  }
+
+  function unlock(){
+    document.getElementById('bars').classList.remove('blurred');
+    document.querySelectorAll('#bars .bar-fill').forEach(el => {
+      requestAnimationFrame(() => { el.style.width = el.dataset.w + '%'; });
+    });
+    document.getElementById('priceRow').innerHTML = '<span class="unlocked-note">✅ Freigeschaltet – Demo, kein echtes Geld</span>';
+    toast('Themen-Analyse freigeschaltet 🎉');
+  }
+
+  function burstConfetti(){
+    const colors = ['#6C5CE7','#FF7A59','#00C896','#FFB800'];
+    for(let i=0;i<18;i++){
+      const p = document.createElement('div');
+      p.className = 'confetti-piece';
+      p.style.left = (15 + Math.random()*70) + 'vw';
+      p.style.top = '20vh';
+      p.style.background = colors[i % colors.length];
+      p.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+      p.style.transition = 'transform 850ms ease-out, top 850ms cubic-bezier(.2,.8,.4,1), opacity 850ms ease-in';
+      document.body.appendChild(p);
+      requestAnimationFrame(() => {
+        p.style.top = (65 + Math.random()*20) + 'vh';
+        p.style.transform = 'rotate(' + (Math.random()*600-300) + 'deg)';
+        p.style.opacity = '0';
+      });
+      setTimeout(() => p.remove(), 900);
+    }
+  }
+
+  function restart(){ show('screen-start'); }
+
+  function toast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+</script>
+</body>
+</html>
