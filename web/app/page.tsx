@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { games, levelMeta, type ProductLevel } from "@/content/games";
+import { SiteHeader } from "@/components/SiteHeader";
 
 const SECTION_ORDER: ProductLevel[] = ["daily-free", "weekly-freemium"];
 
 export default function HomePage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-14 px-5 pb-20 pt-8">
-      <TopBar />
+      <SiteHeader />
       <Hero />
       {SECTION_ORDER.map((level) => (
         <GameSection key={level} level={level} />
@@ -14,22 +15,6 @@ export default function HomePage() {
       <SubscriptionTeaser />
       <Footer />
     </div>
-  );
-}
-
-function TopBar() {
-  return (
-    <header className="flex items-center justify-between">
-      <div className="flex items-center gap-2.5">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#9b8cff] text-lg shadow-[0_4px_0_var(--wf-primary-dark)]">
-          ⚡
-        </span>
-        <span className="font-display text-lg font-bold text-ink">Wissensfunke</span>
-      </div>
-      <span className="rounded-full bg-primary-soft px-3 py-1.5 text-[10.5px] font-bold tracking-wide text-primary-dark uppercase">
-        Beta
-      </span>
-    </header>
   );
 }
 

@@ -92,3 +92,14 @@ body {
 .btn-3d-primary:active {
   box-shadow: 0 1px 0 var(--wf-primary-dark);
 }
+
+@keyframes popIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
