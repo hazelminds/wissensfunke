@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monetarisierungs-Rechner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<style>
+  :root{
+    --bg: #0F1B2D;
+    --bg-deep: #0A1420;
+    --panel-2: #16233A;
+    --paper: #F2EFE9;
+    --gold: #C9A961;
+    --gold-dim: #8E7A47;
+    --sage: #7FB069;
+    --rust: #C1666B;
+    --muted: #8B93A7;
+    --line: rgba(242,239,233,0.10);
+    --line-strong: rgba(242,239,233,0.22);
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(201,169,97,0.08), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(127,176,105,0.06), transparent 55%),
+      var(--bg);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 28px 20px 60px;
+  }
+  .wrap{ max-width: 1180px; margin: 0 auto; }
+
+  /* header */
+  .masthead{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 18px; margin-bottom: 26px;
+    flex-wrap: wrap; gap: 14px;
+  }
+  .masthead .kicker{
+    font-family:'IBM Plex Mono'; font-size:11px; letter-spacing:0.14em; text-transform:uppercase;
+    color: var(--gold); margin: 0 0 6px;
+  }
+  .masthead h1{
+    font-family:'Fraunces', serif; font-weight:600; font-size: 30px; line-height:1.1;
+    margin:0; color: var(--paper);
+  }
+  .masthead p{
+    font-family:'IBM Plex Mono'; font-size: 12px; color: var(--muted); margin: 8px 0 0; max-width: 480px;
+  }
+  .badge-stamp{
+    font-family:'IBM Plex Mono'; font-size: 10.5px; letter-spacing:0.08em; color: var(--gold);
+    border: 1px solid var(--gold-dim); border-radius: 3px; padding: 6px 10px;
+    transform: rotate(-2deg); white-space:nowrap;
+  }
+
+  .grid{ display:grid; grid-template-columns: 360px 1fr; gap: 22px; align-items:start; }
+  @media (max-width: 880px){ .grid{ grid-template-columns: 1fr; } }
+
+  .card{
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 22px;
+  }
+
+  /* input panel */
+  .section-title{
+    font-family:'Fraunces', serif; font-weight:600; font-size: 15px; color: var(--gold);
+    margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px dashed var(--line-strong);
+  }
+  .field{ margin-bottom: 18px; }
+  .field:last-child{ margin-bottom: 0; }
+  .field-row{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px; gap: 8px; }
+  .field label{ font-size: 12.5px; color: var(--paper); font-weight:500; }
+  .field .val{
+    font-family:'IBM Plex Mono'; font-size: 13px; color: var(--sage); font-weight:600; white-space:nowrap;
+  }
+  input[type="range"]{
+    -webkit-appearance:none; width:100%; height:4px; border-radius:2px;
+    background: linear-gradient(to right, var(--gold) 0%, var(--gold) var(--fill,50%), rgba(242,239,233,0.14) var(--fill,50%), rgba(242,239,233,0.14) 100%);
+    outline:none; margin: 2px 0;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:15px; height:15px; border-radius:50%;
+    background: var(--paper); border: 2px solid var(--gold); cursor:pointer; margin-top:-0.5px;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:13px; height:13px; border-radius:50%; background: var(--paper); border: 2px solid var(--gold); cursor:pointer;
+  }
+  .group-gap{ height: 22px; }
+
+  .divider-label{
+    display:flex; align-items:center; gap:10px; margin: 22px 0 16px;
+    font-family:'IBM Plex Mono'; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color: var(--muted);
+  }
+  .divider-label::before, .divider-label::after{ content:''; flex:1; height:1px; background: var(--line-strong); }
+
+  /* output side */
+  .stamp-card{
+    background: var(--panel-2); border: 1px solid var(--line-strong); border-radius: 10px;
+    padding: 26px 26px 22px; position:relative; overflow:hidden;
+  }
+  .stamp-card::before{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(135deg, rgba(201,169,97,0.05), transparent 40%);
+    pointer-events:none;
+  }
+  .stamp-label{
+    font-family:'IBM Plex Mono'; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color: var(--muted);
+    margin:0 0 10px;
+  }
+  .stamp-total{
+    font-family:'Fraunces', serif; font-weight:700; font-size: 52px; color: var(--sage);
+    line-height:1; margin:0; letter-spacing: -0.01em;
+  }
+  .stamp-total .cents{ font-size: 26px; color: var(--sage); opacity:0.7; }
+  .stamp-sub{
+    font-family:'IBM Plex Mono'; font-size:12px; color: var(--muted); margin: 10px 0 0;
+  }
+  .stamp-box{
+    display:inline-block; border: 1.5px double var(--gold-dim); border-radius: 4px;
+    padding: 4px 12px; margin-top: 14px; transform: rotate(-1.2deg);
+    font-family:'IBM Plex Mono'; font-size: 10.5px; letter-spacing:0.1em; color: var(--gold); text-transform:uppercase;
+  }
+
+  .stat-row{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  @media (max-width: 620px){ .stat-row{ grid-template-columns: 1fr; } }
+  .stat{
+    background: var(--panel-2); border: 1px solid var(--line-strong); border-radius: 8px; padding: 14px 16px;
+  }
+  .stat .k{ font-family:'IBM Plex Mono'; font-size: 10.5px; color: var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin:0 0 6px; }
+  .stat .v{ font-family:'IBM Plex Mono'; font-size: 19px; color: var(--paper); font-weight:600; margin:0; }
+  .stat .v.pos{ color: var(--sage); }
+  .stat .v.neg{ color: var(--rust); }
+
+  .chart-card{ margin-top: 18px; padding: 22px; }
+  .chart-card h3{
+    font-family:'Fraunces', serif; font-weight:600; font-size:15px; color:var(--gold); margin: 0 0 4px;
+  }
+  .chart-card .sub{ font-family:'IBM Plex Mono'; font-size:11px; color: var(--muted); margin: 0 0 16px; }
+  .chart-wrap{ height: 260px; }
+  .legend-row{ display:flex; gap:18px; margin-top:14px; flex-wrap:wrap; }
+  .legend-item{ display:flex; align-items:center; gap:7px; font-family:'IBM Plex Mono'; font-size:11px; color: var(--muted); }
+  .legend-dot{ width:9px; height:9px; border-radius:2px; display:inline-block; }
+
+  .foot-note{
+    margin-top: 18px; font-family:'IBM Plex Mono'; font-size: 11px; color: var(--muted); line-height:1.7;
+    border-top: 1px solid var(--line); padding-top: 14px;
+  }
+  .foot-note b{ color: var(--paper); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div>
+      <p class="kicker">Modellrechnung &middot; unverbindlich</p>
+      <h1>Monetarisierungs-Rechner</h1>
+      <p>Grobe Modellierung von Umsatz &amp; Gewinn für Rätsel-/Quiz-/Selbst-Test-Seite mit Einmalkäufen und Mini-Abo. Werte links anpassen, rechts live sehen.</p>
+    </div>
+    <div class="badge-stamp">GESCHÄTZT &middot; KEINE GARANTIE</div>
+  </div>
+
+  <div class="grid">
+
+    <!-- INPUT PANEL -->
+    <div class="card">
+      <p class="section-title">01 &middot; Traffic</p>
+      <div class="field">
+        <div class="field-row"><label for="visitors">Besucher pro Monat</label><span class="val" id="visitors-val">20.000</span></div>
+        <input type="range" id="visitors" min="1000" max="200000" step="1000" value="20000">
+      </div>
+
+      <div class="divider-label">02 &middot; Einmalkäufe</div>
+      <div class="field">
+        <div class="field-row"><label for="oneTimeConv">Conversion zu Tiefenauswertung</label><span class="val" id="oneTimeConv-val">2,0 %</span></div>
+        <input type="range" id="oneTimeConv" min="0" max="10" step="0.1" value="2">
+      </div>
+      <div class="field">
+        <div class="field-row"><label for="oneTimePrice">Preis je Einmalkauf</label><span class="val" id="oneTimePrice-val">3,50 €</span></div>
+        <input type="range" id="oneTimePrice" min="1" max="10" step="0.5" value="3.5">
+      </div>
+
+      <div class="divider-label">03 &middot; Mini-Abo</div>
+      <div class="field">
+        <div class="field-row"><label for="subConv">Conversion zu Neu-Abo / Monat</label><span class="val" id="subConv-val">0,5 %</span></div>
+        <input type="range" id="subConv" min="0" max="5" step="0.1" value="0.5">
+      </div>
+      <div class="field">
+        <div class="field-row"><label for="subPrice">Abo-Preis / Monat</label><span class="val" id="subPrice-val">4,99 €</span></div>
+        <input type="range" id="subPrice" min="1" max="10" step="0.5" value="5">
+      </div>
+      <div class="field">
+        <div class="field-row"><label for="churn">Monatliche Kündigungsrate</label><span class="val" id="churn-val">15 %</span></div>
+        <input type="range" id="churn" min="2" max="40" step="1" value="15">
+      </div>
+
+      <div class="divider-label">04 &middot; Kosten</div>
+      <div class="field">
+        <div class="field-row"><label for="feePercent">Zahlungsgebühr (%)</label><span class="val" id="feePercent-val">2,9 %</span></div>
+        <input type="range" id="feePercent" min="0" max="5" step="0.1" value="2.9">
+      </div>
+      <div class="field">
+        <div class="field-row"><label for="feeFixed">Zahlungsgebühr (fix)</label><span class="val" id="feeFixed-val">0,30 €</span></div>
+        <input type="range" id="feeFixed" min="0" max="1" step="0.05" value="0.3">
+      </div>
+      <div class="field">
+        <div class="field-row"><label for="fixedCosts">Fixkosten / Monat</label><span class="val" id="fixedCosts-val">50 €</span></div>
+        <input type="range" id="fixedCosts" min="0" max="2000" step="10" value="50">
+      </div>
+    </div>
+
+    <!-- OUTPUT PANEL -->
+    <div>
+      <div class="stamp-card">
+        <p class="stamp-label">Netto-Gewinn nach 12 Monaten</p>
+        <p class="stamp-total" id="stamp-total">0,00&nbsp;<span class="cents">€ / Monat</span></p>
+        <p class="stamp-sub" id="stamp-sub">Umsatz brutto: 0 € &middot; nach Zahlungsgebühren &amp; Fixkosten</p>
+        <span class="stamp-box" id="steady-badge">Eingeschwungen ab Monat —</span>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat">
+          <p class="k">Aktive Abonnenten</p>
+          <p class="v" id="stat-subs">0</p>
+        </div>
+        <div class="stat">
+          <p class="k">Einmalkäufe / Monat</p>
+          <p class="v" id="stat-onetime">0</p>
+        </div>
+        <div class="stat">
+          <p class="k">Ø Nutzerwert (ARPU)</p>
+          <p class="v" id="stat-arpu">0,00 €</p>
+        </div>
+      </div>
+
+      <div class="card chart-card">
+        <h3>Umsatzverlauf, 12 Monate</h3>
+        <p class="sub">Balken = Bruttoumsatz nach Quelle &middot; Linie = Gewinn nach Gebühren &amp; Fixkosten</p>
+        <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+        <div class="legend-row">
+          <span class="legend-item"><span class="legend-dot" style="background:#C9A961"></span>Einmalkäufe</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#7FB069"></span>Abo-Umsatz</span>
+          <span class="legend-item"><span class="legend-dot" style="background:#F2EFE9"></span>Gewinn (netto)</span>
+        </div>
+      </div>
+
+      <div class="foot-note">
+        <b>Annahmen:</b> konstante Besucherzahl über 12 Monate, Kündigungsrate wirkt jeden Monat auf den Bestand,
+        Zahlungsgebühr fällt bei jeder Einmalzahlung und jeder Abo-Verlängerung an. Kein Marketing-/CAC-Budget eingerechnet —
+        reales Wachstum verläuft selten linear. Reine Modellrechnung zur groben Einordnung, kein Business-Case-Ersatz.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const ids = ['visitors','oneTimeConv','oneTimePrice','subConv','subPrice','churn','feePercent','feeFixed','fixedCosts'];
+  const els = {};
+  ids.forEach(id => els[id] = document.getElementById(id));
+
+  const fmtEUR = (n) => n.toLocaleString('de-DE', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' €';
+  const fmtEUR2 = (n) => n.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtInt = (n) => Math.round(n).toLocaleString('de-DE');
+  const fmtPct1 = (n) => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' %';
+
+  function updateSliderFill(el){
+    const min = parseFloat(el.min), max = parseFloat(el.max), val = parseFloat(el.value);
+    const pct = ((val - min) / (max - min)) * 100;
+    el.style.setProperty('--fill', pct + '%');
+  }
+
+  function simulate(months){
+    const visitors = parseFloat(els.visitors.value);
+    const oneTimeConv = parseFloat(els.oneTimeConv.value) / 100;
+    const oneTimePrice = parseFloat(els.oneTimePrice.value);
+    const subConv = parseFloat(els.subConv.value) / 100;
+    const subPrice = parseFloat(els.subPrice.value);
+    const churn = parseFloat(els.churn.value) / 100;
+    const feePct = parseFloat(els.feePercent.value) / 100;
+    const feeFix = parseFloat(els.feeFixed.value);
+    const fixedCosts = parseFloat(els.fixedCosts.value);
+
+    let activeSubs = 0;
+    const out = [];
+    let steadyMonth = null;
+    let prevSubs = -1;
+
+    for(let t = 1; t <= months; t++){
+      const newSubs = visitors * subConv;
+      activeSubs = activeSubs * (1 - churn) + newSubs;
+
+      const oneTimeBuyers = visitors * oneTimeConv;
+      const oneTimeGross = oneTimeBuyers * oneTimePrice;
+      const oneTimeFees = oneTimeBuyers * (oneTimePrice * feePct + feeFix);
+
+      const subGross = activeSubs * subPrice;
+      const subFees = activeSubs * (subPrice * feePct + feeFix);
+
+      const gross = oneTimeGross + subGross;
+      const fees = oneTimeFees + subFees;
+      const net = gross - fees;
+      const profit = net - fixedCosts;
+
+      if(steadyMonth === null && prevSubs >= 0 && Math.abs(activeSubs - prevSubs) < newSubs * 0.02){
+        steadyMonth = t;
+      }
+      prevSubs = activeSubs;
+
+      out.push({ t, activeSubs, oneTimeBuyers, oneTimeGross, subGross, gross, fees, net, profit });
+    }
+    if(steadyMonth === null) steadyMonth = months;
+    return { rows: out, steadyMonth };
+  }
+
+  let chart;
+  function render(){
+    ids.forEach(id => updateSliderFill(els[id]));
+
+    document.getElementById('visitors-val').textContent = fmtInt(els.visitors.value);
+    document.getElementById('oneTimeConv-val').textContent = fmtPct1(parseFloat(els.oneTimeConv.value));
+    document.getElementById('oneTimePrice-val').textContent = fmtEUR2(parseFloat(els.oneTimePrice.value)) + ' €';
+    document.getElementById('subConv-val').textContent = fmtPct1(parseFloat(els.subConv.value));
+    document.getElementById('subPrice-val').textContent = fmtEUR2(parseFloat(els.subPrice.value)) + ' €';
+    document.getElementById('churn-val').textContent = Math.round(els.churn.value) + ' %';
+    document.getElementById('feePercent-val').textContent = fmtPct1(parseFloat(els.feePercent.value));
+    document.getElementById('feeFixed-val').textContent = fmtEUR2(parseFloat(els.feeFixed.value)) + ' €';
+    document.getElementById('fixedCosts-val').textContent = fmtInt(els.fixedCosts.value) + ' €';
+
+    const { rows, steadyMonth } = simulate(12);
+    const last = rows[rows.length - 1];
+
+    const totalStr = fmtInt(Math.round(last.profit));
+    document.getElementById('stamp-total').innerHTML = totalStr + '&nbsp;<span class="cents">€ / Monat</span>';
+    document.getElementById('stamp-sub').textContent =
+      'Umsatz brutto: ' + fmtEUR(last.gross) + ' · nach Zahlungsgebühren & Fixkosten';
+    document.getElementById('steady-badge').textContent = 'Eingeschwungen ab Monat ' + steadyMonth;
+
+    document.getElementById('stat-subs').textContent = fmtInt(last.activeSubs);
+    document.getElementById('stat-onetime').textContent = fmtInt(last.oneTimeBuyers);
+    const arpu = parseFloat(els.visitors.value) > 0 ? (last.gross / parseFloat(els.visitors.value)) : 0;
+    document.getElementById('stat-arpu').textContent = fmtEUR2(arpu) + ' €';
+
+    const totalEl = document.getElementById('stamp-total');
+    totalEl.style.color = last.profit >= 0 ? '#7FB069' : '#C1666B';
+
+    const labels = rows.map(r => 'M' + r.t);
+    const oneTimeData = rows.map(r => Math.round(r.oneTimeGross));
+    const subData = rows.map(r => Math.round(r.subGross));
+    const profitData = rows.map(r => Math.round(r.profit));
+
+    if(chart){
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = oneTimeData;
+      chart.data.datasets[1].data = subData;
+      chart.data.datasets[2].data = profitData;
+      chart.update();
+    } else {
+      const ctx = document.getElementById('revChart').getContext('2d');
+      chart = new Chart(ctx, {
+        data: {
+          labels,
+          datasets: [
+            { type:'bar', label:'Einmalkäufe', data: oneTimeData, backgroundColor:'#C9A961', stack:'rev', borderRadius:2, maxBarThickness:22 },
+            { type:'bar', label:'Abo-Umsatz', data: subData, backgroundColor:'#7FB069', stack:'rev', borderRadius:2, maxBarThickness:22 },
+            { type:'line', label:'Gewinn (netto)', data: profitData, borderColor:'#F2EFE9', backgroundColor:'#F2EFE9', pointRadius:2.5, pointBackgroundColor:'#F2EFE9', borderWidth:2, tension:0.3, yAxisID:'y' }
+          ]
+        },
+        options: {
+          responsive:true, maintainAspectRatio:false,
+          interaction: { mode:'index', intersect:false },
+          plugins: {
+            legend: { display:false },
+            tooltip: {
+              backgroundColor:'#0A1420', titleColor:'#C9A961', bodyColor:'#F2EFE9', borderColor:'rgba(242,239,233,0.15)', borderWidth:1,
+              titleFont:{ family:'IBM Plex Mono', size:11 }, bodyFont:{ family:'IBM Plex Mono', size:11 },
+              callbacks: { label: (c) => c.dataset.label + ': ' + c.parsed.y.toLocaleString('de-DE') + ' €' }
+            }
+          },
+          scales: {
+            x: { stacked:true, ticks:{ color:'#8B93A7', font:{ family:'IBM Plex Mono', size:10 } }, grid:{ color:'rgba(242,239,233,0.06)' } },
+            y: { stacked:true, ticks:{ color:'#8B93A7', font:{ family:'IBM Plex Mono', size:10 }, callback:(v)=> v.toLocaleString('de-DE') + ' €' }, grid:{ color:'rgba(242,239,233,0.08)' } }
+          }
+        }
+      });
+    }
+  }
+
+  ids.forEach(id => els[id].addEventListener('input', render));
+  render();
+</script>
+</body>
+</html>
