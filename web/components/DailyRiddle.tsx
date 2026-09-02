@@ -3,13 +3,16 @@
 import { useState } from "react";
 import type { DailyRiddle as DailyRiddleData } from "@/content/daily";
 import { recordDailyCompletion } from "@/lib/streak";
+import { recordServerStreakCompletion } from "@/lib/actions/streak";
 
 export function DailyRiddle({ riddle }: { riddle: DailyRiddleData }) {
   const [revealed, setRevealed] = useState(false);
   const [streakCount, setStreakCount] = useState(0);
 
-  function reveal() {
-    setStreakCount(recordDailyCompletion().count);
+  async function reveal() {
+    const local = recordDailyCompletion();
+    const server = await recordServerStreakCompletion().catch(() => null);
+    setStreakCount(server?.count ?? local.count);
     setRevealed(true);
   }
 

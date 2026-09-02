@@ -15,6 +15,7 @@ export interface Database {
           provider_reference: string;
           provider_secondary_reference: string | null;
           customer_email: string | null;
+          user_id: string | null;
           amount_cents: number;
           currency: string;
           status: "pending" | "paid" | "failed";
@@ -28,6 +29,7 @@ export interface Database {
           provider_reference: string;
           provider_secondary_reference?: string | null;
           customer_email?: string | null;
+          user_id?: string | null;
           amount_cents: number;
           currency?: string;
           status?: "pending" | "paid" | "failed";
@@ -41,11 +43,33 @@ export interface Database {
           provider_reference?: string;
           provider_secondary_reference?: string | null;
           customer_email?: string | null;
+          user_id?: string | null;
           amount_cents?: number;
           currency?: string;
           status?: "pending" | "paid" | "failed";
           created_at?: string;
           paid_at?: string | null;
+        };
+        Relationships: [];
+      };
+      streaks: {
+        Row: {
+          user_id: string;
+          count: number;
+          last_completed_date: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          count?: number;
+          last_completed_date?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          count?: number;
+          last_completed_date?: string | null;
+          updated_at?: string;
         };
         Relationships: [];
       };

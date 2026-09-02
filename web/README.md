@@ -7,8 +7,8 @@ Referenz-Prototyp (Original-Design v4): [`../reference/quiz-prototype-v4.html`](
 ## Stack
 
 - **Frontend + Backend:** Next.js (App Router) — Server Components für Content-Seiten,
-  Route Handlers für Checkout/Webhooks, ein Projekt statt zweier Repos.
-- **Datenbank + Auth:** Supabase (Postgres + eingebautes Auth).
+  Route Handlers für Checkout/Webhooks/Auth-Callback, ein Projekt statt zweier Repos.
+- **Datenbank + Auth:** Supabase (Postgres + eingebautes Auth, Magic-Link-Login).
 - **Payments:** micropayment.ch (primär, noch nicht angebunden — siehe unten), Stripe als
   fertiger, aber aktuell geparkter Adapter. Provider-Wahl über `PAYMENT_PROVIDER` in `.env.local`.
 - **Hosting:** Vercel.
@@ -21,17 +21,37 @@ cp .env.example .env.local   # Werte aus Supabase-/Zahlungsanbieter-Dashboard ei
 npm run dev                  # http://localhost:3000
 ```
 
-Ohne jede Konfiguration laufen die Startseite, das Tages-Rätsel, das Tages-Mini-Quiz und der
-Allgemeinwissen-Quiz-Flow bereits vollständig — nur der „Freischalten"-Button (Einmalkauf)
-braucht einen konfigurierten Zahlungsanbieter.
+Ohne jede Konfiguration laufen Startseite, Tages-Rätsel, Tages-Mini-Quiz und der
+Allgemeinwissen-Quiz-Flow bereits vollständig (Streak dann geräte-lokal, kein Login möglich) —
+nur „Anmelden" und der „Freischalten"-Button brauchen ein konfiguriertes Supabase-Projekt bzw.
+einen konfigurierten Zahlungsanbieter.
 
 ### Supabase einrichten
 
-1. Projekt auf [supabase.com](https://supabase.com) anlegen.
-2. `supabase/migrations/0001_purchases.sql` im SQL-Editor ausführen (oder
-   per Supabase-CLI: `supabase db push`).
-3. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` und
-   `SUPABASE_SERVICE_ROLE_KEY` aus Project Settings → API in `.env.local`.
+Falls schon ein Supabase-Account besteht (z. B. von einem anderen Projekt): **ein neues,
+eigenes Projekt** für Wissensfunke anlegen — Projekte sind pro Account beliebig oft anlegbar,
+eine gemeinsame Datenbank mit einem anderen Produkt wäre hier falsch.
+
+1. Neues Projekt auf [supabase.com](https://supabase.com) → **New project**. Region idealerweise
+   EU (Frankfurt), da die Zielgruppe deutschsprachig ist.
+2. **SQL Editor** → beide Migrationen der Reihe nach ausführen (Inhalt der Dateien reinkopieren,
+   „Run"): zuerst `supabase/migrations/0001_purchases.sql`, dann `0002_auth_streaks.sql`.
+   (Alternativ per Supabase-CLI: `supabase link` + `supabase db push`.)
+3. **Project Settings → API** → `Project URL` → `NEXT_PUBLIC_SUPABASE_URL`,
+   `anon` `public` Key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+   `service_role` Key → `SUPABASE_SERVICE_ROLE_KEY` (geheim halten, nur serverseitig genutzt).
+4. **Authentication → Sign In / Providers** → *Email* ist standardmäßig aktiv, das reicht für den
+   Magic-Link-Login — nichts weiter zu tun.
+5. **Authentication → URL Configuration** → *Site URL* auf `http://localhost:3000` setzen
+   (später auf die echte Domain ändern) und unter *Redirect URLs* `http://localhost:3000/auth/callback`
+   hinzufügen (bei Livegang zusätzlich `https://<domain>/auth/callback`).
+6. **Für den Livegang wichtig:** Supabase verschickt Magic-Link-Mails über einen eigenen
+   Test-Mailer mit sehr niedrigem Rate-Limit (nur zum Ausprobieren geeignet). Vor echtem
+   Nutzerverkehr unter **Authentication → Settings → SMTP Settings** einen eigenen
+   Mail-Versender hinterlegen, sonst laufen Anmeldungen bei mehr als ein paar Testnutzern ins Leere.
+
+Damit sind Datenbank UND Auth eingerichtet — beides läuft über dasselbe Projekt, keine
+weiteren Schritte nötig.
 
 ### Zahlungsanbieter einrichten
 
@@ -55,8 +75,10 @@ app/
   layout.tsx             Root-Layout: Fonts (Fredoka/Nunito), Metadata
   globals.css             Design-Tokens v4 als Tailwind-Theme (--wf-* Variablen)
   page.tsx                 Startseite: listet alle Spiele nach Produktebene
-  quiz/[slug]/              Spiel-Flow (Tages-Rätsel/-Quiz, Ebene-2-Quiz oder Platzhalter)
-  api/webhooks/stripe/       Webhook: checkout.session.completed → purchases-Tabelle
+  login/                    Magic-Link-Login
+  auth/callback/             Tauscht den Magic-Link-Code gegen eine Session
+  quiz/[slug]/                Spiel-Flow (Tages-Rätsel/-Quiz, Ebene-2-Quiz oder Platzhalter)
+  api/webhooks/stripe/         Webhook: checkout.session.completed → purchases-Tabelle
 content/
   games.ts                  Content-Registry aller Spiele (Übergang bis zur DB-Anbindung)
   quizzes.ts                 Fragen/Ränge/Preis für Ebene-2-Quiz mit echtem Spielablauf
@@ -65,38 +87,53 @@ components/
   QuizPlayer.tsx              Ebene-2-Fragen-Flow, Ergebnis-Screen, Paywall-Karte
   DailyMiniQuiz.tsx             Ebene-1-Mini-Quiz (3 Fragen, kein Paywall)
   DailyRiddle.tsx                Ebene-1-Tagesrätsel (Prompt + Lösung aufdecken)
-  SiteHeader.tsx                   Gemeinsamer Header, optional mit Streak-Badge
-  StreakBadge.tsx                   Zeigt den aktuellen Streak (aus localStorage)
+  LoginForm.tsx                   Magic-Link-Formular mit Status-Feedback
+  SiteHeader.tsx                    Gemeinsamer Header: Streak-Badge + Anmelden/Abmelden
+  StreakBadge.tsx                    Streak-Anzeige (Server-Wert oder localStorage-Fallback)
 lib/
-  supabase/                  Browser-, Server- & Service-Role-Client + Database-Typ
-  payments/                   Provider-neutrale Schnittstelle + Stripe-/micropayment-Adapter
-  actions/checkout.ts          Server Action: erstellt Checkout beim aktiven Provider
-  purchases.ts                  Kauf verifizieren/persistieren (Webhook + Self-Heal)
-  streak.ts                      Login-Streak, aktuell geräte-lokal (localStorage)
+  auth.ts                    getCurrentUser() + Supabase-konfiguriert?-Check (überall genutzt,
+                               damit ohne Supabase-Projekt nichts abstürzt)
+  supabase/                   Browser-, Server- & Service-Role-Client + Database-Typ
+  payments/                    Provider-neutrale Schnittstelle + Stripe-/micropayment-Adapter
+  actions/checkout.ts           Server Action: erstellt Checkout beim aktiven Provider
+  actions/auth.ts                Server Actions: Magic-Link versenden, Abmelden
+  actions/streak.ts               Server Action: Streak für eingeloggte Nutzer fortschreiben
+  streak-server.ts                 Streak lesen (Server Component, z. B. SiteHeader)
+  streak.ts                         Login-Streak-Fallback ohne Konto (localStorage)
+  purchases.ts                       Kauf verifizieren/persistieren (Webhook + Self-Heal)
+proxy.ts                       Hält die Supabase-Session frisch (Next 16: „middleware" → „proxy")
 supabase/migrations/
   0001_purchases.sql            Schema für Einmalkäufe (provider-neutral)
+  0002_auth_streaks.sql          streaks-Tabelle + user_id-Spalte auf purchases
 ```
 
 ## Produktebenen (siehe Briefing Abschnitt 2)
 
 1. **Täglicher Gratis-Anker** — ✅ Tages-Rätsel (7 Rätsel im Pool) und Tages-Mini-Quiz (7 Sets à
    3 Fragen) rotieren datumsbasiert, komplett kostenlos. Streak zählt Tage mit abgeschlossener
-   Aktivität, reißt bei einem verpassten Tag ab (Schutz ist Ebene-3-Feature). Noch geräte-lokal,
-   siehe Lücken unten.
+   Aktivität, reißt bei einem verpassten Tag ab (Schutz ist Ebene-3-Feature). Für eingeloggte
+   Nutzer läuft der Streak serverseitig (`streaks`-Tabelle), sonst als localStorage-Fallback.
 2. **Wöchentliche Selbst-Tests (Freemium)** — ✅ Quiz-Flow, Ergebnis, Paywall-Karte fertig für
    „Allgemeinwissen-Quiz". Checkout ruft den aktiven Zahlungsanbieter auf (siehe oben — aktuell
-   ohne konfigurierten Anbieter, Button zeigt einen freundlichen Hinweis statt zu crashen). Weitere
-   Tests (Beziehungstyp, Freundes-Kompatibilität) brauchen noch eigene Fragenkataloge.
+   ohne konfigurierten Anbieter, Button zeigt einen freundlichen Hinweis statt zu crashen). Käufe
+   eingeloggter Nutzer bleiben dauerhaft freigeschaltet (`hasUserPurchased`), unabhängig vom
+   Rücksprung-Link. Weitere Tests (Beziehungstyp, Freundes-Kompatibilität) brauchen noch eigene
+   Fragenkataloge.
 3. **Power-User-Mini-Abo** — alle Tiefenauswertungen, Archiv, werbefrei, Streak-Schutz, bis 4,99 €/Monat — offen
 
-### Bewusste Lücken (bis Auth/Ebene 3 stehen)
+### Auth im Detail
 
-- **Streak ist geräte-lokal** (`lib/streak.ts`, localStorage) — es gibt noch keine Konten. Andere
-  Browser/Geräte sehen einen eigenen Streak. Zieht mit Ebene-1-Auth auf eine `streaks`-Tabelle um;
-  die Aufrufstellen (`recordDailyCompletion`) bleiben dabei gleich.
-- **Kein Login nötig für den Einmalkauf** — Freischaltung hängt an der Provider-Referenz
-  (`?provider=...&ref=...` beim Rücksprung), nicht an einem Nutzerkonto. Neu laden ohne die
-  Query-Parameter zeigt wieder die Paywall. Mit Ebene 1 (Auth) wird der Kauf zusätzlich an
-  `user_id` verknüpft und bleibt dauerhaft freigeschaltet.
+Magic-Link-Login (kein Passwort) über Supabase Auth. `lib/auth.ts` prüft vor jedem Zugriff, ob
+`NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY` überhaupt gesetzt sind — ohne
+Supabase-Projekt bleibt die App exakt im bisherigen Zustand (kein Login möglich, Streak/Käufe
+laufen wie zuvor lokal bzw. über die URL-Referenz, nichts crasht).
+
+### Bewusste Lücken
+
+- **Kein Merge des lokalen Streaks beim ersten Login** — wer vorher ohne Konto gespielt hat und
+  sich dann anmeldet, startet serverseitig bei 0. Der localStorage-Wert geht nicht verloren,
+  wird aber (noch) nicht automatisch übernommen.
+- **Kein „Meine Käufe"/Kontobereich** — Nutzer sehen ihre freigeschalteten Tests aktuell nur,
+  indem sie den jeweiligen Test erneut öffnen (dann automatisch entsperrt).
 - **Widerrufsrecht-Consent** (§ 356 Abs. 5 BGB) ist im Checkout noch nicht als Checkbox
   umgesetzt — braucht zuerst den fertigen Rechtstext (Briefing Abschnitt 8).

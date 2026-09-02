@@ -13,6 +13,8 @@ export interface CheckoutRequest {
   description: string;
   successUrl: string;
   cancelUrl: string;
+  /** Eingeloggter Nutzer, falls vorhanden — verknüpft den Kauf dauerhaft mit dem Konto. */
+  userId: string | null;
 }
 
 export interface CheckoutResult {
@@ -28,6 +30,7 @@ export interface PaymentVerification {
   customerEmail: string | null;
   amountCents: number | null;
   currency: string | null;
+  userId: string | null;
   /** Zweite Referenz des Anbieters (z. B. Stripe payment_intent), falls vorhanden. */
   secondaryReference: string | null;
 }

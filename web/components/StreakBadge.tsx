@@ -3,17 +3,21 @@
 import { useEffect, useState } from "react";
 import { readStreak } from "@/lib/streak";
 
-/** Zeigt nichts beim ersten (Server-)Render, füllt sich nach dem Mount aus localStorage. */
-export function StreakBadge() {
-  const [count, setCount] = useState<number | null>(null);
+/**
+ * `serverCount` kommt vom SiteHeader für eingeloggte Nutzer (Quelle der
+ * Wahrheit, per Server Component vorab geladen). Ist er `undefined`
+ * (nicht eingeloggt / nicht konfiguriert), wird nach dem Mount aus
+ * localStorage nachgeladen — SSR kennt localStorage nicht, deshalb der
+ * Umweg über einen Effect statt eines Lazy-Initializers.
+ */
+export function StreakBadge({ serverCount }: { serverCount?: number }) {
+  const [count, setCount] = useState<number | null>(serverCount ?? null);
 
   useEffect(() => {
-    // Bewusste Ausnahme: SSR kennt localStorage nicht, der erste Client-
-    // Render muss also mit "nichts anzeigen" matchen (s. StartScreen-
-    // Restore-Logik in QuizPlayer.tsx für dasselbe Muster).
+    if (serverCount !== undefined) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCount(readStreak().count);
-  }, []);
+  }, [serverCount]);
 
   if (!count) return null;
 

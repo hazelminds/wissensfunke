@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
-import { verifyUnlock } from "@/lib/purchases";
+import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
+import { getCurrentUser } from "@/lib/auth";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -51,7 +52,11 @@ async function QuizContent({
 
   const quiz = getQuiz(slug);
   if (quiz) {
-    const unlocked = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
+    const [fromPayment, user] = await Promise.all([
+      provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
+      getCurrentUser(),
+    ]);
+    const unlocked = fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
     return (
       <QuizPlayer quiz={quiz} initiallyUnlocked={unlocked} checkoutError={checkoutError === "not_configured"} />
     );

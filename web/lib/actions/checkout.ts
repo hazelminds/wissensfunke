@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { getQuiz } from "@/content/quizzes";
 import { getPaymentProvider, PaymentProviderNotConfiguredError } from "@/lib/payments";
+import { getCurrentUser } from "@/lib/auth";
 
 /**
  * Server Action hinter dem "Freischalten"-Button. Der Preis wird serverseitig
@@ -18,11 +19,13 @@ export async function createUnlockCheckout(quizSlug: string) {
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const provider = getPaymentProvider();
+  const user = await getCurrentUser();
 
   let redirectUrl: string;
   try {
     const result = await provider.createCheckout({
       quizSlug,
+      userId: user?.id ?? null,
       amountCents: quiz.unlockPriceCents,
       currency: "eur",
       title: `${quiz.unlockTitle} — ${quiz.title}`,

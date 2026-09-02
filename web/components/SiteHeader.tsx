@@ -1,7 +1,19 @@
 import Link from "next/link";
 import { StreakBadge } from "@/components/StreakBadge";
+import { getCurrentUser } from "@/lib/auth";
+import { getServerStreak } from "@/lib/streak-server";
+import { signOut } from "@/lib/actions/auth";
 
-export function SiteHeader({ backHref, showStreak = false }: { backHref?: string; showStreak?: boolean }) {
+export async function SiteHeader({
+  backHref,
+  showStreak = false,
+}: {
+  backHref?: string;
+  showStreak?: boolean;
+}) {
+  const user = await getCurrentUser();
+  const serverStreak = showStreak && user ? await getServerStreak(user.id) : null;
+
   return (
     <header className="flex items-center justify-between gap-3">
       <Link href="/" className="flex items-center gap-2.5">
@@ -11,10 +23,21 @@ export function SiteHeader({ backHref, showStreak = false }: { backHref?: string
         <span className="font-display text-lg font-bold text-ink">Wissensfunke</span>
       </Link>
       <div className="flex items-center gap-3">
-        {showStreak && <StreakBadge />}
+        {showStreak && <StreakBadge serverCount={user ? (serverStreak?.count ?? 0) : undefined} />}
         {backHref && (
           <Link href={backHref} className="text-[13px] font-bold text-primary-dark">
             ← Übersicht
+          </Link>
+        )}
+        {user ? (
+          <form action={signOut}>
+            <button type="submit" className="text-[12px] font-bold text-muted hover:text-primary-dark">
+              Abmelden
+            </button>
+          </form>
+        ) : (
+          <Link href="/login" className="text-[12px] font-bold text-primary-dark">
+            Anmelden
           </Link>
         )}
       </div>

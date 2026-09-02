@@ -30,7 +30,7 @@ export const stripeProvider: PaymentProvider = {
           quantity: 1,
         },
       ],
-      metadata: { quizSlug: request.quizSlug },
+      metadata: { quizSlug: request.quizSlug, userId: request.userId ?? "" },
       // Stripe ersetzt {CHECKOUT_SESSION_ID} im finalen Redirect selbst.
       success_url: `${request.successUrl}&ref={CHECKOUT_SESSION_ID}`,
       cancel_url: request.cancelUrl,
@@ -53,6 +53,7 @@ export const stripeProvider: PaymentProvider = {
       customerEmail: session.customer_details?.email ?? null,
       amountCents: session.amount_total ?? null,
       currency: session.currency ?? null,
+      userId: session.metadata?.userId || null,
       secondaryReference:
         typeof session.payment_intent === "string" ? session.payment_intent : null,
     };

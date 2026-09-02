@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { dailyCategoryIcons, type DailyQuizSet } from "@/content/daily";
 import { recordDailyCompletion } from "@/lib/streak";
+import { recordServerStreakCompletion } from "@/lib/actions/streak";
 
 type Answer = { correct: boolean };
 
@@ -24,9 +25,13 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
     setAnswers((prev) => [...prev, { correct: index === question.correctIndex }]);
   }
 
-  function next() {
+  async function next() {
     if (isLast) {
-      setStreakCount(recordDailyCompletion().count);
+      const local = recordDailyCompletion();
+      // Server ist die Quelle der Wahrheit für eingeloggte Nutzer; ohne
+      // Login/Supabase-Setup liefert die Action null, dann zählt localStorage.
+      const server = await recordServerStreakCompletion().catch(() => null);
+      setStreakCount(server?.count ?? local.count);
       setDone(true);
       return;
     }

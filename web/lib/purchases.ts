@@ -24,6 +24,7 @@ export async function upsertPurchase(input: UpsertPurchaseInput) {
       provider_reference: input.providerReference,
       provider_secondary_reference: input.secondaryReference,
       customer_email: input.customerEmail,
+      user_id: input.userId,
       amount_cents: input.amountCents ?? 0,
       currency: input.currency ?? "eur",
       status: input.paid ? "paid" : "pending",
@@ -31,6 +32,20 @@ export async function upsertPurchase(input: UpsertPurchaseInput) {
     },
     { onConflict: "provider,provider_reference" },
   );
+}
+
+/** Eingeloggte Nutzer bleiben dauerhaft freigeschaltet, unabhängig von der URL. */
+export async function hasUserPurchased(userId: string, quizSlug: string): Promise<boolean> {
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from("purchases")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("quiz_slug", quizSlug)
+    .eq("status", "paid")
+    .limit(1)
+    .maybeSingle();
+  return Boolean(data);
 }
 
 /**

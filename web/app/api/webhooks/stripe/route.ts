@@ -36,6 +36,7 @@ export async function POST(request: Request) {
         customerEmail: session.customer_details?.email ?? null,
         amountCents: session.amount_total ?? null,
         currency: session.currency ?? null,
+        userId: session.metadata?.userId || null,
         secondaryReference:
           typeof session.payment_intent === "string" ? session.payment_intent : null,
       });
