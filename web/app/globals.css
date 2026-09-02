@@ -1,64 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  /* Wissensfunke design system v4 — exact tokens from the approved prototype. */
-  --wf-bg: #fafaff;
-  --wf-surface: #ffffff;
-  --wf-ink: #1b1b2f;
-  --wf-ink-soft: #54536b;
+  /* Noggl design system v4 — exact tokens from the approved prototype. */
+  --nog-bg: #fafaff;
+  --nog-surface: #ffffff;
+  --nog-ink: #1b1b2f;
+  --nog-ink-soft: #54536b;
 
-  --wf-primary: #6c5ce7;
-  --wf-primary-dark: #4e3fc4;
-  --wf-primary-soft: #efecff;
+  --nog-primary: #6c5ce7;
+  --nog-primary-dark: #4e3fc4;
+  --nog-primary-soft: #efecff;
 
-  --wf-coral: #ff7a59;
-  --wf-coral-dark: #e85a38;
-  --wf-coral-soft: #ffede7;
+  --nog-coral: #ff7a59;
+  --nog-coral-dark: #e85a38;
+  --nog-coral-soft: #ffede7;
 
-  --wf-green: #00c896;
-  --wf-green-dark: #00a67d;
-  --wf-green-soft: #dffbf3;
+  --nog-green: #00c896;
+  --nog-green-dark: #00a67d;
+  --nog-green-soft: #dffbf3;
 
-  --wf-red: #ff5a6e;
-  --wf-red-dark: #e04054;
-  --wf-red-soft: #ffe6e9;
+  --nog-red: #ff5a6e;
+  --nog-red-dark: #e04054;
+  --nog-red-soft: #ffe6e9;
 
-  --wf-gold: #ffb800;
-  --wf-gold-dark: #e29e00;
-  --wf-gold-soft: #fff4d9;
+  --nog-gold: #ffb800;
+  --nog-gold-dark: #e29e00;
+  --nog-gold-soft: #fff4d9;
 
-  --wf-muted: #8a8aa3;
-  --wf-line: rgba(27, 27, 47, 0.08);
+  --nog-muted: #8a8aa3;
+  --nog-line: rgba(27, 27, 47, 0.08);
 }
 
 @theme inline {
-  --color-bg: var(--wf-bg);
-  --color-surface: var(--wf-surface);
-  --color-ink: var(--wf-ink);
-  --color-ink-soft: var(--wf-ink-soft);
+  --color-bg: var(--nog-bg);
+  --color-surface: var(--nog-surface);
+  --color-ink: var(--nog-ink);
+  --color-ink-soft: var(--nog-ink-soft);
 
-  --color-primary: var(--wf-primary);
-  --color-primary-dark: var(--wf-primary-dark);
-  --color-primary-soft: var(--wf-primary-soft);
+  --color-primary: var(--nog-primary);
+  --color-primary-dark: var(--nog-primary-dark);
+  --color-primary-soft: var(--nog-primary-soft);
 
-  --color-coral: var(--wf-coral);
-  --color-coral-dark: var(--wf-coral-dark);
-  --color-coral-soft: var(--wf-coral-soft);
+  --color-coral: var(--nog-coral);
+  --color-coral-dark: var(--nog-coral-dark);
+  --color-coral-soft: var(--nog-coral-soft);
 
-  --color-green: var(--wf-green);
-  --color-green-dark: var(--wf-green-dark);
-  --color-green-soft: var(--wf-green-soft);
+  --color-green: var(--nog-green);
+  --color-green-dark: var(--nog-green-dark);
+  --color-green-soft: var(--nog-green-soft);
 
-  --color-red: var(--wf-red);
-  --color-red-dark: var(--wf-red-dark);
-  --color-red-soft: var(--wf-red-soft);
+  --color-red: var(--nog-red);
+  --color-red-dark: var(--nog-red-dark);
+  --color-red-soft: var(--nog-red-soft);
 
-  --color-gold: var(--wf-gold);
-  --color-gold-dark: var(--wf-gold-dark);
-  --color-gold-soft: var(--wf-gold-soft);
+  --color-gold: var(--nog-gold);
+  --color-gold-dark: var(--nog-gold-dark);
+  --color-gold-soft: var(--nog-gold-soft);
 
-  --color-muted: var(--wf-muted);
-  --color-line: var(--wf-line);
+  --color-muted: var(--nog-muted);
+  --color-line: var(--nog-line);
 
   --font-display: var(--font-fredoka), sans-serif;
   --font-body: var(--font-nunito), sans-serif;
@@ -68,11 +68,11 @@ body {
   background:
     radial-gradient(700px 400px at 100% -5%, rgba(108, 92, 231, 0.1), transparent 55%),
     radial-gradient(600px 380px at -5% 100%, rgba(255, 122, 89, 0.1), transparent 55%),
-    var(--wf-bg);
-  color: var(--wf-ink);
+    var(--nog-bg);
+  color: var(--nog-ink);
 }
 
-/* 3D "gummy" button — the signature Wissensfunke CTA style (Duolingo-Prinzip). */
+/* 3D "gummy" button — the signature Noggl CTA style (Duolingo-Prinzip). */
 .btn-3d {
   font-family: var(--font-display), sans-serif;
   font-weight: 600;
@@ -85,12 +85,12 @@ body {
   transform: translateY(4px);
 }
 .btn-3d-primary {
-  background: var(--wf-primary);
+  background: var(--nog-primary);
   color: #fff;
-  box-shadow: 0 5px 0 var(--wf-primary-dark);
+  box-shadow: 0 5px 0 var(--nog-primary-dark);
 }
 .btn-3d-primary:active {
-  box-shadow: 0 1px 0 var(--wf-primary-dark);
+  box-shadow: 0 1px 0 var(--nog-primary-dark);
 }
 
 @keyframes popIn {

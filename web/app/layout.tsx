@@ -16,11 +16,11 @@ const nunito = Nunito({
 
 export const metadata: Metadata = {
   title: {
-    default: "Wissensfunke",
-    template: "%s · Wissensfunke",
+    default: "Noggl",
+    template: "%s · Noggl",
   },
   description:
-    "Rätsel, Quiz und Selbst-Tests zur reinen Unterhaltung — täglich neu, ohne Gewinnmöglichkeit.",
+    "Kurzweilige Denkspiele für zwischendurch — Rätsel, Quiz und Selbst-Tests, täglich neu, ohne Gewinnmöglichkeit.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

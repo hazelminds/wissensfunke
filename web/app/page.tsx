@@ -74,7 +74,7 @@ function GameCard({
   return (
     <Link
       href={`/quiz/${slug}`}
-      className="group flex flex-col gap-3 rounded-2xl border-2 border-line bg-surface p-4 shadow-[0_3px_0_var(--wf-line)] transition-transform hover:-translate-y-0.5 hover:shadow-[0_5px_0_var(--wf-line)]"
+      className="group flex flex-col gap-3 rounded-2xl border-2 border-line bg-surface p-4 shadow-[0_3px_0_var(--nog-line)] transition-transform hover:-translate-y-0.5 hover:shadow-[0_5px_0_var(--nog-line)]"
     >
       <div className="flex items-center gap-2.5">
         <span className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-line bg-surface text-lg">
@@ -120,7 +120,7 @@ function Footer() {
   return (
     <footer className="border-t border-line pt-6 text-[12px] text-muted">
       <p>
-        Wissensfunke ist ein eigenständiges Unterhaltungsangebot ohne
+        Noggl ist ein eigenständiges Unterhaltungsangebot ohne
         Gewinnmöglichkeit — kein Glücksspiel. Rechtstexte (Impressum,
         Datenschutz, AGB, Widerrufsbelehrung) folgen vor dem Livegang.
       </p>

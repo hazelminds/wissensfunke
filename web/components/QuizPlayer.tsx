@@ -221,7 +221,7 @@ function QuizScreen({
                       ? "border-green bg-green text-white"
                       : "border-red bg-red text-white"
                     : isCurrent
-                      ? "border-primary text-primary shadow-[0_0_0_4px_var(--wf-primary-soft)]"
+                      ? "border-primary text-primary shadow-[0_0_0_4px_var(--nog-primary-soft)]"
                       : "border-line bg-surface text-muted",
                 ].join(" ")}
               >
@@ -256,9 +256,9 @@ function QuizScreen({
               disabled={answered}
               onClick={() => onSelect(i)}
               className={[
-                "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left font-body text-[15px] font-bold text-ink shadow-[0_3px_0_var(--wf-line)] transition-transform",
-                state === "correct" && "border-green bg-green-soft shadow-[0_3px_0_var(--wf-green)]",
-                state === "wrong" && "border-red bg-red-soft shadow-[0_3px_0_var(--wf-red)]",
+                "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left font-body text-[15px] font-bold text-ink shadow-[0_3px_0_var(--nog-line)] transition-transform",
+                state === "correct" && "border-green bg-green-soft shadow-[0_3px_0_var(--nog-green)]",
+                state === "wrong" && "border-red bg-red-soft shadow-[0_3px_0_var(--nog-red)]",
                 state === "dim" && "border-line bg-surface opacity-45",
                 state === "" && "border-line bg-surface hover:-translate-y-0.5",
               ]
@@ -399,7 +399,7 @@ function ResultScreen({
       <div className="flex gap-2.5">
         <button
           onClick={onRestart}
-          className="btn-3d flex-1 border-2 border-line bg-surface py-3.5 text-sm text-ink shadow-[0_5px_0_var(--wf-line)] active:shadow-[0_1px_0_var(--wf-line)]"
+          className="btn-3d flex-1 border-2 border-line bg-surface py-3.5 text-sm text-ink shadow-[0_5px_0_var(--nog-line)] active:shadow-[0_1px_0_var(--nog-line)]"
         >
           🔁 Nochmal
         </button>

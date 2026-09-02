@@ -1,8 +1,11 @@
-# Wissensfunke — Web-App
+# Noggl — Web-App
 
-Next.js-App (App Router, TypeScript, Tailwind CSS 4) für die Rätsel-/Quiz-/Selbst-Test-Seite
-„Wissensfunke". Konzept & Compliance-Vorgaben: [`../reference/projekt-briefing.md`](../reference/projekt-briefing.md).
-Referenz-Prototyp (Original-Design v4): [`../reference/quiz-prototype-v4.html`](../reference/quiz-prototype-v4.html).
+Next.js-App (App Router, TypeScript, Tailwind CSS 4) für Noggl — kurzweilige Denkspiele für
+Erwachsene (Rätsel, Quiz, Selbst-Tests). Domain: noggl.games. Ursprünglich unter dem
+Arbeitstitel „Wissensfunke" konzipiert (siehe Konzept & Compliance-Vorgaben:
+[`../reference/projekt-briefing.md`](../reference/projekt-briefing.md) — Name im Dokument noch
+der alte, Inhalt weiterhin gültig). Referenz-Prototyp (Original-Design v4):
+[`../reference/quiz-prototype-v4.html`](../reference/quiz-prototype-v4.html).
 
 ## Stack
 
@@ -29,7 +32,7 @@ einen konfigurierten Zahlungsanbieter.
 ### Supabase einrichten
 
 Falls schon ein Supabase-Account besteht (z. B. von einem anderen Projekt): **ein neues,
-eigenes Projekt** für Wissensfunke anlegen — Projekte sind pro Account beliebig oft anlegbar,
+eigenes Projekt** für Noggl anlegen — Projekte sind pro Account beliebig oft anlegbar,
 eine gemeinsame Datenbank mit einem anderen Produkt wäre hier falsch.
 
 1. Neues Projekt auf [supabase.com](https://supabase.com) → **New project**. Region idealerweise
@@ -73,7 +76,7 @@ verifiziert die Session beim Rücksprung direkt beim Anbieter (Self-Heal).
 ```
 app/
   layout.tsx             Root-Layout: Fonts (Fredoka/Nunito), Metadata
-  globals.css             Design-Tokens v4 als Tailwind-Theme (--wf-* Variablen)
+  globals.css             Design-Tokens v4 als Tailwind-Theme (--nog-* Variablen)
   page.tsx                 Startseite: listet alle Spiele nach Produktebene
   login/                    Magic-Link-Login
   auth/callback/             Tauscht den Magic-Link-Code gegen eine Session

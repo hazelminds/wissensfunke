@@ -64,7 +64,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
                       ? "border-green bg-green text-white"
                       : "border-red bg-red text-white"
                     : isCurrent
-                      ? "border-primary text-primary shadow-[0_0_0_4px_var(--wf-primary-soft)]"
+                      ? "border-primary text-primary shadow-[0_0_0_4px_var(--nog-primary-soft)]"
                       : "border-line bg-surface text-muted",
                 ].join(" ")}
               >
@@ -99,9 +99,9 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
               disabled={answered}
               onClick={() => selectAnswer(i)}
               className={[
-                "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left font-body text-[15px] font-bold text-ink shadow-[0_3px_0_var(--wf-line)] transition-transform",
-                state === "correct" && "border-green bg-green-soft shadow-[0_3px_0_var(--wf-green)]",
-                state === "wrong" && "border-red bg-red-soft shadow-[0_3px_0_var(--wf-red)]",
+                "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left font-body text-[15px] font-bold text-ink shadow-[0_3px_0_var(--nog-line)] transition-transform",
+                state === "correct" && "border-green bg-green-soft shadow-[0_3px_0_var(--nog-green)]",
+                state === "wrong" && "border-red bg-red-soft shadow-[0_3px_0_var(--nog-red)]",
                 state === "dim" && "border-line bg-surface opacity-45",
                 state === "" && "border-line bg-surface hover:-translate-y-0.5",
               ]
