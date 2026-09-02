@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
-import { upsertPurchaseFromSession } from "@/lib/purchases";
+import { upsertPurchase } from "@/lib/purchases";
 
 export async function POST(request: Request) {
   const signature = request.headers.get("stripe-signature");
@@ -21,8 +21,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Signatur ungültig: ${message}` }, { status: 400 });
   }
 
-  if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
-    await upsertPurchaseFromSession(event.data.object);
+  if (
+    event.type === "checkout.session.completed" ||
+    event.type === "checkout.session.async_payment_succeeded"
+  ) {
+    const session = event.data.object;
+    const quizSlug = session.metadata?.quizSlug;
+    if (quizSlug) {
+      await upsertPurchase({
+        provider: "stripe",
+        providerReference: session.id,
+        quizSlug,
+        paid: session.payment_status === "paid",
+        customerEmail: session.customer_details?.email ?? null,
+        amountCents: session.amount_total ?? null,
+        currency: session.currency ?? null,
+        secondaryReference:
+          typeof session.payment_intent === "string" ? session.payment_intent : null,
+      });
+    }
   }
 
   return NextResponse.json({ received: true });

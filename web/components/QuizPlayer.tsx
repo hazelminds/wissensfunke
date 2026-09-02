@@ -7,12 +7,16 @@ import { createUnlockCheckout } from "@/lib/actions/checkout";
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean };
 
+const attemptStorageKey = (slug: string) => `wf_attempt_${slug}`;
+
 export function QuizPlayer({
   quiz,
   initiallyUnlocked,
+  checkoutError = false,
 }: {
   quiz: QuizDefinition;
   initiallyUnlocked: boolean;
+  checkoutError?: boolean;
 }) {
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
@@ -21,12 +25,44 @@ export function QuizPlayer({
   const [unlocked, setUnlocked] = useState(initiallyUnlocked);
   const [revealed, setRevealed] = useState(initiallyUnlocked);
 
+  // Rücksprung von der Zahlungsseite (Erfolg oder Fehler): der Client-State
+  // (answers) ging bei der Navigation weg verloren — hier aus localStorage
+  // restaurieren, damit man nicht das ganze Quiz nochmal machen muss.
+  useEffect(() => {
+    if (!initiallyUnlocked && !checkoutError) return;
+    try {
+      const raw = localStorage.getItem(attemptStorageKey(quiz.slug));
+      if (raw) {
+        const saved = JSON.parse(raw) as { answers: Answer[] };
+        // Bewusste Ausnahme: SSR kennt localStorage nicht, der erste Client-
+        // Render muss also mit "start" matchen — das Nachziehen aus dem
+        // externen Speicher gehört genau hierher, nicht in einen Lazy-Initializer.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setAnswers(saved.answers);
+        setScreen("result");
+      }
+    } catch {
+      // localStorage nicht verfügbar (privater Modus o. ä.) — kein Problem,
+      // Nutzer landet einfach wieder auf dem Start-Screen.
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (initiallyUnlocked) {
       const t = setTimeout(() => setRevealed(true), 150);
       return () => clearTimeout(t);
     }
   }, [initiallyUnlocked]);
+
+  useEffect(() => {
+    if (screen !== "result") return;
+    try {
+      localStorage.setItem(attemptStorageKey(quiz.slug), JSON.stringify({ answers }));
+    } catch {
+      // s.o.
+    }
+  }, [screen, quiz.slug, answers]);
 
   const score = answers.filter((a) => a.correct).length;
   const question = quiz.questions[current];
@@ -82,6 +118,7 @@ export function QuizPlayer({
       answers={answers}
       unlocked={unlocked}
       revealed={revealed}
+      checkoutError={checkoutError}
       onUnlockedByOwner={() => {
         setUnlocked(true);
         setRevealed(true);
@@ -264,6 +301,7 @@ function ResultScreen({
   answers,
   unlocked,
   revealed,
+  checkoutError,
   onUnlockedByOwner,
   onRestart,
 }: {
@@ -272,6 +310,7 @@ function ResultScreen({
   answers: Answer[];
   unlocked: boolean;
   revealed: boolean;
+  checkoutError: boolean;
   onUnlockedByOwner: () => void;
   onRestart: () => void;
 }) {
@@ -303,6 +342,13 @@ function ResultScreen({
         <h2 className="font-display text-xl font-bold text-ink">{rank.title}</h2>
         <p className="text-sm text-ink-soft">{rank.subtitle}</p>
       </div>
+
+      {checkoutError && (
+        <div className="rounded-xl bg-gold-soft px-4 py-3 text-[13px] font-semibold text-gold-dark">
+          ⚙️ Die Bezahlfunktion wird gerade eingerichtet — die Themen-Analyse ist in Kürze
+          freischaltbar. Dein Ergebnis oben bleibt dir natürlich erhalten.
+        </div>
+      )}
 
       <div className="flex flex-col gap-4 rounded-2xl border-2 border-line bg-surface p-5">
         <div>

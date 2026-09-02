@@ -10,22 +10,26 @@ export default async function QuizPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ provider?: string; ref?: string; checkout_error?: string }>;
 }) {
   const { slug } = await params;
-  const { session_id: sessionId } = await searchParams;
+  const { provider, ref, checkout_error: checkoutError } = await searchParams;
 
   const quiz = getQuiz(slug);
   const game = games.find((g) => g.slug === slug);
   if (!game) notFound();
 
-  const unlocked = sessionId ? await verifyUnlock(sessionId, slug) : false;
+  const unlocked = provider && ref ? await verifyUnlock(provider, ref, slug) : false;
 
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
       <SiteHeader backHref="/" />
       {quiz ? (
-        <QuizPlayer quiz={quiz} initiallyUnlocked={unlocked} />
+        <QuizPlayer
+          quiz={quiz}
+          initiallyUnlocked={unlocked}
+          checkoutError={checkoutError === "not_configured"}
+        />
       ) : (
         <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />
       )}
