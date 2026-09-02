@@ -7,7 +7,7 @@ const SECTION_ORDER: ProductLevel[] = ["daily-free", "weekly-freemium"];
 export default function HomePage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-14 px-5 pb-20 pt-8">
-      <SiteHeader />
+      <SiteHeader showStreak />
       <Hero />
       {SECTION_ORDER.map((level) => (
         <GameSection key={level} level={level} />

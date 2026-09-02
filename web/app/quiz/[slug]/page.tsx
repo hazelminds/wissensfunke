@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
+import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
 import { verifyUnlock } from "@/lib/purchases";
 import { QuizPlayer } from "@/components/QuizPlayer";
+import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
+import { DailyRiddle } from "@/components/DailyRiddle";
 import { SiteHeader } from "@/components/SiteHeader";
 
 export default async function QuizPage({
@@ -13,28 +16,48 @@ export default async function QuizPage({
   searchParams: Promise<{ provider?: string; ref?: string; checkout_error?: string }>;
 }) {
   const { slug } = await params;
-  const { provider, ref, checkout_error: checkoutError } = await searchParams;
+  const { provider, ref: paymentRef, checkout_error: checkoutError } = await searchParams;
 
-  const quiz = getQuiz(slug);
   const game = games.find((g) => g.slug === slug);
   if (!game) notFound();
 
-  const unlocked = provider && ref ? await verifyUnlock(provider, ref, slug) : false;
-
   return (
     <div className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
-      <SiteHeader backHref="/" />
-      {quiz ? (
-        <QuizPlayer
-          quiz={quiz}
-          initiallyUnlocked={unlocked}
-          checkoutError={checkoutError === "not_configured"}
-        />
-      ) : (
-        <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />
-      )}
+      <SiteHeader backHref="/" showStreak={slug === "tages-raetsel" || slug === "tages-mini-quiz"} />
+      <QuizContent slug={slug} game={game} provider={provider} paymentRef={paymentRef} checkoutError={checkoutError} />
     </div>
   );
+}
+
+async function QuizContent({
+  slug,
+  game,
+  provider,
+  paymentRef,
+  checkoutError,
+}: {
+  slug: string;
+  game: (typeof games)[number];
+  provider?: string;
+  paymentRef?: string;
+  checkoutError?: string;
+}) {
+  if (slug === "tages-mini-quiz") {
+    return <DailyMiniQuiz quizSet={getDailyQuizSet()} />;
+  }
+  if (slug === "tages-raetsel") {
+    return <DailyRiddle riddle={getDailyRiddle()} />;
+  }
+
+  const quiz = getQuiz(slug);
+  if (quiz) {
+    const unlocked = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
+    return (
+      <QuizPlayer quiz={quiz} initiallyUnlocked={unlocked} checkoutError={checkoutError === "not_configured"} />
+    );
+  }
+
+  return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
 }
 
 function ComingSoon({ title, emoji, teaser }: { title: string; emoji: string; teaser: string }) {
