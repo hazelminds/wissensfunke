@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fredoka, Nunito } from "next/font/google";
+import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 const fredoka = Fredoka({
@@ -26,7 +27,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="de" className={`${fredoka.variable} ${nunito.variable}`}>
-      <body className="min-h-screen font-body antialiased">{children}</body>
+      <body className="min-h-screen font-body antialiased">
+        {children}
+        <SiteFooter />
+      </body>
     </html>
   );
 }

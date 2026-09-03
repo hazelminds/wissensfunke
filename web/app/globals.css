@@ -103,3 +103,42 @@ body {
     opacity: 1;
   }
 }
+
+/* Rechtstexte (Impressum/Datenschutz/AGB/Widerruf) — schlichte Lauftext-Typografie. */
+.legal-prose h2 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--nog-ink);
+  margin: 4px 0 -8px;
+}
+.legal-prose h3 {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--nog-ink);
+  margin: 4px 0 -8px;
+}
+.legal-prose ul {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.legal-prose strong {
+  color: var(--nog-ink);
+  font-weight: 800;
+}
+.legal-prose a {
+  color: var(--nog-primary-dark);
+  font-weight: 700;
+  text-decoration: underline;
+}
+.legal-prose .placeholder {
+  color: var(--nog-red-dark);
+  font-weight: 800;
+  background: var(--nog-red-soft);
+  padding: 1px 5px;
+  border-radius: 4px;
+}

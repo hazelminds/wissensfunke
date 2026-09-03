@@ -121,8 +121,8 @@ function Footer() {
     <footer className="border-t border-line pt-6 text-[12px] text-muted">
       <p>
         Noggl ist ein eigenständiges Unterhaltungsangebot ohne
-        Gewinnmöglichkeit — kein Glücksspiel. Rechtstexte (Impressum,
-        Datenschutz, AGB, Widerrufsbelehrung) folgen vor dem Livegang.
+        Gewinnmöglichkeit — kein Glücksspiel. Rechtstexte liegen als Entwurf vor (siehe unten) und
+        werden vor dem Livegang anwaltlich geprüft.
       </p>
     </footer>
   );

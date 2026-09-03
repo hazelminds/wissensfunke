@@ -78,6 +78,7 @@ app/
   layout.tsx             Root-Layout: Fonts (Fredoka/Nunito), Metadata
   globals.css             Design-Tokens v4 als Tailwind-Theme (--nog-* Variablen)
   page.tsx                 Startseite: listet alle Spiele nach Produktebene
+  rechtliches/              Impressum, Datenschutz, AGB, Widerruf (Entwürfe, siehe unten)
   login/                    Magic-Link-Login
   auth/callback/             Tauscht den Magic-Link-Code gegen eine Session
   quiz/[slug]/                Spiel-Flow (Tages-Rätsel/-Quiz, Ebene-2-Quiz oder Platzhalter)
@@ -92,7 +93,9 @@ components/
   DailyRiddle.tsx                Ebene-1-Tagesrätsel (Prompt + Lösung aufdecken)
   LoginForm.tsx                   Magic-Link-Formular mit Status-Feedback
   SiteHeader.tsx                    Gemeinsamer Header: Streak-Badge + Anmelden/Abmelden
+  SiteFooter.tsx                      Globaler Footer (Rechtslinks), im Root-Layout gerendert
   StreakBadge.tsx                    Streak-Anzeige (Server-Wert oder localStorage-Fallback)
+  LegalPage.tsx                       Gerüst für die vier Rechtsseiten (Entwurfs-Banner etc.)
 lib/
   auth.ts                    getCurrentUser() + Supabase-konfiguriert?-Check (überall genutzt,
                                damit ohne Supabase-Projekt nichts abstürzt)
@@ -140,3 +143,50 @@ laufen wie zuvor lokal bzw. über die URL-Referenz, nichts crasht).
   indem sie den jeweiligen Test erneut öffnen (dann automatisch entsperrt).
 - **Widerrufsrecht-Consent** (§ 356 Abs. 5 BGB) ist im Checkout noch nicht als Checkbox
   umgesetzt — braucht zuerst den fertigen Rechtstext (Briefing Abschnitt 8).
+
+## Rechtstexte (`/rechtliches/*`)
+
+Impressum, Datenschutz, AGB und Widerruf existieren jetzt als **Entwürfe** (gelber
+„Entwurf"-Banner auf jeder Seite, `[ZU ERGÄNZEN]`-Platzhalter rot markiert). Das sind erste
+Fassungen zur Vorbereitung, keine geprüfte Rechtsberatung — vor Livegang zwingend von einer
+Anwältin/einem Anwalt (und für Steuerfragen einer Steuerberatung) prüfen lassen.
+
+**Wichtigster offener Punkt, unabhängig vom Feintuning der Texte:** Der Betreiber laut Recherche
+(hazelminds-communications.com) ist **Hazelminds Communications Pte. Ltd., Singapur** (UEN
+202326202E) — keine EU-/DE-Gesellschaft. Das ändert einiges gegenüber einem „normalen" deutschen
+Impressum:
+
+- **EU-Vertretung nach Art. 27 DSGVO:** Anbieter außerhalb der EU/des EWR, die gezielt EU-Bürger:innen
+  ansprechen, müssen in der Regel eine Vertretung in der EU benennen. Noch nicht geklärt, ob eine
+  Ausnahme greift oder eine Vertretung benannt werden muss.
+- **EU-Umsatzsteuer (OSS):** Digitale Inhalte an Verbraucher:innen in der EU verkauft ein
+  Nicht-EU-Unternehmen grundsätzlich unter EU-Umsatzsteuerpflicht (One-Stop-Shop-Verfahren) —
+  unabhängig vom Sitz in Singapur. Braucht steuerliche Prüfung, bevor echtes Geld fließt.
+  Zahlungsdienstleister (Stripe/micropayment.ch) haben teils eigene Anforderungen an
+  Nicht-EU-Vertragspartner — beim gewählten Anbieter erfragen.
+- **Rechtswahl/Gerichtsstand in den AGB:** Zwingende verbraucherschützende Vorschriften am
+  Wohnsitz der Käufer:innen (Art. 6 Rom-I-VO) lassen sich vertraglich nicht wegbedingen —
+  eine AGB-Klausel zugunsten singapurischen Rechts schützt nicht automatisch vor deutschem/EU-
+  Verbraucherrecht. Braucht anwaltliche Formulierung.
+- **Diskrepanz gefunden:** Die bei ACRA hinterlegte Geschäftstätigkeit lautet laut Recherche
+  „Softwareentwicklung (außer Games)" — während die Firmen-Website selbst „Game Development" als
+  Leistung bewirbt und Noggl ein Spiele-Produkt ist. Wert, mit der Geschäftsführung/Steuerberatung
+  abzugleichen, ob die eingetragene Tätigkeit angepasst werden muss.
+
+**Fehlende Kontaktdaten:** Telefonnummer und E-Mail-Adresse des Betreibers waren über Websuche
+nicht auffindbar (die Original-Domain war aus dieser Umgebung nicht direkt abrufbar, siehe
+`EGRESS_BLOCKED` an anderer Stelle in diesem Dokument) — beides ist in allen vier Texten als
+Platzhalter markiert und muss ergänzt werden; Telefon/E-Mail sind Pflichtangaben im Impressum.
+
+**Weitere offene Punkte in den Texten selbst** (jeweils als `[ZU ERGÄNZEN]`/`[ZU PRÜFEN]`
+markiert): Name der Geschäftsführung, ob ein presserechtlich Verantwortlicher nach § 18 Abs. 2
+MStV nötig ist, aktueller Stand der EU-Streitschlichtungsplattform (wurde ggf. 2025 eingestellt —
+unbedingt aktuellen Stand prüfen, nicht ungeprüft übernehmen), konkrete Auftragsverarbeitungsverträge
+mit Supabase/Hosting/Zahlungsanbieter, Datenschutzbeauftragte:r-Pflicht, Löschfristen, finale
+Preise/Steuerausweis, Haftungsklausel, Kündigungsmodalitäten fürs Abo.
+
+Kurz: **Diese Entwürfe zeigen, wie die Seiten strukturiert sind und was inhaltlich reingehört —
+nicht, dass Noggl schon rechtssicher live gehen kann.** Vor allem die Singapur-Frage sollte früh
+mit einer im internationalen/deutschen Recht erfahrenen Kanzlei besprochen werden, weil sie
+möglicherweise beeinflusst, wie das Geschäft überhaupt strukturiert sein sollte (z. B. ob eine
+EU-Gesellschaft für den Verkauf an EU-Verbraucher:innen sinnvoller wäre).
