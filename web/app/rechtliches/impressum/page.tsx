@@ -48,10 +48,8 @@ export default function ImpressumPage() {
       <section>
         <h3>Umsatzsteuer</h3>
         <p>
-          <Placeholder>
-            ZU ERGÄNZEN: USt-IdNr./Steuernummer bzw. EU-USt-OSS-Registrierungsnummer, falls
-            digitale Inhalte an Verbraucher:innen in der EU verkauft werden
-          </Placeholder>
+          EU-USt-OSS-Registrierung liegt vor.{" "}
+          <Placeholder>ZU ERGÄNZEN: konkrete USt-IdNr./OSS-Registrierungsnummer hier eintragen</Placeholder>
         </p>
       </section>
 

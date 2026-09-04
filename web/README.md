@@ -144,12 +144,16 @@ laufen wie zuvor lokal bzw. über die URL-Referenz, nichts crasht).
 - **Widerrufsrecht-Consent** (§ 356 Abs. 5 BGB) ist im Checkout noch nicht als Checkbox
   umgesetzt — braucht zuerst den fertigen Rechtstext (Briefing Abschnitt 8).
 
-## Rechtstexte (`/rechtliches/*`)
+## Rechtstexte (`/rechtliches/*`) — ⏸️ VOR LIVEGANG UNBEDINGT HIER WEITERMACHEN
 
-Impressum, Datenschutz, AGB und Widerruf existieren jetzt als **Entwürfe** (gelber
-„Entwurf"-Banner auf jeder Seite, `[ZU ERGÄNZEN]`-Platzhalter rot markiert). Das sind erste
-Fassungen zur Vorbereitung, keine geprüfte Rechtsberatung — vor Livegang zwingend von einer
-Anwältin/einem Anwalt (und für Steuerfragen einer Steuerberatung) prüfen lassen.
+Impressum, Datenschutz, AGB und Widerruf existieren als **Entwürfe** (gelber „Entwurf"-Banner auf
+jeder Seite, `[ZU ERGÄNZEN]`-Platzhalter rot markiert). Das sind erste Fassungen zur Vorbereitung,
+keine geprüfte Rechtsberatung — vor Livegang zwingend von einer Anwältin/einem Anwalt (und für
+Steuerfragen einer Steuerberatung) prüfen lassen. **Bewusst zurückgestellt, um an der
+Grundstruktur weiterzubauen — bitte vor dem tatsächlichen Livegang aktiv nochmal aufgreifen.**
+
+**Bereits geklärt:** EU-Umsatzsteuer (OSS) ist angemeldet — keine offene Baustelle mehr, der
+Punkt unten ist nur zur Doku stehen geblieben.
 
 **Wichtigster offener Punkt, unabhängig vom Feintuning der Texte:** Der Betreiber laut Recherche
 (hazelminds-communications.com) ist **Hazelminds Communications Pte. Ltd., Singapur** (UEN
@@ -159,11 +163,7 @@ Impressum:
 - **EU-Vertretung nach Art. 27 DSGVO:** Anbieter außerhalb der EU/des EWR, die gezielt EU-Bürger:innen
   ansprechen, müssen in der Regel eine Vertretung in der EU benennen. Noch nicht geklärt, ob eine
   Ausnahme greift oder eine Vertretung benannt werden muss.
-- **EU-Umsatzsteuer (OSS):** Digitale Inhalte an Verbraucher:innen in der EU verkauft ein
-  Nicht-EU-Unternehmen grundsätzlich unter EU-Umsatzsteuerpflicht (One-Stop-Shop-Verfahren) —
-  unabhängig vom Sitz in Singapur. Braucht steuerliche Prüfung, bevor echtes Geld fließt.
-  Zahlungsdienstleister (Stripe/micropayment.ch) haben teils eigene Anforderungen an
-  Nicht-EU-Vertragspartner — beim gewählten Anbieter erfragen.
+- ~~EU-Umsatzsteuer (OSS)~~ — erledigt, angemeldet (s. o.).
 - **Rechtswahl/Gerichtsstand in den AGB:** Zwingende verbraucherschützende Vorschriften am
   Wohnsitz der Käufer:innen (Art. 6 Rom-I-VO) lassen sich vertraglich nicht wegbedingen —
   eine AGB-Klausel zugunsten singapurischen Rechts schützt nicht automatisch vor deutschem/EU-

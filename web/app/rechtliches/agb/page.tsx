@@ -46,11 +46,8 @@ export default function AgbPage() {
         <p>
           Aktuelle Beispielpreise: Einmalkauf einer Tiefenauswertung{" "}
           <Placeholder>ab 2,99 €, endgültige Preisstruktur noch nicht final</Placeholder>; Abo{" "}
-          <Placeholder>bis 4,99 €/Monat, noch nicht final</Placeholder>.{" "}
-          <Placeholder>
-            ZU ERGÄNZEN: ob Preise als Brutto-/Endpreise inkl. gesetzlicher USt. ausgewiesen
-            werden (abhängig von der finalen steuerlichen Einordnung, siehe Datenschutz/Impressum).
-          </Placeholder>
+          <Placeholder>bis 4,99 €/Monat, noch nicht final</Placeholder>. Alle Preise verstehen sich
+          als Endpreise inkl. der jeweils geltenden gesetzlichen Umsatzsteuer (EU-USt-OSS-Verfahren).
         </p>
       </section>
 

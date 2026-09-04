@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Fredoka, Nunito } from "next/font/google";
+import { Bricolage_Grotesque, Nunito } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
+const bricolage = Bricolage_Grotesque({
+  variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["500", "600", "700", "800"],
 });
 
 const nunito = Nunito({
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="de" className={`${fredoka.variable} ${nunito.variable}`}>
+    <html lang="de" className={`${bricolage.variable} ${nunito.variable}`}>
       <body className="min-h-screen font-body antialiased">
         {children}
         <SiteFooter />
