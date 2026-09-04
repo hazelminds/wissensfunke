@@ -22,6 +22,9 @@ export const metadata: Metadata = {
   },
   description:
     "Kurzweilige Denkspiele für zwischendurch — Rätsel, Quiz und Selbst-Tests, täglich neu, ohne Gewinnmöglichkeit.",
+  // Noch in Entwicklung (kein Zahlungsanbieter aktiv, Rechtstexte nur Entwurf) — erst aus dem
+  // Index nehmen lassen, wenn die Seite wirklich startklar ist.
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
