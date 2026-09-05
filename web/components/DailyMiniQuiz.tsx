@@ -124,7 +124,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
       </div>
 
       {answered && (
-        <div className="rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-[#3B3860]">
+        <div className="rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-ink">
           {question.explanation}
         </div>
       )}

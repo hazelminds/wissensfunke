@@ -281,7 +281,7 @@ function QuizScreen({
       </div>
 
       {answered && (
-        <div className="rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-[#3B3860]">
+        <div className="rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-ink">
           {question.explanation}
         </div>
       )}
@@ -409,7 +409,12 @@ function ResultScreen({
 }
 
 function burstConfetti() {
-  const colors = ["#6C5CE7", "#FF7A59", "#00C896", "#FFB800"];
+  const colors = [
+    "hsl(12 90% 60%)",
+    "hsl(28 95% 62%)",
+    "hsl(160 70% 45%)",
+    "hsl(45 95% 58%)",
+  ];
   for (let i = 0; i < 18; i++) {
     const p = document.createElement("div");
     p.style.position = "fixed";

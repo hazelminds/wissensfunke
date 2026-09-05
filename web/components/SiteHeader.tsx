@@ -17,7 +17,7 @@ export async function SiteHeader({
   return (
     <header className="flex items-center justify-between gap-3">
       <Link href="/" className="flex items-center gap-2.5">
-        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-[#9b8cff] text-lg shadow-[0_4px_0_var(--nog-primary-dark)]">
+        <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-coral text-lg shadow-[0_4px_0_var(--nog-primary-dark)]">
           🧠
         </span>
         <span className="font-display text-lg font-bold text-ink">Noggl</span>

@@ -13,7 +13,7 @@ export function LoginForm() {
       <div className="flex flex-col gap-2 rounded-2xl border-2 border-green bg-green-soft p-5 text-center">
         <span className="text-2xl">📬</span>
         <p className="font-display text-[15px] font-bold text-green-dark">Link verschickt!</p>
-        <p className="text-sm text-[#0F4A3A]">
+        <p className="text-sm text-ink-soft">
           Check dein Postfach ({state.message}) und klick auf den Anmelde-Link.
         </p>
       </div>

@@ -33,7 +33,7 @@ export function DailyRiddle({ riddle }: { riddle: DailyRiddleData }) {
             <p className="font-display text-[15px] font-bold text-green-dark">
               Lösung: {riddle.answer}
             </p>
-            <p className="text-sm leading-relaxed text-[#0F4A3A]">{riddle.explanation}</p>
+            <p className="text-sm leading-relaxed text-ink-soft">{riddle.explanation}</p>
           </div>
         ) : (
           <button onClick={reveal} className="btn-3d btn-3d-primary py-4 text-base">

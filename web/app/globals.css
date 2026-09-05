@@ -1,34 +1,63 @@
 @import "tailwindcss";
 
 :root {
-  /* Noggl design system v4 — exact tokens from the approved prototype. */
-  --nog-bg: #fafaff;
-  --nog-surface: #ffffff;
-  --nog-ink: #1b1b2f;
-  --nog-ink-soft: #54536b;
+  /* Noggl design system v5 — dark theme, ported 1:1 from the Base44 prototype. */
+  --background: 255 24% 7%;
+  --foreground: 40 40% 96%;
+  --card: 255 22% 11%;
+  --card-foreground: 40 40% 96%;
+  --popover: 255 22% 11%;
+  --popover-foreground: 40 40% 96%;
+  --primary: 12 90% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 255 18% 16%;
+  --secondary-foreground: 40 40% 96%;
+  --muted: 255 18% 16%;
+  --muted-foreground: 240 12% 64%;
+  --accent: 178 70% 45%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 255 16% 18%;
+  --input: 255 16% 18%;
+  --ring: 12 90% 60%;
+  --radius: 1rem;
+  --success: 160 70% 45%;
 
-  --nog-primary: #6c5ce7;
-  --nog-primary-dark: #4e3fc4;
-  --nog-primary-soft: #efecff;
+  /* Spiel-Kategorien, direkt aus Base44 übernommen. */
+  --quiz: 265 85% 68%;
+  --puzzle: 178 70% 48%;
+  --psych: 28 95% 60%;
+  --glow: 12 90% 68%;
 
-  --nog-coral: #ff7a59;
-  --nog-coral-dark: #e85a38;
-  --nog-coral-soft: #ffede7;
+  /* Semantische Aliase (--nog-*), auf denen unsere bestehenden Komponenten aufbauen. */
+  --nog-bg: hsl(var(--background));
+  --nog-surface: hsl(var(--card));
+  --nog-ink: hsl(var(--foreground));
+  --nog-ink-soft: hsl(var(--muted-foreground));
 
-  --nog-green: #00c896;
-  --nog-green-dark: #00a67d;
-  --nog-green-soft: #dffbf3;
+  --nog-primary: hsl(var(--primary));
+  --nog-primary-dark: hsl(12 90% 70%);
+  --nog-primary-soft: hsl(12 90% 60% / 0.16);
 
-  --nog-red: #ff5a6e;
-  --nog-red-dark: #e04054;
-  --nog-red-soft: #ffe6e9;
+  --nog-coral: hsl(var(--psych));
+  --nog-coral-dark: hsl(28 95% 72%);
+  --nog-coral-soft: hsl(28 95% 60% / 0.16);
 
-  --nog-gold: #ffb800;
-  --nog-gold-dark: #e29e00;
-  --nog-gold-soft: #fff4d9;
+  --nog-green: hsl(var(--success));
+  --nog-green-dark: hsl(160 70% 62%);
+  --nog-green-soft: hsl(160 70% 45% / 0.16);
 
-  --nog-muted: #8a8aa3;
-  --nog-line: rgba(27, 27, 47, 0.08);
+  --nog-red: hsl(var(--destructive));
+  --nog-red-dark: hsl(0 84% 72%);
+  --nog-red-soft: hsl(0 84% 60% / 0.16);
+
+  --nog-gold: hsl(45 95% 58%);
+  --nog-gold-dark: hsl(45 95% 70%);
+  --nog-gold-soft: hsl(45 95% 58% / 0.16);
+
+  --nog-muted: hsl(var(--muted-foreground));
+  --nog-line: hsl(var(--border));
 }
 
 @theme inline {
@@ -60,16 +89,28 @@
   --color-muted: var(--nog-muted);
   --color-line: var(--nog-line);
 
+  --color-quiz: hsl(var(--quiz));
+  --color-puzzle: hsl(var(--puzzle));
+  --color-psych: hsl(var(--psych));
+
   --font-display: var(--font-bricolage), sans-serif;
   --font-body: var(--font-nunito), sans-serif;
 }
 
 body {
   background:
-    radial-gradient(700px 400px at 100% -5%, rgba(108, 92, 231, 0.1), transparent 55%),
-    radial-gradient(600px 380px at -5% 100%, rgba(255, 122, 89, 0.1), transparent 55%),
+    radial-gradient(700px 400px at 100% -5%, hsl(var(--primary) / 0.12), transparent 55%),
+    radial-gradient(600px 380px at -5% 100%, hsl(var(--accent) / 0.1), transparent 55%),
     var(--nog-bg);
   color: var(--nog-ink);
+}
+
+/* Utilities, 1:1 aus Base44 übernommen -- für neu gebaute Komponenten. */
+.glow-primary {
+  box-shadow: 0 18px 50px -18px hsl(var(--primary) / 0.7);
+}
+.hairline {
+  border: 1px solid hsl(var(--border));
 }
 
 /* 3D "gummy" button — the signature Noggl CTA style (Duolingo-Prinzip). */
