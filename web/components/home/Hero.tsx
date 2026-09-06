@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Star, Brain, Puzzle, Heart } from "lucide-react";
 
 export function Hero() {
   return (
@@ -44,6 +44,21 @@ export function Hero() {
               Plus entdecken
             </Link>
           </div>
+
+          <div className="mt-7 flex items-center gap-4 text-sm text-muted">
+            <span className="flex items-center gap-1.5">
+              <span className="flex text-primary">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-current" />
+                ))}
+              </span>
+              4,8
+            </span>
+            <span className="h-4 w-px bg-line" />
+            <span>120k Spieler</span>
+            <span className="h-4 w-px bg-line" />
+            <span>Kein Download nötig</span>
+          </div>
         </div>
 
         <HeroVisual />
@@ -58,7 +73,7 @@ function HeroVisual() {
       <div className="hairline absolute top-0 right-4 w-56 rotate-3 rounded-2xl bg-surface p-4 shadow-2xl">
         <div className="mb-3 flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-quiz/20">
-            <span className="text-lg">🧠</span>
+            <Brain className="h-5 w-5 text-quiz" />
           </div>
           <div>
             <p className="text-xs text-muted">Quiz</p>
@@ -80,7 +95,7 @@ function HeroVisual() {
       <div className="hairline absolute top-24 left-0 w-52 -rotate-6 rounded-2xl bg-surface p-4 shadow-2xl">
         <div className="mb-3 flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-puzzle/20">
-            <span className="text-lg">🧩</span>
+            <Puzzle className="h-5 w-5 text-puzzle" />
           </div>
           <p className="font-display text-sm font-bold text-ink">Rätsel · 3-Sterne</p>
         </div>
@@ -94,7 +109,7 @@ function HeroVisual() {
       <div className="hairline absolute right-10 bottom-0 w-60 rotate-2 rounded-2xl bg-surface p-4 shadow-2xl">
         <div className="mb-3 flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-psych/20">
-            <span className="text-lg">💬</span>
+            <Heart className="h-5 w-5 text-psych" />
           </div>
           <div>
             <p className="text-xs text-muted">Selbsttest</p>

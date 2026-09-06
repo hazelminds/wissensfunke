@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CalendarDays, Clock, Crown, ArrowRight } from "lucide-react";
 import { games, gameTypeMeta, type GameModule } from "@/content/games";
+import { GameIcon } from "@/lib/gameIcons";
 
 const typeColorVar: Record<string, string> = {
   quiz: "--quiz",
@@ -53,10 +54,10 @@ export function GameOfDay() {
         >
           <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
             <div
-              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl text-white shadow-lg"
+              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-white shadow-lg"
               style={{ background: `hsl(var(${colorVar}))` }}
             >
-              {game.emoji}
+              <GameIcon title={game.title} type={game.type} className="h-8 w-8" />
             </div>
             <div className="min-w-0">
               <div className="mb-1 flex items-center gap-2 text-xs text-muted">

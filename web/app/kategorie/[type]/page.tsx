@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Crown } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { games, gameTypeMeta, type GameType } from "@/content/games";
+import { GameIcon } from "@/lib/gameIcons";
 
 export function generateStaticParams() {
   return Object.keys(gameTypeMeta).map((type) => ({ type }));
@@ -41,7 +42,8 @@ export default async function CategoryPage({
               Aktuell keine Runden in dieser Kategorie.
             </p>
           ) : (
-            items.map((g) => (
+            items.map((g) => {
+              return (
               <Link
                 key={g.slug}
                 href={`/quiz/${g.slug}`}
@@ -54,10 +56,10 @@ export default async function CategoryPage({
                   }}
                 >
                   <div
-                    className="flex h-16 w-16 items-center justify-center rounded-2xl text-3xl text-white shadow-lg"
+                    className="flex h-16 w-16 items-center justify-center rounded-2xl text-white shadow-lg"
                     style={{ background: `hsl(var(--${g.type}))` }}
                   >
-                    {g.emoji}
+                    <GameIcon title={g.title} type={g.type} className="h-8 w-8" />
                   </div>
                   {g.isPremium && (
                     <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-white">
@@ -75,7 +77,8 @@ export default async function CategoryPage({
                   </div>
                 </div>
               </Link>
-            ))
+              );
+            })
           )}
         </div>
       </main>

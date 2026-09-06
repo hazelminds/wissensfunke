@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Nunito } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
-const bricolage = Bricolage_Grotesque({
-  variable: "--font-bricolage",
+/** Base44-Vorbild nutzt exakt diese beiden Google Fonts -- 1:1 übernommen. */
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
   weight: ["500", "600", "700", "800"],
 });
 
-const nunito = Nunito({
-  variable: "--font-nunito",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="de" className={`${bricolage.variable} ${nunito.variable}`}>
+    <html lang="de" className={`${plusJakarta.variable} ${inter.variable}`}>
       <body className="min-h-screen font-body antialiased">
         {children}
         <SiteFooter />

@@ -1,11 +1,22 @@
+import { createElement } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, Lock } from "lucide-react";
+import { ArrowRight, Check, Lock, Brain, Puzzle, Heart } from "lucide-react";
 import { type GameType, gameTypeMeta } from "@/content/games";
 
-const categories: { id: GameType; emoji: string; free: string; plus: string }[] = [
-  { id: "quiz", emoji: "🧠", free: "5 Fragen pro Runde", plus: "30+ Fragen & Themenspecials" },
-  { id: "puzzle", emoji: "🧩", free: "Tagesrätsel & 3 Starter", plus: "Erweiterte Rätsel-Sets" },
-  { id: "psych", emoji: "💬", free: "Kurze Versionen", plus: "Ausführliche Ergebnisse & Profile" },
+const categories: {
+  id: GameType;
+  icon: typeof Brain;
+  free: string;
+  plus: string;
+}[] = [
+  { id: "quiz", icon: Brain, free: "5 Fragen pro Runde", plus: "30+ Fragen & Themenspecials" },
+  { id: "puzzle", icon: Puzzle, free: "Tagesrätsel & 3 Starter", plus: "Erweiterte Rätsel-Sets" },
+  {
+    id: "psych",
+    icon: Heart,
+    free: "Kurze Versionen",
+    plus: "Ausführliche Ergebnisse & Profile",
+  },
 ];
 
 export function CategoryCards() {
@@ -42,10 +53,13 @@ export function CategoryCards() {
                 style={{ background: `hsl(var(--${c.id}))` }}
               />
               <div
-                className="relative flex h-12 w-12 items-center justify-center rounded-2xl text-2xl"
+                className="relative flex h-12 w-12 items-center justify-center rounded-2xl"
                 style={{ background: `hsl(var(--${c.id}) / 0.18)` }}
               >
-                {c.emoji}
+                {createElement(c.icon, {
+                  className: "h-6 w-6",
+                  style: { color: `hsl(var(--${c.id}))` },
+                })}
               </div>
 
               <h3 className="relative mt-5 font-display text-xl font-bold text-ink">

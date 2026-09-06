@@ -9,7 +9,7 @@ const FAQ = [
     a: "Noggl ist eine Unterhaltungsplattform für Erwachsene mit kurzen Quizrunden, kleinen Rätseln und Selbst-Tests. Alles läuft direkt im Browser — kein Download, kein Konto nötig zum Reinschnuppern.",
   },
   {
-    q: "Sind die Selbst-Tests ernsthaft?",
+    q: "Sind die psychologischen Tests ernsthaft?",
     a: "Nein. Die Selbst-Tests sind reine Unterhaltung und ersetzen keine Beratung oder Diagnose. Ergebnisse sind Anregungen zum Nachdenken, keine professionelle Einschätzung.",
   },
   {
