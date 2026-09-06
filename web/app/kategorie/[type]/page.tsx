@@ -18,7 +18,9 @@ export default async function CategoryPage({
   if (!isGameType(type)) notFound();
 
   const meta = gameTypeMeta[type];
-  const items = games.filter((g) => g.type === type).sort((a, b) => a.sortOrder - b.sortOrder);
+  const items = games
+    .filter((g) => g.type === type && g.inCategoryBrowser !== false)
+    .sort((a, b) => a.sortOrder - b.sortOrder);
 
   return (
     <div className="min-h-screen bg-bg">

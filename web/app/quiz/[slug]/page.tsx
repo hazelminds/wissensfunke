@@ -65,7 +65,8 @@ async function QuizContent({
   }
 
   if (game.variant === "whoami") {
-    const round = getWhoAmIRound("einstein");
+    const roundSlug = slug.replace(/^wer-bin-ich-/, "");
+    const round = getWhoAmIRound(roundSlug);
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
     return (
       <DailyCapGate>
