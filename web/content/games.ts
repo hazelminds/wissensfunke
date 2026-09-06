@@ -10,6 +10,9 @@
 
 export type ProductLevel = "daily-free" | "weekly-freemium" | "subscriber-only";
 
+/** Die drei Spielarten aus dem Base44-Vorbild -- steuert Kategorie-Farbe & Icon. */
+export type GameType = "quiz" | "puzzle" | "psych";
+
 export interface GameModule {
   slug: string;
   title: string;
@@ -18,6 +21,9 @@ export interface GameModule {
   category: string;
   level: ProductLevel;
   estMinutes: number;
+  type: GameType;
+  isPremium: boolean;
+  sortOrder: number;
 }
 
 export const levelMeta: Record<
@@ -51,6 +57,9 @@ export const games: GameModule[] = [
     category: "Logik",
     level: "daily-free",
     estMinutes: 3,
+    type: "puzzle",
+    isPremium: false,
+    sortOrder: 1,
   },
   {
     slug: "tages-mini-quiz",
@@ -60,6 +69,9 @@ export const games: GameModule[] = [
     category: "Allgemeinwissen",
     level: "daily-free",
     estMinutes: 2,
+    type: "quiz",
+    isPremium: false,
+    sortOrder: 2,
   },
 
   // Ebene 2 – wöchentliche Selbst-Tests (Freemium)
@@ -71,6 +83,9 @@ export const games: GameModule[] = [
     category: "Wissen",
     level: "weekly-freemium",
     estMinutes: 2,
+    type: "quiz",
+    isPremium: false,
+    sortOrder: 3,
   },
   {
     slug: "beziehungstyp",
@@ -80,6 +95,9 @@ export const games: GameModule[] = [
     category: "Persönlichkeit",
     level: "weekly-freemium",
     estMinutes: 4,
+    type: "psych",
+    isPremium: false,
+    sortOrder: 4,
   },
   {
     slug: "freundes-kompatibilitaet",
@@ -89,5 +107,23 @@ export const games: GameModule[] = [
     category: "Kompatibilität",
     level: "weekly-freemium",
     estMinutes: 3,
+    type: "psych",
+    isPremium: false,
+    sortOrder: 5,
   },
 ];
+
+export const gameTypeMeta: Record<GameType, { label: string; description: string }> = {
+  quiz: {
+    label: "Quiz",
+    description: "Schnelle Wissensrunden — Allgemein, Filme, Weltwissen & mehr.",
+  },
+  puzzle: {
+    label: "Puzzle",
+    description: "Kurze Logik- und Bilderrätsel zum Knobeln zwischendurch.",
+  },
+  psych: {
+    label: "Selbsttests",
+    description: "Kurzweilige Persönlichkeitsspiele — Unterhaltung, keine Beratung.",
+  },
+};
