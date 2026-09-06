@@ -7,9 +7,13 @@ import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
-const IMAGE_URL = "/puzzle-noggl.svg";
-
 type Difficulty = "easy" | "medium" | "hard";
+
+const IMAGES: Record<Difficulty, string> = {
+  easy: "/puzzle-beach.svg",
+  medium: "/puzzle-skyline.svg",
+  hard: "/puzzle-macro.svg",
+};
 
 const gridFor = (difficulty: Difficulty) => (difficulty === "medium" ? 4 : difficulty === "hard" ? 5 : 3);
 const labelFor = (difficulty: Difficulty) =>
@@ -80,6 +84,7 @@ export function SlidingPuzzle({
   difficulty?: Difficulty;
 }) {
   const n = gridFor(difficulty);
+  const imageUrl = IMAGES[difficulty];
 
   const [{ board, empty }, setState] = useState(() => initBoard(n));
   const [moves, setMoves] = useState(0);
@@ -224,7 +229,7 @@ export function SlidingPuzzle({
         {showPreview && (
           <div
             className="absolute inset-0 z-20 bg-cover bg-center"
-            style={{ backgroundImage: `url(${IMAGE_URL})` }}
+            style={{ backgroundImage: `url(${imageUrl})` }}
           />
         )}
 
@@ -254,7 +259,7 @@ export function SlidingPuzzle({
                 top: `${row * cellPct}%`,
                 transform: `translate(${tx}px, ${ty}px)`,
                 transition: isDragging ? "none" : "transform 180ms ease, left 180ms ease, top 180ms ease",
-                backgroundImage: `url(${IMAGE_URL})`,
+                backgroundImage: `url(${imageUrl})`,
                 backgroundSize: `${n * 100}% ${n * 100}%`,
                 backgroundPosition: `${(homeCol / (n - 1)) * 100}% ${(homeRow / (n - 1)) * 100}%`,
                 boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.06)",

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="water" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d5f6b" />
+      <stop offset="45%" stop-color="#0e8f93" />
+      <stop offset="75%" stop-color="#3fc1c9" />
+      <stop offset="100%" stop-color="#8fe3d8" />
+    </linearGradient>
+    <radialGradient id="shallow" cx="30%" cy="70%" r="60%">
+      <stop offset="0%" stop-color="#bdf0e0" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#bdf0e0" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#water)" />
+  <circle cx="180" cy="420" r="220" fill="url(#shallow)" />
+
+  <!-- sand curve, top-left corner -->
+  <path d="M0 0 L230 0 Q120 90 60 190 Q10 270 0 320 Z" fill="#f3e3b6" />
+  <path d="M0 0 L230 0 Q120 90 60 190 Q10 270 0 320 Z" fill="#e9d49a" opacity="0.5" />
+
+  <!-- coral reef patches -->
+  <ellipse cx="120" cy="470" rx="70" ry="40" fill="#1f7a6d" opacity="0.55" />
+  <ellipse cx="90" cy="510" rx="45" ry="25" fill="#276b52" opacity="0.5" />
+  <ellipse cx="480" cy="150" rx="60" ry="30" fill="#0a4a55" opacity="0.4" />
+
+  <!-- palm tree shadows -->
+  <g fill="#0a3d3f" opacity="0.5">
+    <ellipse cx="330" cy="250" rx="70" ry="26" transform="rotate(25 330 250)" />
+    <ellipse cx="400" cy="230" rx="55" ry="20" transform="rotate(-15 400 230)" />
+    <ellipse cx="360" cy="300" rx="45" ry="16" transform="rotate(60 360 300)" />
+  </g>
+
+  <!-- boat -->
+  <g transform="translate(470,470)">
+    <ellipse cx="0" cy="0" rx="38" ry="10" fill="#eee" />
+    <rect x="-2" y="-46" width="4" height="46" fill="#eee" />
+    <path d="M-2 -46 L28 -10 L-2 -10 Z" fill="#f8f8f8" opacity="0.9" />
+  </g>
+
+  <!-- sun glints -->
+  <g fill="#ffffff" opacity="0.55">
+    <circle cx="250" cy="90" r="4" />
+    <circle cx="410" cy="380" r="5" />
+    <circle cx="140" cy="330" r="3" />
+    <circle cx="520" cy="260" r="4" />
+    <circle cx="60" cy="60" r="3" />
+  </g>
+</svg>
