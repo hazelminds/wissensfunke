@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Trophy, Crown, User as UserIcon, LogIn } from "lucide-react";
+import { Menu, X, Trophy, Crown, User as UserIcon, LogIn, Shield } from "lucide-react";
 
 export function NavbarMobileMenu({
   isLoggedIn,
   username,
+  isAdmin = false,
 }: {
   isLoggedIn: boolean;
   username: string | null;
+  isAdmin?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -46,6 +48,15 @@ export function NavbarMobileMenu({
           >
             <Trophy className="h-4 w-4" /> Bestenliste
           </Link>
+          {isAdmin && (
+            <Link
+              href="/admin"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-1.5 py-2.5 text-sm text-ink-soft hover:text-ink"
+            >
+              <Shield className="h-4 w-4" /> Admin
+            </Link>
+          )}
           <Link
             href="/konto"
             onClick={() => setOpen(false)}

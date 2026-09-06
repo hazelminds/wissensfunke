@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { Trophy, Crown, User as UserIcon, LogIn } from "lucide-react";
+import { Trophy, Crown, User as UserIcon, LogIn, Shield } from "lucide-react";
 import { StreakBadge } from "@/components/StreakBadge";
 import { NavbarMobileMenu } from "@/components/NavbarMobileMenu";
 import { getCurrentUser } from "@/lib/auth";
 import { getServerStreak } from "@/lib/streak-server";
 import { signOut } from "@/lib/actions/auth";
+import { isAdminEmail } from "@/lib/admin";
 
 /** Navbar im Base44-Aufbau: Logo, Nav-Links, Bestenliste, Plus-CTA, Konto/Anmelden. */
 export async function SiteHeader({
@@ -17,6 +18,7 @@ export async function SiteHeader({
   const user = await getCurrentUser();
   const serverStreak = showStreak && user ? await getServerStreak(user.id) : null;
   const username = (user?.user_metadata?.username as string | undefined) ?? user?.email ?? null;
+  const isAdmin = isAdminEmail(user?.email);
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-[hsl(var(--background)/0.7)] backdrop-blur-xl">
@@ -54,6 +56,14 @@ export async function SiteHeader({
             >
               <Trophy className="h-4 w-4" /> Bestenliste
             </Link>
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-ink"
+              >
+                <Shield className="h-4 w-4" /> Admin
+              </Link>
+            )}
           </nav>
         )}
 
@@ -92,7 +102,7 @@ export async function SiteHeader({
               <LogIn className="h-4 w-4" /> Anmelden
             </Link>
           )}
-          <NavbarMobileMenu isLoggedIn={!!user} username={username} />
+          <NavbarMobileMenu isLoggedIn={!!user} username={username} isAdmin={isAdmin} />
         </div>
       </div>
     </header>
