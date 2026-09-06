@@ -55,13 +55,10 @@ async function QuizContent({
   }
 
   // Ab hier: Weekly-Freemium-Spiele -- unterliegen dem 2-Gratis-Runden-Limit
-  // für eingeloggte Nicht-Plus-Nutzer (Base44-Vorbild), Gäste sind frei.
-  const user = await getCurrentUser();
-  const isLoggedIn = !!user;
-
+  // für ALLE Besucher:innen, Gast oder eingeloggt.
   if (game.variant === "sliding") {
     return (
-      <DailyCapGate isLoggedIn={isLoggedIn}>
+      <DailyCapGate>
         <SlidingPuzzle title={game.title} color={game.type} difficulty={game.difficulty} />
       </DailyCapGate>
     );
@@ -71,7 +68,7 @@ async function QuizContent({
     const round = getWhoAmIRound("einstein");
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
     return (
-      <DailyCapGate isLoggedIn={isLoggedIn}>
+      <DailyCapGate>
         <WhoAmI title={game.title} color={game.type} round={round} />
       </DailyCapGate>
     );
@@ -79,10 +76,13 @@ async function QuizContent({
 
   const quiz = getQuiz(slug);
   if (quiz) {
-    const fromPayment = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
+    const [fromPayment, user] = await Promise.all([
+      provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
+      getCurrentUser(),
+    ]);
     const unlocked = fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
     return (
-      <DailyCapGate isLoggedIn={isLoggedIn}>
+      <DailyCapGate>
         <QuizPlayer
           quiz={quiz}
           initiallyUnlocked={unlocked}

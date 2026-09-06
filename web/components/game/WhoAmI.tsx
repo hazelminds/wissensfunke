@@ -6,6 +6,7 @@ import type { WhoAmIRound } from "@/content/whoami";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 function normalize(s: string): string {
   return (s || "")
@@ -199,6 +200,8 @@ export function WhoAmI({ title, color, round }: { title: string; color: string; 
           </button>
         </div>
       )}
+
+      {status === "won" && <LeaderboardTeaser board="puzzle" />}
     </div>
   );
 }

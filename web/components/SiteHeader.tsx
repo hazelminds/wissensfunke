@@ -38,20 +38,24 @@ export async function SiteHeader({
           )}
         </div>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          <Link href="/#spiele" className="text-sm text-ink-soft transition-colors hover:text-ink">
-            Spiele
-          </Link>
-          <Link href="/#tests" className="text-sm text-ink-soft transition-colors hover:text-ink">
-            Tests
-          </Link>
-          <Link
-            href="/bestenliste"
-            className="flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-ink"
-          >
-            <Trophy className="h-4 w-4" /> Bestenliste
-          </Link>
-        </nav>
+        {/* Auf Unterseiten (backHref gesetzt) reicht der Zurück-Link -- die volle
+            Nav würde mit Zurück-Link/Streak-Badge kollidieren. */}
+        {!backHref && (
+          <nav className="hidden items-center gap-8 md:flex">
+            <Link href="/#spiele" className="text-sm text-ink-soft transition-colors hover:text-ink">
+              Spiele
+            </Link>
+            <Link href="/#tests" className="text-sm text-ink-soft transition-colors hover:text-ink">
+              Tests
+            </Link>
+            <Link
+              href="/bestenliste"
+              className="flex items-center gap-1.5 text-sm text-ink-soft transition-colors hover:text-ink"
+            >
+              <Trophy className="h-4 w-4" /> Bestenliste
+            </Link>
+          </nav>
+        )}
 
         <div className="flex items-center gap-2.5">
           {showStreak && (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { type QuizDefinition, formatPrice, rankFor } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
+import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean };
@@ -404,6 +405,8 @@ function ResultScreen({
           🔁 Nochmal
         </button>
       </div>
+
+      <LeaderboardTeaser board="quiz" />
     </div>
   );
 }

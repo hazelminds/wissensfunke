@@ -2,34 +2,27 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Lock, Crown, ArrowRight } from "lucide-react";
+import { Lock, Zap, Crown, ArrowRight } from "lucide-react";
 import { hasReachedDailyCap } from "@/lib/dailyCap";
 
 /**
- * Wrappt Weekly-Freemium-Spiele: eingeloggte Nicht-Plus-Nutzer dürfen davon
- * insgesamt 2 Runden pro Tag gratis spielen, danach kommt die Paywall
- * (Base44-Vorbild). Gäste sind nicht limitiert. Täglicher Gratis-Anker
+ * Wrappt Weekly-Freemium-Spiele: jede:r Besucher:in (Gast oder eingeloggt)
+ * darf davon insgesamt 2 Runden pro Tag gratis spielen, danach kommt die
+ * Paywall mit zwei Optionen -- Tagespass (einmalig, nur heute unbegrenzt)
+ * oder Plus-Abo (monatlich, dauerhaft). Täglicher Gratis-Anker
  * (Tages-Rätsel/-Mini-Quiz) läuft nie durch dieses Gate.
  */
-export function DailyCapGate({
-  isLoggedIn,
-  children,
-}: {
-  isLoggedIn: boolean;
-  children: React.ReactNode;
-}) {
+export function DailyCapGate({ children }: { children: React.ReactNode }) {
   const [blocked, setBlocked] = useState(false);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     // SSR kennt localStorage nicht -- Cap-Status erst nach dem Mount lesen
     // (gleiches Muster wie StreakBadge).
-    if (isLoggedIn) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setBlocked(hasReachedDailyCap());
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBlocked(hasReachedDailyCap());
     setChecked(true);
-  }, [isLoggedIn]);
+  }, []);
 
   if (!checked) return null;
 
@@ -47,12 +40,44 @@ export function DailyCapGate({
           Du hast heute schon 2 Runden gratis gespielt. Ab der 3. brauchst du Plus — oder komm
           morgen wieder.
         </p>
-        <Link
-          href="/konto"
-          className="glow-primary mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-3 font-semibold text-white transition hover:opacity-90"
-        >
-          <Crown className="h-4 w-4" /> Plus freischalten <ArrowRight className="h-4 w-4" />
-        </Link>
+
+        <div className="mt-6 flex flex-col gap-3">
+          <Link
+            href="/konto"
+            className="hairline flex items-center justify-between gap-3 rounded-2xl bg-surface p-4 text-left transition hover:border-primary/50"
+          >
+            <span className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15">
+                <Zap className="h-5 w-5 text-primary" />
+              </span>
+              <span>
+                <span className="block font-display font-bold text-ink">
+                  Heute unbegrenzt weiterspielen
+                </span>
+                <span className="block text-xs text-muted">Einmalig, nur für heute</span>
+              </span>
+            </span>
+            <ArrowRight className="h-4 w-4 shrink-0 text-muted" />
+          </Link>
+
+          <Link
+            href="/konto"
+            className="glow-primary flex items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-left text-white transition hover:opacity-90"
+          >
+            <span className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">
+                <Crown className="h-5 w-5" />
+              </span>
+              <span>
+                <span className="block font-display font-bold">Plus-Abo</span>
+                <span className="block text-xs text-white/80">
+                  Monatlich, dauerhaft unbegrenzt + volle Bestenliste
+                </span>
+              </span>
+            </span>
+            <ArrowRight className="h-4 w-4 shrink-0" />
+          </Link>
+        </div>
       </div>
     );
   }

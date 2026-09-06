@@ -5,6 +5,7 @@ import { RefreshCw, Eye, Trophy } from "lucide-react";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 const IMAGE_URL = "/puzzle-noggl.svg";
 
@@ -290,6 +291,8 @@ export function SlidingPuzzle({
       <p className="mt-5 text-center text-sm text-muted">
         Ziehe eine Kachel neben der Lücke in die freie Stelle — oder tippe sie an. {n}×{n} Felder.
       </p>
+
+      {solved && <LeaderboardTeaser board="puzzle" />}
     </div>
   );
 }

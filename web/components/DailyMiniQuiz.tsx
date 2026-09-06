@@ -4,6 +4,7 @@ import { useState } from "react";
 import { dailyCategoryIcons, type DailyQuizSet } from "@/content/daily";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
+import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Answer = { correct: boolean };
 
@@ -150,6 +151,7 @@ function DoneCard({ score, total, streakCount }: { score: number; total: number;
           <>Dein Streak steht jetzt bei <strong>{streakCount} {streakCount === 1 ? "Tag" : "Tagen"}</strong>.</>
         )}
       </p>
+      <LeaderboardTeaser board="quiz" />
     </div>
   );
 }
