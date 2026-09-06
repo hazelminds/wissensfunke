@@ -5,7 +5,7 @@ import { NavbarMobileMenu } from "@/components/NavbarMobileMenu";
 import { getCurrentUser } from "@/lib/auth";
 import { getServerStreak } from "@/lib/streak-server";
 import { signOut } from "@/lib/actions/auth";
-import { isAdminEmail } from "@/lib/admin";
+import { isAdminUser } from "@/lib/admin";
 
 /** Navbar im Base44-Aufbau: Logo, Nav-Links, Bestenliste, Plus-CTA, Konto/Anmelden. */
 export async function SiteHeader({
@@ -18,7 +18,7 @@ export async function SiteHeader({
   const user = await getCurrentUser();
   const serverStreak = showStreak && user ? await getServerStreak(user.id) : null;
   const username = (user?.user_metadata?.username as string | undefined) ?? user?.email ?? null;
-  const isAdmin = isAdminEmail(user?.email);
+  const isAdmin = await isAdminUser(user?.id, user?.email);
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-[hsl(var(--background)/0.7)] backdrop-blur-xl">

@@ -1,7 +1,7 @@
 import { ShieldAlert } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getCurrentUser } from "@/lib/auth";
-import { isAdminEmail } from "@/lib/admin";
+import { isAdminUser } from "@/lib/admin";
 import { getAdminStats, listAdminUsers } from "@/lib/adminData";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 import { AdminDashboardStats } from "@/components/admin/AdminDashboardStats";
@@ -10,9 +10,9 @@ import { AdminGamesTable } from "@/components/admin/AdminGamesTable";
 
 export default async function AdminPage() {
   const user = await getCurrentUser();
-  const isAdmin = isAdminEmail(user?.email);
+  const isAdmin = await isAdminUser(user?.id, user?.email);
 
-  if (!isAdmin) {
+  if (!isAdmin || !user) {
     return (
       <div className="min-h-screen bg-bg">
         <SiteHeader backHref="/" />
@@ -43,7 +43,7 @@ export default async function AdminPage() {
         <AdminTabs
           dashboard={<AdminDashboardStats stats={stats} />}
           games={<AdminGamesTable />}
-          users={<AdminUserTable users={users} />}
+          users={<AdminUserTable users={users} currentUserId={user.id} />}
         />
       </main>
     </div>

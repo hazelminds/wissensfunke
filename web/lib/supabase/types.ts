@@ -73,6 +73,24 @@ export interface Database {
         };
         Relationships: [];
       };
+      admin_users: {
+        Row: {
+          user_id: string;
+          granted_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          granted_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          granted_by?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

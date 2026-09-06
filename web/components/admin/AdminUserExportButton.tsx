@@ -10,12 +10,13 @@ function csvEscape(v: string | number): string {
 
 export function AdminUserExportButton({ users }: { users: AdminUserRow[] }) {
   const onExport = () => {
-    const header = ["E-Mail", "Registriert seit", "Käufe", "Umsatz (EUR)"];
+    const header = ["E-Mail", "Registriert seit", "Käufe", "Umsatz (EUR)", "Admin (ja/nein)"];
     const rows = users.map((u) => [
       u.email ?? "",
       new Date(u.createdAt).toISOString(),
       String(u.purchaseCount),
       (u.purchaseTotalCents / 100).toFixed(2),
+      u.isAdmin ? "ja" : "nein",
     ]);
     const csv = [header, ...rows].map((r) => r.map(csvEscape).join(",")).join("\n");
     const bom = "﻿";
