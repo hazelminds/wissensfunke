@@ -24,6 +24,10 @@ export interface GameModule {
   type: GameType;
   isPremium: boolean;
   sortOrder: number;
+  /** Nur für type "puzzle": welche Puzzle-Mechanik gerendert wird. */
+  variant?: "sliding" | "whoami";
+  /** Nur für die Sliding-Puzzle-Variante: Rastergröße. */
+  difficulty?: "easy" | "medium" | "hard";
 }
 
 export const levelMeta: Record<
@@ -110,6 +114,33 @@ export const games: GameModule[] = [
     type: "psych",
     isPremium: false,
     sortOrder: 5,
+  },
+  {
+    slug: "bilder-puzzle",
+    title: "Bilder-Puzzle",
+    teaser: "Schiebe die Kacheln zurecht und deck das Bild dahinter auf.",
+    emoji: "🧩",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 4,
+    type: "puzzle",
+    variant: "sliding",
+    difficulty: "easy",
+    isPremium: false,
+    sortOrder: 6,
+  },
+  {
+    slug: "wer-bin-ich-einstein",
+    title: "Wer bin ich?",
+    teaser: "Lies die Hinweise nacheinander und errate die gesuchte Person.",
+    emoji: "🔎",
+    category: "Rätsel",
+    level: "weekly-freemium",
+    estMinutes: 3,
+    type: "puzzle",
+    variant: "whoami",
+    isPremium: false,
+    sortOrder: 7,
   },
 ];
 

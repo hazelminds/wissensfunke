@@ -2,12 +2,16 @@ import { notFound } from "next/navigation";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
+import { getWhoAmIRound } from "@/content/whoami";
 import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
 import { getCurrentUser } from "@/lib/auth";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
 import { SiteHeader } from "@/components/SiteHeader";
+import { DailyCapGate } from "@/components/DailyCapGate";
+import { SlidingPuzzle } from "@/components/game/SlidingPuzzle";
+import { WhoAmI } from "@/components/game/WhoAmI";
 
 export default async function QuizPage({
   params,
@@ -50,15 +54,41 @@ async function QuizContent({
     return <DailyRiddle riddle={getDailyRiddle()} />;
   }
 
+  // Ab hier: Weekly-Freemium-Spiele -- unterliegen dem 2-Gratis-Runden-Limit
+  // für eingeloggte Nicht-Plus-Nutzer (Base44-Vorbild), Gäste sind frei.
+  const user = await getCurrentUser();
+  const isLoggedIn = !!user;
+
+  if (game.variant === "sliding") {
+    return (
+      <DailyCapGate isLoggedIn={isLoggedIn}>
+        <SlidingPuzzle title={game.title} color={game.type} difficulty={game.difficulty} />
+      </DailyCapGate>
+    );
+  }
+
+  if (game.variant === "whoami") {
+    const round = getWhoAmIRound("einstein");
+    if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
+    return (
+      <DailyCapGate isLoggedIn={isLoggedIn}>
+        <WhoAmI title={game.title} color={game.type} round={round} />
+      </DailyCapGate>
+    );
+  }
+
   const quiz = getQuiz(slug);
   if (quiz) {
-    const [fromPayment, user] = await Promise.all([
-      provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
-      getCurrentUser(),
-    ]);
+    const fromPayment = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
     const unlocked = fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
     return (
-      <QuizPlayer quiz={quiz} initiallyUnlocked={unlocked} checkoutError={checkoutError === "not_configured"} />
+      <DailyCapGate isLoggedIn={isLoggedIn}>
+        <QuizPlayer
+          quiz={quiz}
+          initiallyUnlocked={unlocked}
+          checkoutError={checkoutError === "not_configured"}
+        />
+      </DailyCapGate>
     );
   }
 

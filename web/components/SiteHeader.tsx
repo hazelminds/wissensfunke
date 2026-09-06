@@ -21,11 +21,13 @@ export async function SiteHeader({
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-[hsl(var(--background)/0.7)] backdrop-blur-xl">
       <div className="relative mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span className="glow-primary flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-coral">
-            <span className="font-display text-lg leading-none font-extrabold text-white">N</span>
-          </span>
-          <span className="font-display text-xl font-extrabold tracking-tight text-ink">Noggl</span>
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center gap-2.5">
+            <span className="glow-primary flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-coral">
+              <span className="font-display text-lg leading-none font-extrabold text-white">N</span>
+            </span>
+            <span className="font-display text-xl font-extrabold tracking-tight text-ink">Noggl</span>
+          </Link>
           {backHref && (
             <Link
               href={backHref}
@@ -34,7 +36,7 @@ export async function SiteHeader({
               ← Übersicht
             </Link>
           )}
-        </Link>
+        </div>
 
         <nav className="hidden items-center gap-8 md:flex">
           <Link href="/#spiele" className="text-sm text-ink-soft transition-colors hover:text-ink">
