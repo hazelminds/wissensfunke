@@ -27,9 +27,11 @@ export default async function QuizPage({
   if (!game) notFound();
 
   return (
-    <div className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
+    <div className="min-h-screen bg-bg">
       <SiteHeader backHref="/" showStreak={slug === "tages-raetsel" || slug === "tages-mini-quiz"} />
-      <QuizContent slug={slug} game={game} provider={provider} paymentRef={paymentRef} checkoutError={checkoutError} />
+      <main className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
+        <QuizContent slug={slug} game={game} provider={provider} paymentRef={paymentRef} checkoutError={checkoutError} />
+      </main>
     </div>
   );
 }
