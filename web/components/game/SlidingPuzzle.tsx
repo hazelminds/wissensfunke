@@ -10,9 +10,9 @@ import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 type Difficulty = "easy" | "medium" | "hard";
 
 const IMAGES: Record<Difficulty, string> = {
-  easy: "/puzzle-beach.svg",
-  medium: "/puzzle-skyline.svg",
-  hard: "/puzzle-macro.svg",
+  easy: "/puzzle-beach.jpg",
+  medium: "/puzzle-skyline.jpg",
+  hard: "/puzzle-macro.jpg",
 };
 
 const gridFor = (difficulty: Difficulty) => (difficulty === "medium" ? 4 : difficulty === "hard" ? 5 : 3);
