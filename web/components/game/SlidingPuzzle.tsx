@@ -13,9 +13,27 @@ type Difficulty = "easy" | "medium" | "hard";
 // round — one is picked at random per shuffle (initial load and "Neu
 // mischen" alike).
 const IMAGES: Record<Difficulty, string[]> = {
-  easy: ["/puzzle-beach.jpg", "/puzzle-beach-2.jpg", "/puzzle-beach-3.jpg", "/puzzle-beach-4.jpg"],
-  medium: ["/puzzle-skyline.jpg", "/puzzle-skyline-2.jpg", "/puzzle-skyline-3.jpg", "/puzzle-skyline-4.jpg"],
-  hard: ["/puzzle-macro.jpg", "/puzzle-macro-2.jpg", "/puzzle-macro-3.jpg", "/puzzle-macro-4.jpg"],
+  easy: [
+    "/puzzle-beach.jpg",
+    "/puzzle-beach-2.jpg",
+    "/puzzle-beach-3.jpg",
+    "/puzzle-beach-4.jpg",
+    "/puzzle-beach-5.jpg",
+  ],
+  medium: [
+    "/puzzle-skyline.jpg",
+    "/puzzle-skyline-2.jpg",
+    "/puzzle-skyline-3.jpg",
+    "/puzzle-skyline-4.jpg",
+    "/puzzle-skyline-5.jpg",
+  ],
+  hard: [
+    "/puzzle-macro.jpg",
+    "/puzzle-macro-2.jpg",
+    "/puzzle-macro-3.jpg",
+    "/puzzle-macro-4.jpg",
+    "/puzzle-macro-5.jpg",
+  ],
 };
 
 function pickImage(difficulty: Difficulty): string {
