@@ -36,6 +36,10 @@ function isSolved(board: (number | null)[], n: number): boolean {
   return board[total - 1] === null;
 }
 
+// Shuffles by replaying legal moves backward from the solved state (never by
+// placing tiles randomly), so every board this produces is guaranteed
+// solvable — and tryMove() below only ever allows legal moves during play,
+// so the board can never drift into an unsolvable state either.
 function initBoard(n: number): { board: (number | null)[]; empty: number } {
   const total = n * n;
   const board: (number | null)[] = Array.from({ length: total }, (_, i) => (i < total - 1 ? i : null));
