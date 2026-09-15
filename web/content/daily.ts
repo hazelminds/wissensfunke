@@ -5,11 +5,9 @@
  * einfach durch den Pool. Sobald der Pool erschöpft ist, geht es von vorn
  * los.
  *
- * dailyRiddles hat 400 Einträge (7 hier + 393 in riddles-data.ts) — bei
- * einem Rätsel pro Tag ein Zyklus von gut 13 Monaten, bevor sich eines
- * wiederholt. dailyQuizSets hat dagegen erst 7 Sets (Wochenzyklus) und
- * sollte nach demselben Muster wachsen, sobald mehr Fragen gebraucht
- * werden (siehe Briefing Abschnitt 8: "Content-Backlog").
+ * Sowohl dailyRiddles als auch dailyQuizSets haben 400 Einträge (7 hier +
+ * 393 in riddles-data.ts bzw. quiz-sets-data.ts) — bei einem Eintrag pro
+ * Tag ein Zyklus von gut 13 Monaten, bevor sich etwas wiederholt.
  */
 
 export interface DailyQuizQuestion {
@@ -37,9 +35,21 @@ export const dailyCategoryIcons: Record<string, string> = {
   Chemie: "⚗️",
   Kunst: "🎨",
   Alltag: "🔢",
+  Sport: "⚽",
+  Musik: "🎵",
+  Literatur: "📚",
+  Technik: "💻",
+  Astronomie: "🔭",
+  Physik: "⚛️",
+  Film: "🎬",
+  Sprache: "🗣️",
+  Wirtschaft: "💰",
+  Mathematik: "➗",
 };
 
-export const dailyQuizSets: DailyQuizSet[] = [
+import { moreDailyQuizSets } from "./quiz-sets-data";
+
+const starterQuizSets: DailyQuizSet[] = [
   {
     questions: [
       {
@@ -223,6 +233,8 @@ export const dailyQuizSets: DailyQuizSet[] = [
     ],
   },
 ];
+
+export const dailyQuizSets: DailyQuizSet[] = [...starterQuizSets, ...moreDailyQuizSets];
 
 import { moreDailyRiddles } from "./riddles-data";
 
