@@ -3,8 +3,13 @@
  * Komplett kostenlos, kein Zufallselement mit Vermögenswert: die Auswahl
  * ist rein datumsbasiert (deterministisch), nicht zufällig, und rotiert
  * einfach durch den Pool. Sobald der Pool erschöpft ist, geht es von vorn
- * los — die Pools sollten mit der Zeit wachsen (siehe Briefing Abschnitt 8:
- * "Content-Backlog").
+ * los.
+ *
+ * dailyRiddles hat 400 Einträge (7 hier + 393 in riddles-data.ts) — bei
+ * einem Rätsel pro Tag ein Zyklus von gut 13 Monaten, bevor sich eines
+ * wiederholt. dailyQuizSets hat dagegen erst 7 Sets (Wochenzyklus) und
+ * sollte nach demselben Muster wachsen, sobald mehr Fragen gebraucht
+ * werden (siehe Briefing Abschnitt 8: "Content-Backlog").
  */
 
 export interface DailyQuizQuestion {
@@ -219,7 +224,9 @@ export const dailyQuizSets: DailyQuizSet[] = [
   },
 ];
 
-export const dailyRiddles: DailyRiddle[] = [
+import { moreDailyRiddles } from "./riddles-data";
+
+const starterRiddles: DailyRiddle[] = [
   {
     prompt:
       "Was hat morgens vier Beine, mittags zwei und abends drei — und ist doch immer dasselbe?",
@@ -263,6 +270,8 @@ export const dailyRiddles: DailyRiddle[] = [
     explanation: "Eine Karte zeigt all das nur als Symbole und Linien, nicht als echte Dinge.",
   },
 ];
+
+export const dailyRiddles: DailyRiddle[] = [...starterRiddles, ...moreDailyRiddles];
 
 function dayNumber(date: Date): number {
   return Math.floor(date.getTime() / 86_400_000);
