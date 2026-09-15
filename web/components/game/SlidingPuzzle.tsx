@@ -9,11 +9,19 @@ import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Difficulty = "easy" | "medium" | "hard";
 
-const IMAGES: Record<Difficulty, string> = {
-  easy: "/puzzle-beach.jpg",
-  medium: "/puzzle-skyline.jpg",
-  hard: "/puzzle-macro.jpg",
+// A pool per difficulty so production doesn't show the same photo every
+// round — one is picked at random per shuffle (initial load and "Neu
+// mischen" alike).
+const IMAGES: Record<Difficulty, string[]> = {
+  easy: ["/puzzle-beach.jpg"],
+  medium: ["/puzzle-skyline.jpg"],
+  hard: ["/puzzle-macro.jpg"],
 };
+
+function pickImage(difficulty: Difficulty): string {
+  const pool = IMAGES[difficulty];
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 const gridFor = (difficulty: Difficulty) => (difficulty === "medium" ? 4 : difficulty === "hard" ? 5 : 3);
 const labelFor = (difficulty: Difficulty) =>
@@ -88,9 +96,11 @@ export function SlidingPuzzle({
   difficulty?: Difficulty;
 }) {
   const n = gridFor(difficulty);
-  const imageUrl = IMAGES[difficulty];
 
-  const [{ board, empty }, setState] = useState(() => initBoard(n));
+  const [{ board, empty, imageUrl }, setState] = useState(() => ({
+    ...initBoard(n),
+    imageUrl: pickImage(difficulty),
+  }));
   const [moves, setMoves] = useState(0);
   const [startTime, setStartTime] = useState(() => Date.now());
   const [elapsed, setElapsed] = useState(0);
@@ -119,13 +129,13 @@ export function SlidingPuzzle({
   }, [startTime, solved]);
 
   const reset = useCallback(() => {
-    setState(initBoard(n));
+    setState({ ...initBoard(n), imageUrl: pickImage(difficulty) });
     setMoves(0);
     setStartTime(Date.now());
     setElapsed(0);
     setSolved(false);
     setDrag(null);
-  }, [n]);
+  }, [n, difficulty]);
 
   const tryMove = useCallback(
     (pos: number) => {
@@ -135,7 +145,7 @@ export function SlidingPuzzle({
       nextBoard[empty] = nextBoard[pos];
       nextBoard[pos] = null;
       const newEmpty = pos;
-      setState({ board: nextBoard, empty: newEmpty });
+      setState((s) => ({ ...s, board: nextBoard, empty: newEmpty }));
       setMoves((m) => m + 1);
       if (isSolved(nextBoard, n)) {
         setSolved(true);
