@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
-import { getWhoAmIRound } from "@/content/whoami";
+import { getDailyWhoAmIRound, getRandomWhoAmIRound, type WhoAmIDifficulty } from "@/content/whoami";
 import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
 import { getCurrentUser } from "@/lib/auth";
 import { QuizPlayer } from "@/components/QuizPlayer";
@@ -67,14 +67,14 @@ async function QuizContent({
   }
 
   if (game.variant === "whoami") {
-    const roundSlug = slug.replace(/^wer-bin-ich-/, "");
-    const round = getWhoAmIRound(roundSlug);
+    const difficulty = (game.difficulty ?? "easy") as WhoAmIDifficulty;
+    // Leicht ist der tägliche Gratis-Anker (ein Rätsel/Tag, wie Tagesrätsel) --
+    // Mittel/Schwer sind Plus-exklusiv mit beliebig vielen Runden/Tag.
+    const round =
+      game.level === "daily-free" ? getDailyWhoAmIRound(difficulty) : getRandomWhoAmIRound(difficulty);
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
-    return (
-      <DailyCapGate>
-        <WhoAmI title={game.title} color={game.type} round={round} />
-      </DailyCapGate>
-    );
+    const player = <WhoAmI title={game.title} color={game.type} round={round} />;
+    return game.level === "daily-free" ? player : <DailyCapGate>{player}</DailyCapGate>;
   }
 
   const quiz = getQuiz(slug);

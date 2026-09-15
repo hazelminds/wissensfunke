@@ -5,8 +5,11 @@
  * Allgemeinwissen, keine privaten/heiklen Details).
  */
 
+export type WhoAmIDifficulty = "easy" | "medium" | "hard";
+
 export interface WhoAmIRound {
   slug: string;
+  difficulty: WhoAmIDifficulty;
   hints: string[];
   solution: string;
   aliases: string[];
@@ -15,6 +18,7 @@ export interface WhoAmIRound {
 export const whoAmIRounds: WhoAmIRound[] = [
   {
     slug: "genie",
+    difficulty: "medium",
     hints: [
       "Ich wurde 1879 in Deutschland geboren.",
       "Als Kind soll ich erst relativ spät sprechen gelernt haben.",
@@ -29,6 +33,7 @@ export const whoAmIRounds: WhoAmIRound[] = [
   },
   {
     slug: "king-of-pop",
+    difficulty: "easy",
     hints: [
       "Ich wurde 1958 in Gary, Indiana, geboren.",
       "Meine Karriere begann schon als Kind in einer Familienband.",
@@ -43,6 +48,7 @@ export const whoAmIRounds: WhoAmIRound[] = [
   },
   {
     slug: "wahrzeichen",
+    difficulty: "easy",
     hints: [
       "Ich wurde für eine Weltausstellung errichtet.",
       "Meine Baumaterialien bestehen fast komplett aus Eisen.",
@@ -57,6 +63,7 @@ export const whoAmIRounds: WhoAmIRound[] = [
   },
   {
     slug: "meisterdetektiv",
+    difficulty: "medium",
     hints: [
       "Ich wohne in einer berühmten Wohnung in London.",
       "Mein treuer Begleiter ist ein Arzt, der auch meine Fälle aufschreibt.",
@@ -71,6 +78,7 @@ export const whoAmIRounds: WhoAmIRound[] = [
   },
   {
     slug: "meisterwerk",
+    difficulty: "hard",
     hints: [
       "Ich entstand im 16. Jahrhundert in Italien.",
       "Mein Schöpfer war auch als Erfinder und Wissenschaftler tätig.",
@@ -87,4 +95,29 @@ export const whoAmIRounds: WhoAmIRound[] = [
 
 export function getWhoAmIRound(slug: string): WhoAmIRound | undefined {
   return whoAmIRounds.find((r) => r.slug === slug);
+}
+
+export function getWhoAmIRoundsByDifficulty(difficulty: WhoAmIDifficulty): WhoAmIRound[] {
+  return whoAmIRounds.filter((r) => r.difficulty === difficulty);
+}
+
+function dayNumber(date: Date): number {
+  return Math.floor(date.getTime() / 86_400_000);
+}
+
+/** Leicht: ein Rätsel pro Tag, deterministisch -- alle sehen dasselbe (wie getDailyRiddle). */
+export function getDailyWhoAmIRound(
+  difficulty: WhoAmIDifficulty,
+  date: Date = new Date(),
+): WhoAmIRound | undefined {
+  const pool = getWhoAmIRoundsByDifficulty(difficulty);
+  if (pool.length === 0) return undefined;
+  return pool[dayNumber(date) % pool.length];
+}
+
+/** Mittel/Schwer: mehrere Runden pro Tag -- bei jedem Aufruf zufällig aus dem Pool. */
+export function getRandomWhoAmIRound(difficulty: WhoAmIDifficulty): WhoAmIRound | undefined {
+  const pool = getWhoAmIRoundsByDifficulty(difficulty);
+  if (pool.length === 0) return undefined;
+  return pool[Math.floor(Math.random() * pool.length)];
 }
