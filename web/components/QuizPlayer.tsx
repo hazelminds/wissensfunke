@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { type QuizDefinition, formatPrice, rankFor } from "@/content/quizzes";
+import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor, sampleQuestions } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
@@ -25,6 +25,11 @@ export function QuizPlayer({
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [unlocked, setUnlocked] = useState(initiallyUnlocked);
   const [revealed, setRevealed] = useState(initiallyUnlocked);
+  // Frische Zufallsauswahl aus dem Pool bei jedem Rundenstart (auch "Nochmal") --
+  // sonst würde ein Pool von 150 Fragen sich anfühlen wie einer von 8.
+  const [roundQuestions, setRoundQuestions] = useState<QuizQuestion[]>(() =>
+    sampleQuestions(quiz.questions, quiz.roundSize),
+  );
 
   // Rücksprung von der Zahlungsseite (Erfolg oder Fehler): der Client-State
   // (answers) ging bei der Navigation weg verloren — hier aus localStorage
@@ -66,10 +71,11 @@ export function QuizPlayer({
   }, [screen, quiz.slug, answers]);
 
   const score = answers.filter((a) => a.correct).length;
-  const question = quiz.questions[current];
+  const question = roundQuestions[current];
   const answered = selected !== null;
 
   function startQuiz() {
+    setRoundQuestions(sampleQuestions(quiz.questions, quiz.roundSize));
     setCurrent(0);
     setSelected(null);
     setAnswers([]);
@@ -86,7 +92,7 @@ export function QuizPlayer({
   }
 
   function nextQuestion() {
-    if (current + 1 >= quiz.questions.length) {
+    if (current + 1 >= roundQuestions.length) {
       setScreen("result");
       return;
     }
@@ -95,13 +101,14 @@ export function QuizPlayer({
   }
 
   if (screen === "start") {
-    return <StartScreen quiz={quiz} onStart={startQuiz} />;
+    return <StartScreen quiz={quiz} roundSize={roundQuestions.length} onStart={startQuiz} />;
   }
 
   if (screen === "quiz") {
     return (
       <QuizScreen
         quiz={quiz}
+        roundQuestions={roundQuestions}
         current={current}
         answers={answers}
         question={question}
@@ -116,6 +123,7 @@ export function QuizPlayer({
     <ResultScreen
       quiz={quiz}
       score={score}
+      roundLength={answers.length}
       answers={answers}
       unlocked={unlocked}
       revealed={revealed}
@@ -129,7 +137,15 @@ export function QuizPlayer({
   );
 }
 
-function StartScreen({ quiz, onStart }: { quiz: QuizDefinition; onStart: () => void }) {
+function StartScreen({
+  quiz,
+  roundSize,
+  onStart,
+}: {
+  quiz: QuizDefinition;
+  roundSize: number;
+  onStart: () => void;
+}) {
   const icons = Object.values(quiz.categoryIcons);
   return (
     <div className="flex flex-col gap-6">
@@ -138,8 +154,9 @@ function StartScreen({ quiz, onStart }: { quiz: QuizDefinition; onStart: () => v
           {quiz.title}
         </h1>
         <p className="max-w-md text-[15px] leading-relaxed text-ink-soft">
-          {quiz.questions.length} kurze Fragen. Direkt nach der letzten Antwort siehst du dein
-          Ergebnis — die Themen-Analyse gibt es optional als Tiefenauswertung.
+          {roundSize} kurze Fragen, zufällig aus einem großen Fragen-Pool. Direkt nach der letzten
+          Antwort siehst du dein Ergebnis — die Themen-Analyse gibt es optional als
+          Tiefenauswertung.
         </p>
         <div className="flex flex-wrap gap-2.5">
           {icons.map((icon, i) => (
@@ -153,11 +170,9 @@ function StartScreen({ quiz, onStart }: { quiz: QuizDefinition; onStart: () => v
         </div>
         <div className="flex flex-wrap gap-2">
           <MetaChip className="bg-primary-soft text-primary-dark">
-            ⏱ {Math.ceil(quiz.questions.length * 0.5)} Min.
+            ⏱ {Math.ceil(roundSize * 0.5)} Min.
           </MetaChip>
-          <MetaChip className="bg-coral-soft text-coral-dark">
-            ❓ {quiz.questions.length} Fragen
-          </MetaChip>
+          <MetaChip className="bg-coral-soft text-coral-dark">❓ {roundSize} Fragen</MetaChip>
           <MetaChip className="bg-green-soft text-green-dark">🆓 Gratis-Ergebnis</MetaChip>
         </div>
       </div>
@@ -178,6 +193,7 @@ function MetaChip({ children, className }: { children: React.ReactNode; classNam
 
 function QuizScreen({
   quiz,
+  roundQuestions,
   current,
   answers,
   question,
@@ -186,18 +202,19 @@ function QuizScreen({
   onNext,
 }: {
   quiz: QuizDefinition;
+  roundQuestions: QuizQuestion[];
   current: number;
   answers: Answer[];
-  question: QuizDefinition["questions"][number];
+  question: QuizQuestion;
   selected: number | null;
   onSelect: (index: number) => void;
   onNext: () => void;
 }) {
   const letters = ["A", "B", "C", "D"];
   const badgeColors = ["bg-primary", "bg-coral", "bg-green", "bg-gold"];
-  const progressPct = (current / quiz.questions.length) * 100;
+  const progressPct = (current / roundQuestions.length) * 100;
   const answered = selected !== null;
-  const isLast = current === quiz.questions.length - 1;
+  const isLast = current === roundQuestions.length - 1;
 
   return (
     <div className="flex flex-col gap-6">
@@ -209,7 +226,7 @@ function QuizScreen({
           />
         </div>
         <div className="flex justify-between px-1">
-          {quiz.questions.map((_, i) => {
+          {roundQuestions.map((_, i) => {
             const result = answers[i];
             const isCurrent = i === current;
             return (
@@ -299,6 +316,7 @@ function QuizScreen({
 function ResultScreen({
   quiz,
   score,
+  roundLength,
   answers,
   unlocked,
   revealed,
@@ -308,6 +326,7 @@ function ResultScreen({
 }: {
   quiz: QuizDefinition;
   score: number;
+  roundLength: number;
   answers: Answer[];
   unlocked: boolean;
   revealed: boolean;
@@ -315,14 +334,18 @@ function ResultScreen({
   onUnlockedByOwner: () => void;
   onRestart: () => void;
 }) {
-  const rank = rankFor(quiz, score);
+  const rank = rankFor(quiz, score, roundLength);
+  // Plus-exklusive Quizze (unlockPriceCents: 0) haben keinen separaten Kauf-Schritt --
+  // die Themen-Analyse ist automatisch enthalten, kein zweiter Paywall obendrauf.
+  const includedFree = quiz.unlockPriceCents === 0;
+  const effectiveRevealed = revealed || includedFree;
 
   useEffect(() => {
-    if (score === quiz.questions.length) {
+    if (roundLength > 0 && score === roundLength) {
       const t = setTimeout(burstConfetti, 250);
       return () => clearTimeout(t);
     }
-  }, [score, quiz.questions.length]);
+  }, [score, roundLength]);
 
   // Nach echter Rückkehr von Stripe ist `unlocked` bereits gesetzt — dieser
   // Callback existiert nur, damit ein späterer Login-Abgleich (Ebene 3,
@@ -337,7 +360,7 @@ function ResultScreen({
         >
           <span className="text-4xl">{rank.emoji}</span>
           <span className="font-display text-[17px] font-bold text-white">
-            {score}/{quiz.questions.length}
+            {score}/{roundLength}
           </span>
         </div>
         <h2 className="font-display text-xl font-bold text-ink">{rank.title}</h2>
@@ -359,7 +382,7 @@ function ResultScreen({
           <p className="text-[12.5px] text-muted">{quiz.unlockDescription}</p>
         </div>
 
-        <div className={`flex flex-col gap-3 ${!revealed ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""}`}>
+        <div className={`flex flex-col gap-3 ${!effectiveRevealed ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""}`}>
           {answers.map((a, i) => (
             <div key={i} className="flex items-center gap-2.5">
               <span className="w-[120px] shrink-0 text-[12.5px] font-bold text-ink">
@@ -369,14 +392,18 @@ function ResultScreen({
               <div className="h-2.5 flex-1 overflow-hidden rounded-md bg-line">
                 <div
                   className={`h-full rounded-md transition-[width] duration-500 ${a.correct ? "bg-green" : "bg-red"}`}
-                  style={{ width: revealed ? `${a.correct ? 100 : 15}%` : "0%" }}
+                  style={{ width: effectiveRevealed ? `${a.correct ? 100 : 15}%` : "0%" }}
                 />
               </div>
             </div>
           ))}
         </div>
 
-        {unlocked ? (
+        {includedFree ? (
+          <p className="flex items-center gap-1.5 text-[13.5px] font-extrabold text-green-dark">
+            ✅ Enthalten mit Plus
+          </p>
+        ) : unlocked ? (
           <p className="flex items-center gap-1.5 text-[13.5px] font-extrabold text-green-dark">
             ✅ Freigeschaltet
           </p>

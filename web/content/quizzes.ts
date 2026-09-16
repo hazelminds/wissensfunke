@@ -14,7 +14,9 @@ export interface QuizQuestion {
 }
 
 export interface QuizRank {
-  minCorrect: number;
+  /** Anteil richtiger Antworten (0–1), ab dem dieser Rang gilt -- prozentual statt
+   * absolut, damit dieselben Ränge für jede Rundengröße funktionieren. */
+  minCorrectPct: number;
   title: string;
   subtitle: string;
   emoji: string;
@@ -25,7 +27,12 @@ export interface QuizDefinition {
   slug: string;
   title: string;
   categoryIcons: Record<string, string>;
+  /** Gesamter Fragen-Pool -- pro Runde wird daraus zufällig eine Teilmenge
+   * der Größe roundSize gezogen (siehe QuizPlayer), damit sich Wiederholungen
+   * nicht gleich anfühlen. */
   questions: QuizQuestion[];
+  /** Anzahl Fragen pro gespielter Runde. */
+  roundSize: number;
   ranks: QuizRank[];
   /** Preis der Tiefenauswertung — immer VOR dem Klick auf "Freischalten" sichtbar (Compliance §5). */
   unlockPriceCents: number;
@@ -33,7 +40,92 @@ export interface QuizDefinition {
   unlockDescription: string;
 }
 
+/** Wiederverwendbare Standard-Rangstufen -- passen für jede Rundengröße, weil
+ * sie über den Anteil richtiger Antworten definiert sind, nicht über eine
+ * feste Zahl. */
+export const STANDARD_RANKS: QuizRank[] = [
+  {
+    minCorrectPct: 0,
+    title: "Neugieriger Anfänger",
+    subtitle: "Da geht noch was – guter Einstieg trotzdem!",
+    emoji: "🌱",
+    gradientClass: "from-[hsl(160,70%,45%)] to-[hsl(160,70%,35%)]",
+  },
+  {
+    minCorrectPct: 0.4,
+    title: "Solides Grundwissen",
+    subtitle: "Die Basics sitzen sicher.",
+    emoji: "🥉",
+    gradientClass: "from-[hsl(28,95%,62%)] to-[hsl(28,95%,50%)]",
+  },
+  {
+    minCorrectPct: 0.75,
+    title: "Wissens-Ass",
+    subtitle: "Fast alles richtig – sehr stark!",
+    emoji: "🥈",
+    gradientClass: "from-[hsl(12,90%,60%)] to-[hsl(12,90%,48%)]",
+  },
+  {
+    minCorrectPct: 1,
+    title: "Trivia-Champion",
+    subtitle: "Perfekte Runde – alles richtig!",
+    emoji: "🏆",
+    gradientClass: "from-[hsl(45,95%,58%)] to-[hsl(45,95%,46%)]",
+  },
+];
+
+import { geschichteQuestions, filmzitateQuestions, gemischtQuestions } from "./quiz-pools-data";
+import { dailyCategoryIcons } from "./daily";
+
 export const quizzes: QuizDefinition[] = [
+  {
+    slug: "geschichte",
+    title: "Geschichte",
+    categoryIcons: {
+      Antike: "🏛️",
+      Mittelalter: "🏰",
+      "Frühe Neuzeit": "⚔️",
+      Neuzeit: "📜",
+      Zeitgeschichte: "🌍",
+    },
+    questions: geschichteQuestions,
+    roundSize: 8,
+    ranks: STANDARD_RANKS,
+    unlockPriceCents: 299,
+    unlockTitle: "Themen-Analyse",
+    unlockDescription: "Wo du wirklich glänzt – nach Epoche sortiert",
+  },
+  {
+    slug: "filmzitate",
+    title: "Filmzitate",
+    categoryIcons: {
+      Drama: "🎭",
+      Action: "💥",
+      Komödie: "😂",
+      "Sci-Fi": "🚀",
+      Animation: "🎨",
+      Fantasy: "🧙",
+    },
+    questions: filmzitateQuestions,
+    roundSize: 8,
+    ranks: STANDARD_RANKS,
+    unlockPriceCents: 299,
+    unlockTitle: "Themen-Analyse",
+    unlockDescription: "Wo du wirklich glänzt – nach Genre sortiert",
+  },
+  {
+    slug: "gemischt",
+    title: "Gemischt",
+    categoryIcons: dailyCategoryIcons,
+    questions: gemischtQuestions,
+    roundSize: 20,
+    ranks: STANDARD_RANKS,
+    // Plus-exklusives Quiz: die Themen-Analyse ist bereits mit dem Abo
+    // enthalten, kein zusätzlicher Einmalkauf obendrauf (siehe QuizPlayer).
+    unlockPriceCents: 0,
+    unlockTitle: "Themen-Analyse",
+    unlockDescription: "Wo du wirklich glänzt – nach Kategorie sortiert, inklusive mit Plus",
+  },
   {
     slug: "allgemeinwissen",
     title: "Allgemeinwissen-Quiz",
@@ -84,36 +176,8 @@ export const quizzes: QuizDefinition[] = [
           "Leonardo da Vinci begann das Gemälde um 1503 – es hängt heute im Louvre in Paris.",
       },
     ],
-    ranks: [
-      {
-        minCorrect: 0,
-        title: "Neugieriger Anfänger",
-        subtitle: "Da geht noch was – guter Einstieg trotzdem!",
-        emoji: "🌱",
-        gradientClass: "from-[hsl(160,70%,45%)] to-[hsl(160,70%,35%)]",
-      },
-      {
-        minCorrect: 2,
-        title: "Solides Grundwissen",
-        subtitle: "Die Basics sitzen sicher.",
-        emoji: "🥉",
-        gradientClass: "from-[hsl(28,95%,62%)] to-[hsl(28,95%,50%)]",
-      },
-      {
-        minCorrect: 4,
-        title: "Wissens-Ass",
-        subtitle: "Fast alles richtig – sehr stark!",
-        emoji: "🥈",
-        gradientClass: "from-[hsl(12,90%,60%)] to-[hsl(12,90%,48%)]",
-      },
-      {
-        minCorrect: 5,
-        title: "Trivia-Champion",
-        subtitle: "Perfekte Runde. Alle 5 Fragen richtig!",
-        emoji: "🏆",
-        gradientClass: "from-[hsl(45,95%,58%)] to-[hsl(45,95%,46%)]",
-      },
-    ],
+    roundSize: 5,
+    ranks: STANDARD_RANKS,
     unlockPriceCents: 299,
     unlockTitle: "Themen-Analyse",
     unlockDescription: "Wo du wirklich glänzt – nach Kategorie sortiert",
@@ -124,8 +188,9 @@ export function getQuiz(slug: string): QuizDefinition | undefined {
   return quizzes.find((q) => q.slug === slug);
 }
 
-export function rankFor(quiz: QuizDefinition, score: number): QuizRank {
-  return [...quiz.ranks].reverse().find((r) => score >= r.minCorrect) ?? quiz.ranks[0];
+export function rankFor(quiz: QuizDefinition, score: number, roundLength: number): QuizRank {
+  const pct = roundLength === 0 ? 0 : score / roundLength;
+  return [...quiz.ranks].reverse().find((r) => pct >= r.minCorrectPct) ?? quiz.ranks[0];
 }
 
 export function formatPrice(cents: number): string {
@@ -133,4 +198,15 @@ export function formatPrice(cents: number): string {
     style: "currency",
     currency: "EUR",
   });
+}
+
+/** Zieht `size` zufällige, unterschiedliche Fragen aus dem Pool (Fisher-Yates-Teilshuffle). */
+export function sampleQuestions(pool: QuizQuestion[], size: number): QuizQuestion[] {
+  const arr = [...pool];
+  const n = Math.min(size, arr.length);
+  for (let i = 0; i < n; i++) {
+    const j = i + Math.floor(Math.random() * (arr.length - i));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr.slice(0, n);
 }
