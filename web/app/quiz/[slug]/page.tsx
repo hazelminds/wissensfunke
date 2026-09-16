@@ -18,19 +18,37 @@ export default async function QuizPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ provider?: string; ref?: string; checkout_error?: string }>;
+  searchParams: Promise<{ provider?: string; ref?: string; checkout_error?: string; preview?: string }>;
 }) {
   const { slug } = await params;
-  const { provider, ref: paymentRef, checkout_error: checkoutError } = await searchParams;
+  const { provider, ref: paymentRef, checkout_error: checkoutError, preview } = await searchParams;
 
   const game = games.find((g) => g.slug === slug);
   if (!game) notFound();
+
+  // Test-Vorschau: ?preview=plus zeigt die freigeschaltete Ansicht, ohne
+  // echten Kauf/Login -- nur zum Gegenprüfen des Plus-Ergebnisses, keine
+  // echte Berechtigungsprüfung.
+  const previewUnlocked = preview === "plus";
 
   return (
     <div className="min-h-screen bg-bg">
       <SiteHeader backHref="/" showStreak={slug === "tages-raetsel" || slug === "tages-mini-quiz"} />
       <main className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
-        <QuizContent slug={slug} game={game} provider={provider} paymentRef={paymentRef} checkoutError={checkoutError} />
+        {previewUnlocked && (
+          <div className="rounded-xl bg-gold-soft px-4 py-3 text-[13px] font-semibold text-gold-dark">
+            🔍 Test-Vorschau aktiv — zeigt die Ansicht eines freigeschalteten/Plus-Mitglieds. Kein
+            echter Kauf, keine echte Berechtigung.
+          </div>
+        )}
+        <QuizContent
+          slug={slug}
+          game={game}
+          provider={provider}
+          paymentRef={paymentRef}
+          checkoutError={checkoutError}
+          previewUnlocked={previewUnlocked}
+        />
       </main>
     </div>
   );
@@ -42,12 +60,14 @@ async function QuizContent({
   provider,
   paymentRef,
   checkoutError,
+  previewUnlocked,
 }: {
   slug: string;
   game: (typeof games)[number];
   provider?: string;
   paymentRef?: string;
   checkoutError?: string;
+  previewUnlocked: boolean;
 }) {
   if (slug === "tages-mini-quiz") {
     return <DailyMiniQuiz quizSet={getDailyQuizSet()} />;
@@ -83,7 +103,7 @@ async function QuizContent({
       provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
       getCurrentUser(),
     ]);
-    const unlocked = fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
+    const unlocked = previewUnlocked || fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
     return (
       <DailyCapGate>
         <QuizPlayer
