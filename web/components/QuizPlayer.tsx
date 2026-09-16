@@ -233,24 +233,6 @@ function QuizScreen({
           {roundQuestions.map((_, i) => {
             const result = answers[i];
             const isCurrent = i === current;
-            if (deferredReveal) {
-              // Kein Richtig/Falsch in den Punkten -- nur "beantwortet" vs. "aktuell" vs. "offen".
-              return (
-                <span
-                  key={i}
-                  className={[
-                    "flex h-[26px] w-[26px] items-center justify-center rounded-full border-2 font-display text-xs font-semibold transition-all",
-                    result
-                      ? "border-primary bg-primary text-white"
-                      : isCurrent
-                        ? "border-primary text-primary shadow-[0_0_0_4px_var(--nog-primary-soft)]"
-                        : "border-line bg-surface text-muted",
-                  ].join(" ")}
-                >
-                  {result ? "•" : i + 1}
-                </span>
-              );
-            }
             return (
               <span
                 key={i}
@@ -287,7 +269,11 @@ function QuizScreen({
           let state = "";
           if (answered) {
             if (deferredReveal) {
-              state = i === selected ? "selected" : "dim";
+              // Tendenz-Feedback: nur die gewählte Antwort wird grün/rot markiert,
+              // welche Option tatsächlich richtig gewesen wäre, bleibt offen --
+              // das kommt erst mit Freischaltung in der Auswertung am Ende.
+              if (i === selected) state = i === question.correctIndex ? "correct" : "wrong";
+              else state = "dim";
             } else if (i === question.correctIndex) {
               state = "correct";
             } else if (i === selected) {
@@ -305,7 +291,6 @@ function QuizScreen({
                 "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left font-body text-[15px] font-bold text-ink shadow-[0_3px_0_var(--nog-line)] transition-transform",
                 state === "correct" && "border-green bg-green-soft shadow-[0_3px_0_var(--nog-green)]",
                 state === "wrong" && "border-red bg-red-soft shadow-[0_3px_0_var(--nog-red)]",
-                state === "selected" && "border-primary bg-primary-soft shadow-[0_3px_0_var(--nog-primary)]",
                 state === "dim" && "border-line bg-surface opacity-45",
                 state === "" && "border-line bg-surface hover:-translate-y-0.5",
               ]
@@ -314,13 +299,7 @@ function QuizScreen({
             >
               <span
                 className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[9px] font-display text-[13.5px] font-bold text-white ${
-                  state === "correct"
-                    ? "bg-green"
-                    : state === "wrong"
-                      ? "bg-red"
-                      : state === "selected"
-                        ? "bg-primary"
-                        : badgeColors[i]
+                  state === "correct" ? "bg-green" : state === "wrong" ? "bg-red" : badgeColors[i]
                 }`}
               >
                 {letters[i]}
@@ -328,7 +307,6 @@ function QuizScreen({
               <span>{opt}</span>
               {state === "correct" && <span className="ml-auto text-base">✓</span>}
               {state === "wrong" && <span className="ml-auto text-base">✕</span>}
-              {state === "selected" && <span className="ml-auto text-base">•</span>}
             </button>
           );
         })}
