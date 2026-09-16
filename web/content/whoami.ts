@@ -3,6 +3,9 @@
  * Hinweis, vom vagsten zum eindeutigsten sortiert. Faktenbasiert zu real
  * existierenden bzw. bekannten fiktiven Figuren (öffentliches
  * Allgemeinwissen, keine privaten/heiklen Details).
+ *
+ * whoAmIRounds hat insgesamt 450 Runden (5 hier + 445 in whoami-data.ts) --
+ * 150 je Schwierigkeitsstufe. Siehe whoami-data.ts für Details zum Zyklus.
  */
 
 export type WhoAmIDifficulty = "easy" | "medium" | "hard";
@@ -15,11 +18,14 @@ export interface WhoAmIRound {
   aliases: string[];
 }
 
-export const whoAmIRounds: WhoAmIRound[] = [
+import { moreWhoAmIRounds } from "./whoami-data";
+
+const starterRounds: WhoAmIRound[] = [
   {
     slug: "genie",
     difficulty: "medium",
     hints: [
+      "Ich habe im 20. Jahrhundert ganze Wissenschaftszweige revolutioniert.",
       "Ich wurde 1879 in Deutschland geboren.",
       "Als Kind soll ich erst relativ spät sprechen gelernt haben.",
       "Ich habe unser Verständnis von Raum und Zeit revolutioniert.",
@@ -65,6 +71,7 @@ export const whoAmIRounds: WhoAmIRound[] = [
     slug: "meisterdetektiv",
     difficulty: "medium",
     hints: [
+      "Meine Geschichten zählen zu den meistverfilmten literarischen Figuren überhaupt.",
       "Ich wohne in einer berühmten Wohnung in London.",
       "Mein treuer Begleiter ist ein Arzt, der auch meine Fälle aufschreibt.",
       "Ich wurde von einem schottischen Schriftsteller erschaffen.",
@@ -80,6 +87,9 @@ export const whoAmIRounds: WhoAmIRound[] = [
     slug: "meisterwerk",
     difficulty: "hard",
     hints: [
+      "Ich bin eines der berühmtesten Kunstwerke der gesamten Menschheitsgeschichte.",
+      "Millionen Menschen reisen jedes Jahr auch meinetwegen an einen bestimmten Ort.",
+      "Ich bin deutlich kleiner, als die meisten Besucher erwarten, wenn sie mich zum ersten Mal sehen.",
       "Ich entstand im 16. Jahrhundert in Italien.",
       "Mein Schöpfer war auch als Erfinder und Wissenschaftler tätig.",
       "Man rätselt bis heute über mein geheimnisvolles Lächeln.",
@@ -92,6 +102,8 @@ export const whoAmIRounds: WhoAmIRound[] = [
     aliases: ["Die Mona Lisa"],
   },
 ];
+
+export const whoAmIRounds: WhoAmIRound[] = [...starterRounds, ...moreWhoAmIRounds];
 
 export function getWhoAmIRound(slug: string): WhoAmIRound | undefined {
   return whoAmIRounds.find((r) => r.slug === slug);
