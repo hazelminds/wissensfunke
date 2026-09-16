@@ -96,10 +96,11 @@ export const quizzes: QuizDefinition[] = [
     },
     questions: geschichteQuestions,
     roundSize: 8,
+    revealTiming: "end",
     ranks: STANDARD_RANKS,
     unlockPriceCents: 299,
     unlockTitle: "Themen-Analyse",
-    unlockDescription: "Wo du wirklich glänzt – nach Epoche sortiert",
+    unlockDescription: "Die richtigen Antworten und mehr Hintergrund zu jeder Frage",
   },
   {
     slug: "filmzitate",
@@ -126,12 +127,13 @@ export const quizzes: QuizDefinition[] = [
     categoryIcons: dailyCategoryIcons,
     questions: gemischtQuestions,
     roundSize: 20,
+    revealTiming: "end",
     ranks: STANDARD_RANKS,
     // Plus-exklusives Quiz: die Themen-Analyse ist bereits mit dem Abo
     // enthalten, kein zusätzlicher Einmalkauf obendrauf (siehe QuizPlayer).
     unlockPriceCents: 0,
     unlockTitle: "Themen-Analyse",
-    unlockDescription: "Wo du wirklich glänzt – nach Kategorie sortiert, inklusive mit Plus",
+    unlockDescription: "Die richtigen Antworten und mehr Hintergrund zu jeder Frage, inklusive mit Plus",
   },
   {
     slug: "allgemeinwissen",
