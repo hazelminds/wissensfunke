@@ -420,6 +420,12 @@ function ResultScreen({
                       !effectiveRevealed ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""
                     }`}
                   >
+                    {!a.correct && (
+                      <p className="text-ink-soft">
+                        <span className="font-bold">Deine Antwort:</span>{" "}
+                        {q.options[a.selectedIndex]}
+                      </p>
+                    )}
                     <p className="text-ink">
                       <span className="font-bold">Richtig wäre:</span>{" "}
                       {q.options[q.correctIndex]}
