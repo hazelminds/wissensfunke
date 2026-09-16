@@ -442,9 +442,9 @@ export const moreDailyRiddles: DailyRiddle[] = [
     explanation: "Ein Kamm hat Zähne zum Kämmen, aber keine Funktion zum Beißen.",
   },
   {
-    prompt: "Ich habe einen Kopf und einen Schwanz, aber keine Beine. Was bin ich?",
-    answer: "Eine Münze",
-    explanation: "Umgangssprachlich hat eine Münze „Kopf“ und „Zahl“ (Schwanz im übertragenen Sinn).",
+    prompt: "Ich habe eine Feder, aber kann nicht fliegen. Ich habe eine Spitze, aber steche niemanden. Was bin ich?",
+    answer: "Ein Füller",
+    explanation: "Ein Füller hat eine Schreibfeder und eine Spitze zum Schreiben.",
   },
   {
     prompt: "Ich habe Blätter, aber bin kein Baum. Was bin ich?",
@@ -477,9 +477,9 @@ export const moreDailyRiddles: DailyRiddle[] = [
     explanation: "Ein Versprechen lässt sich „brechen“, ohne dass ein physischer Gegenstand berührt wird.",
   },
   {
-    prompt: "Ich habe Städte, aber keine Häuser, Wälder, aber keine Bäume, und Wasser, aber keine Fische. Was bin ich?",
-    answer: "Eine Landkarte",
-    explanation: "Eine Karte zeigt all das nur symbolisch als Linien und Flächen.",
+    prompt: "Ich habe einen Fuß, aber kann nicht laufen. Ich habe einen Kopf, aber kann nicht denken. Was bin ich?",
+    answer: "Ein Bett",
+    explanation: "Ein Bett hat umgangssprachlich einen Fuß und einen Kopf(-ende), aber keine echten Körperfunktionen.",
   },
   {
     prompt: "Ich bin immer vor dir, aber du kannst mich nie einholen. Was bin ich?",
@@ -502,9 +502,9 @@ export const moreDailyRiddles: DailyRiddle[] = [
     explanation: "Sowohl ein Stuhl als auch ein Buch haben umgangssprachlich einen „Rücken“.",
   },
   {
-    prompt: "Ich werde immer nasser, während ich trockne. Was bin ich?",
-    answer: "Ein Handtuch",
-    explanation: "Ein Handtuch nimmt beim Trocknen anderer Dinge selbst Feuchtigkeit auf.",
+    prompt: "Ich habe einen Ring, aber keinen Finger. Ich habe eine Nadel, aber nähe nicht. Was bin ich?",
+    answer: "Ein Kompass",
+    explanation: "Ein Kompass hat einen drehbaren Ring und eine Magnetnadel, die zum Norden zeigt.",
   },
   {
     prompt: "Ich habe vier Beine, aber kann nicht laufen. Was bin ich?",
@@ -1159,14 +1159,14 @@ export const moreDailyRiddles: DailyRiddle[] = [
     explanation: "Luft im Körper hat kaum Gewicht, doch man kann sie nur begrenzt anhalten.",
   },
   {
-    prompt: "Was ist voller Löcher und hält trotzdem Wasser?",
-    answer: "Ein Schwamm",
-    explanation: "Ein Schwamm speichert Wasser gerade wegen seiner porösen Struktur.",
+    prompt: "Ich habe Löcher zum Durchschauen, aber niemand nennt mich blind. Was bin ich?",
+    answer: "Ein Sieb",
+    explanation: "Ein Sieb hat viele kleine Löcher, durch die Flüssigkeit oder feines Material fällt.",
   },
   {
-    prompt: "Je mehr davon du wegnimmst, desto größer wird es. Was ist gemeint?",
-    answer: "Ein Loch",
-    explanation: "Ein klassisches Paradoxon: Entnimmt man Material, wächst die Öffnung.",
+    prompt: "Ich habe einen Deckel, aber keine Kiste. Ich habe Scharniere, aber keine Tür. Was bin ich?",
+    answer: "Ein Laptop",
+    explanation: "Ein Laptop klappt wie eine Kiste mit Deckel auf und zu und wird von Scharnieren zusammengehalten.",
   },
   {
     prompt: "Was kann man nicht behalten, bevor man es weitergibt?",
@@ -1194,9 +1194,9 @@ export const moreDailyRiddles: DailyRiddle[] = [
     explanation: "Ein Lächeln oder geteiltes Wissen wird durch Weitergeben nicht weniger.",
   },
   {
-    prompt: "Je mehr du davon hast, desto weniger siehst du. Was ist gemeint?",
-    answer: "Dunkelheit",
-    explanation: "Mit zunehmender Dunkelheit sinkt die Sichtbarkeit gegen null.",
+    prompt: "Je mehr davon in einem Raum ist, desto leiser wird es. Was ist gemeint?",
+    answer: "Watte",
+    explanation: "Watte schluckt Schall — je mehr davon im Raum ist, desto stärker wird der Lärm gedämpft.",
   },
   {
     prompt: "Was kann man nur brechen, indem man es ausspricht?",
