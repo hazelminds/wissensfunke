@@ -6,7 +6,7 @@ import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
-type Answer = { category: string; correct: boolean };
+type Answer = { category: string; correct: boolean; selectedIndex: number };
 
 const attemptStorageKey = (slug: string) => `wf_attempt_${slug}`;
 
@@ -87,7 +87,7 @@ export function QuizPlayer({
     setSelected(index);
     setAnswers((prev) => [
       ...prev,
-      { category: question.category, correct: index === question.correctIndex },
+      { category: question.category, correct: index === question.correctIndex, selectedIndex: index },
     ]);
   }
 
@@ -124,6 +124,7 @@ export function QuizPlayer({
       quiz={quiz}
       score={score}
       roundLength={answers.length}
+      roundQuestions={roundQuestions}
       answers={answers}
       unlocked={unlocked}
       revealed={revealed}
@@ -215,6 +216,9 @@ function QuizScreen({
   const progressPct = (current / roundQuestions.length) * 100;
   const answered = selected !== null;
   const isLast = current === roundQuestions.length - 1;
+  // "end"-Modus: kein Richtig/Falsch während der Runde -- erst in der
+  // Auswertung am Schluss (siehe ResultScreen).
+  const deferredReveal = quiz.revealTiming === "end";
 
   return (
     <div className="flex flex-col gap-6">
@@ -229,6 +233,24 @@ function QuizScreen({
           {roundQuestions.map((_, i) => {
             const result = answers[i];
             const isCurrent = i === current;
+            if (deferredReveal) {
+              // Kein Richtig/Falsch in den Punkten -- nur "beantwortet" vs. "aktuell" vs. "offen".
+              return (
+                <span
+                  key={i}
+                  className={[
+                    "flex h-[26px] w-[26px] items-center justify-center rounded-full border-2 font-display text-xs font-semibold transition-all",
+                    result
+                      ? "border-primary bg-primary text-white"
+                      : isCurrent
+                        ? "border-primary text-primary shadow-[0_0_0_4px_var(--nog-primary-soft)]"
+                        : "border-line bg-surface text-muted",
+                  ].join(" ")}
+                >
+                  {result ? "•" : i + 1}
+                </span>
+              );
+            }
             return (
               <span
                 key={i}
@@ -264,9 +286,15 @@ function QuizScreen({
         {question.options.map((opt, i) => {
           let state = "";
           if (answered) {
-            if (i === question.correctIndex) state = "correct";
-            else if (i === selected) state = "wrong";
-            else state = "dim";
+            if (deferredReveal) {
+              state = i === selected ? "selected" : "dim";
+            } else if (i === question.correctIndex) {
+              state = "correct";
+            } else if (i === selected) {
+              state = "wrong";
+            } else {
+              state = "dim";
+            }
           }
           return (
             <button
@@ -277,6 +305,7 @@ function QuizScreen({
                 "flex items-center gap-3 rounded-2xl border-2 p-3.5 text-left font-body text-[15px] font-bold text-ink shadow-[0_3px_0_var(--nog-line)] transition-transform",
                 state === "correct" && "border-green bg-green-soft shadow-[0_3px_0_var(--nog-green)]",
                 state === "wrong" && "border-red bg-red-soft shadow-[0_3px_0_var(--nog-red)]",
+                state === "selected" && "border-primary bg-primary-soft shadow-[0_3px_0_var(--nog-primary)]",
                 state === "dim" && "border-line bg-surface opacity-45",
                 state === "" && "border-line bg-surface hover:-translate-y-0.5",
               ]
@@ -285,7 +314,13 @@ function QuizScreen({
             >
               <span
                 className={`flex h-[30px] w-[30px] shrink-0 items-center justify-center rounded-[9px] font-display text-[13.5px] font-bold text-white ${
-                  state === "correct" ? "bg-green" : state === "wrong" ? "bg-red" : badgeColors[i]
+                  state === "correct"
+                    ? "bg-green"
+                    : state === "wrong"
+                      ? "bg-red"
+                      : state === "selected"
+                        ? "bg-primary"
+                        : badgeColors[i]
                 }`}
               >
                 {letters[i]}
@@ -293,12 +328,13 @@ function QuizScreen({
               <span>{opt}</span>
               {state === "correct" && <span className="ml-auto text-base">✓</span>}
               {state === "wrong" && <span className="ml-auto text-base">✕</span>}
+              {state === "selected" && <span className="ml-auto text-base">•</span>}
             </button>
           );
         })}
       </div>
 
-      {answered && (
+      {answered && !deferredReveal && (
         <div className="rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-ink">
           {question.explanation}
         </div>
@@ -317,6 +353,7 @@ function ResultScreen({
   quiz,
   score,
   roundLength,
+  roundQuestions,
   answers,
   unlocked,
   revealed,
@@ -327,6 +364,7 @@ function ResultScreen({
   quiz: QuizDefinition;
   score: number;
   roundLength: number;
+  roundQuestions: QuizQuestion[];
   answers: Answer[];
   unlocked: boolean;
   revealed: boolean;
@@ -335,6 +373,7 @@ function ResultScreen({
   onRestart: () => void;
 }) {
   const rank = rankFor(quiz, score, roundLength);
+  const deferredReveal = quiz.revealTiming === "end";
   // Plus-exklusive Quizze (unlockPriceCents: 0) haben keinen separaten Kauf-Schritt --
   // die Themen-Analyse ist automatisch enthalten, kein zweiter Paywall obendrauf.
   const includedFree = quiz.unlockPriceCents === 0;
@@ -382,22 +421,55 @@ function ResultScreen({
           <p className="text-[12.5px] text-muted">{quiz.unlockDescription}</p>
         </div>
 
-        <div className={`flex flex-col gap-3 ${!effectiveRevealed ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""}`}>
-          {answers.map((a, i) => (
-            <div key={i} className="flex items-center gap-2.5">
-              <span className="w-[120px] shrink-0 text-[12.5px] font-bold text-ink">
-                <span className="mr-1.5">{quiz.categoryIcons[a.category] ?? "❔"}</span>
-                {a.category}
-              </span>
-              <div className="h-2.5 flex-1 overflow-hidden rounded-md bg-line">
-                <div
-                  className={`h-full rounded-md transition-[width] duration-500 ${a.correct ? "bg-green" : "bg-red"}`}
-                  style={{ width: effectiveRevealed ? `${a.correct ? 100 : 15}%` : "0%" }}
-                />
+        {deferredReveal ? (
+          <div className="flex flex-col gap-2.5">
+            {answers.map((a, i) => {
+              const q = roundQuestions[i];
+              return (
+                <div key={i} className="hairline rounded-xl bg-bg p-3.5">
+                  <div className="flex items-start gap-2.5">
+                    <span
+                      className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-bold text-white ${
+                        a.correct ? "bg-green" : "bg-red"
+                      }`}
+                    >
+                      {a.correct ? "✓" : "✕"}
+                    </span>
+                    <p className="text-[13.5px] leading-snug font-semibold text-ink">{q.question}</p>
+                  </div>
+                  <div
+                    className={`mt-2.5 ml-[34px] flex flex-col gap-1 text-[12.5px] leading-relaxed ${
+                      !effectiveRevealed ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""
+                    }`}
+                  >
+                    <p className="text-ink">
+                      <span className="font-bold">Richtig wäre:</span>{" "}
+                      {q.options[q.correctIndex]}
+                    </p>
+                    <p className="text-muted">{q.explanation}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className={`flex flex-col gap-3 ${!effectiveRevealed ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""}`}>
+            {answers.map((a, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <span className="w-[120px] shrink-0 text-[12.5px] font-bold text-ink">
+                  <span className="mr-1.5">{quiz.categoryIcons[a.category] ?? "❔"}</span>
+                  {a.category}
+                </span>
+                <div className="h-2.5 flex-1 overflow-hidden rounded-md bg-line">
+                  <div
+                    className={`h-full rounded-md transition-[width] duration-500 ${a.correct ? "bg-green" : "bg-red"}`}
+                    style={{ width: effectiveRevealed ? `${a.correct ? 100 : 15}%` : "0%" }}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {includedFree ? (
           <p className="flex items-center gap-1.5 text-[13.5px] font-extrabold text-green-dark">

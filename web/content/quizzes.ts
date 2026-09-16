@@ -33,6 +33,12 @@ export interface QuizDefinition {
   questions: QuizQuestion[];
   /** Anzahl Fragen pro gespielter Runde. */
   roundSize: number;
+  /** "immediate" (Standard, wenn weggelassen): Richtig/Falsch wird direkt nach
+   * jeder Antwort angezeigt, inkl. Erklärung. "end": keine Rückmeldung
+   * während der Runde -- erst im Ergebnis sieht man pro Frage, ob man richtig
+   * lag (gratis); die richtige Antwort und mehr Hintergrundinfos gibt es erst
+   * mit Freischaltung/Plus. */
+  revealTiming?: "immediate" | "end";
   ranks: QuizRank[];
   /** Preis der Tiefenauswertung — immer VOR dem Klick auf "Freischalten" sichtbar (Compliance §5). */
   unlockPriceCents: number;
@@ -108,10 +114,11 @@ export const quizzes: QuizDefinition[] = [
     },
     questions: filmzitateQuestions,
     roundSize: 8,
+    revealTiming: "end",
     ranks: STANDARD_RANKS,
     unlockPriceCents: 299,
     unlockTitle: "Themen-Analyse",
-    unlockDescription: "Wo du wirklich glänzt – nach Genre sortiert",
+    unlockDescription: "Die richtigen Antworten und mehr Hintergrund zu jedem Zitat",
   },
   {
     slug: "gemischt",
