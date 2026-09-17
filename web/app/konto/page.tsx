@@ -1,12 +1,22 @@
-import { User as UserIcon } from "lucide-react";
+import { Crown, Flame, Lock, LogOut, User as UserIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
+import { UsernameForm } from "@/components/konto/UsernameForm";
 import { getCurrentUser, isSupabaseConfigured } from "@/lib/auth";
 import { getServerStreak } from "@/lib/streak-server";
+import { getPlusStatus } from "@/lib/plus";
+import { signOut } from "@/lib/actions/auth";
+import { updateUsernameAction } from "@/lib/actions/profile";
+import { streakBadges } from "@/content/streakBadges";
 
 export default async function KontoPage() {
   const user = await getCurrentUser();
-  const streak = user ? await getServerStreak(user.id) : null;
+  const [streak, plus] = await Promise.all([
+    user ? getServerStreak(user.id) : null,
+    user ? getPlusStatus(user.id) : null,
+  ]);
+  const plusActive = plus?.active ?? false;
+  const username = (user?.user_metadata?.username as string | undefined) ?? "";
 
   return (
     <div className="min-h-screen bg-bg">
@@ -17,9 +27,20 @@ export default async function KontoPage() {
             <UserIcon className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <h1 className="font-display text-2xl font-extrabold tracking-tight text-ink">
-              Dein Konto
-            </h1>
+            <div className="flex items-center gap-2">
+              <h1 className="font-display text-2xl font-extrabold tracking-tight text-ink">
+                Dein Konto
+              </h1>
+              {user && (
+                <span
+                  className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${
+                    plusActive ? "bg-gold text-[hsl(28,40%,14%)]" : "hairline text-muted"
+                  }`}
+                >
+                  {plusActive ? "Plus" : "Gratis"}
+                </span>
+              )}
+            </div>
             {user && <p className="text-sm text-ink-soft">{user.email}</p>}
           </div>
         </div>
@@ -38,13 +59,97 @@ export default async function KontoPage() {
             )}
           </div>
         ) : (
-          <div className="hairline rounded-3xl bg-surface p-5">
-            <p className="font-display font-bold text-ink">
-              Serie: {streak?.count ?? 0} {streak?.count === 1 ? "Tag" : "Tage"}
-            </p>
-            <p className="mt-3 rounded-xl bg-primary-soft px-3 py-2 text-[13px] font-bold text-primary-dark">
-              Konto-Details, Plus-Status und Streak-Badges kommen als Nächstes.
-            </p>
+          <div className="flex flex-col gap-5">
+            <div className="hairline rounded-3xl bg-surface p-5">
+              <p className="flex items-center gap-2 font-display font-bold text-ink">
+                <Crown className="h-4 w-4 text-gold" /> {plusActive ? "Plus-Status" : "Gratis-Status"}
+              </p>
+              <p className="mt-1.5 text-sm text-ink-soft">
+                {plusActive
+                  ? plus?.until
+                    ? `Aktiv bis ${new Date(plus.until).toLocaleDateString("de-DE")}. Danke, dass du dabei bist!`
+                    : "Dein Plus-Zugang ist aktiv. Danke, dass du dabei bist!"
+                  : "Schalte Plus frei für die volle Bestenliste, deinen Spielernamen und zum Sammeln von Medaillen."}
+              </p>
+            </div>
+
+            <div className="hairline rounded-3xl bg-surface p-5">
+              <div className="mb-1 flex items-center justify-between gap-3">
+                <p className="flex items-center gap-2 font-display font-bold text-ink">
+                  <Flame className="h-4 w-4 text-primary" /> Deine Serie
+                </p>
+                <span className="text-xs font-bold text-muted">
+                  {plusActive
+                    ? `${streakBadges.filter((b) => (streak?.count ?? 0) >= b.threshold).length}/${streakBadges.length} Badges`
+                    : `0/${streakBadges.length} Badges`}
+                </span>
+              </div>
+              <p className="mb-4 text-sm text-ink-soft">
+                Spiele täglich, um deine Serie auszubauen und neue Medaillen freizuschalten.
+              </p>
+
+              <div className="hairline mb-4 flex items-center justify-between rounded-2xl bg-bg px-4 py-3.5">
+                <p className="flex items-center gap-2 font-display text-lg font-extrabold text-ink">
+                  <Flame className="h-5 w-5 text-primary" />
+                  {streak?.count ?? 0} {streak?.count === 1 ? "Tag" : "Tage"} in Folge
+                </p>
+                <p className="text-right text-xs text-muted">
+                  Bestleistung
+                  <br />
+                  <span className="font-bold text-ink-soft">
+                    {streak?.bestCount ?? 0} {streak?.bestCount === 1 ? "Tag" : "Tage"}
+                  </span>
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {streakBadges.map((badge) => {
+                  const reached = (streak?.count ?? 0) >= badge.threshold;
+                  const unlocked = plusActive && reached;
+                  return (
+                    <div
+                      key={badge.id}
+                      className={`hairline flex flex-col items-center gap-1.5 rounded-2xl p-3.5 text-center ${
+                        unlocked ? "bg-primary/15" : "bg-bg"
+                      }`}
+                    >
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-xl ${
+                          unlocked ? "bg-primary text-white" : "bg-line text-muted"
+                        }`}
+                      >
+                        {unlocked ? <Flame className="h-4.5 w-4.5" /> : <Lock className="h-4 w-4" />}
+                      </div>
+                      <p className="text-[12.5px] leading-tight font-bold text-ink">{badge.title}</p>
+                      <p className="text-[11px] text-muted">
+                        {plusActive
+                          ? reached
+                            ? "Freigeschaltet"
+                            : `${badge.threshold} Tage übrig`
+                          : "Nur mit Plus"}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="hairline rounded-3xl bg-surface p-5">
+              <p className="font-display font-bold text-ink">Spielername</p>
+              <p className="mb-4 text-sm text-ink-soft">
+                Wird in der Bestenliste angezeigt, sobald du Plus hast.
+              </p>
+              <UsernameForm action={updateUsernameAction} currentUsername={username} locked={!plusActive} />
+            </div>
+
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-muted transition hover:text-ink"
+              >
+                <LogOut className="h-4 w-4" /> Abmelden
+              </button>
+            </form>
           </div>
         )}
       </main>

@@ -26,21 +26,28 @@ export async function recordServerStreakCompletion() {
   const supabase = await createClient();
   const { data: existing } = await supabase
     .from("streaks")
-    .select("count, last_completed_date")
+    .select("count, best_count, last_completed_date")
     .eq("user_id", user.id)
     .maybeSingle();
 
   const today = todayKey();
   if (existing?.last_completed_date === today) {
-    return { count: existing.count, lastCompletedDate: today };
+    return { count: existing.count, bestCount: existing.best_count, lastCompletedDate: today };
   }
 
   const nextCount = existing?.last_completed_date === yesterdayKey() ? existing.count + 1 : 1;
+  const nextBest = Math.max(nextCount, existing?.best_count ?? 0);
 
   await supabase.from("streaks").upsert(
-    { user_id: user.id, count: nextCount, last_completed_date: today, updated_at: new Date().toISOString() },
+    {
+      user_id: user.id,
+      count: nextCount,
+      best_count: nextBest,
+      last_completed_date: today,
+      updated_at: new Date().toISOString(),
+    },
     { onConflict: "user_id" },
   );
 
-  return { count: nextCount, lastCompletedDate: today };
+  return { count: nextCount, bestCount: nextBest, lastCompletedDate: today };
 }

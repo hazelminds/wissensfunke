@@ -56,18 +56,21 @@ export interface Database {
         Row: {
           user_id: string;
           count: number;
+          best_count: number;
           last_completed_date: string | null;
           updated_at: string;
         };
         Insert: {
           user_id: string;
           count?: number;
+          best_count?: number;
           last_completed_date?: string | null;
           updated_at?: string;
         };
         Update: {
           user_id?: string;
           count?: number;
+          best_count?: number;
           last_completed_date?: string | null;
           updated_at?: string;
         };
