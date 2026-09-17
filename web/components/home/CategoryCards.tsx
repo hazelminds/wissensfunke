@@ -2,6 +2,7 @@ import { createElement } from "react";
 import Link from "next/link";
 import { ArrowRight, Check, Lock, Brain, Puzzle, Heart } from "lucide-react";
 import { type GameType, gameTypeMeta } from "@/content/games";
+import { PlusButton } from "@/components/PlusButton";
 
 const categories: {
   id: GameType;
@@ -31,12 +32,9 @@ export function CategoryCards() {
             Womit spielst du heute?
           </h2>
         </div>
-        <Link
-          href="/konto"
-          className="hidden items-center gap-1.5 text-sm text-ink-soft transition hover:text-ink sm:inline-flex"
-        >
+        <PlusButton className="hidden items-center gap-1.5 text-sm text-ink-soft transition hover:text-ink sm:inline-flex">
           Plus freischalten <ArrowRight className="h-4 w-4" />
-        </Link>
+        </PlusButton>
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 md:gap-5">

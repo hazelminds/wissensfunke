@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Crown, Lock } from "lucide-react";
 import { leaderboards } from "@/content/leaderboard";
+import { PlusButton } from "@/components/PlusButton";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 const AVATAR_COLORS = ["bg-quiz", "bg-puzzle", "bg-psych", "bg-primary"];
@@ -71,12 +71,9 @@ export function LeaderboardBoard() {
         })}
       </div>
 
-      <Link
-        href="/konto"
-        className="glow-primary mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-      >
+      <PlusButton className="glow-primary mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90">
         <Crown className="h-4 w-4" /> Plus freischalten für die volle Bestenliste
-      </Link>
+      </PlusButton>
     </div>
   );
 }

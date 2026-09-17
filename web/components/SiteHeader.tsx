@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Trophy, Crown, User as UserIcon, LogIn, Shield } from "lucide-react";
 import { StreakBadge } from "@/components/StreakBadge";
 import { NavbarMobileMenu } from "@/components/NavbarMobileMenu";
+import { PlusButton } from "@/components/PlusButton";
 import { getCurrentUser } from "@/lib/auth";
 import { getServerStreak } from "@/lib/streak-server";
 import { signOut } from "@/lib/actions/auth";
@@ -74,12 +75,9 @@ export async function SiteHeader({
           {showStreak && (
             <StreakBadge serverCount={user ? (serverStreak?.count ?? 0) : undefined} />
           )}
-          <Link
-            href="/konto"
-            className="glow-primary hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 sm:inline-flex"
-          >
+          <PlusButton className="glow-primary hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 sm:inline-flex">
             <Crown className="h-4 w-4" /> Plus
-          </Link>
+          </PlusButton>
           {user ? (
             <>
               <Link

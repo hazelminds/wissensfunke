@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, Trophy, Crown, User as UserIcon, LogIn, Shield } from "lucide-react";
+import { PlusButton } from "@/components/PlusButton";
 
 export function NavbarMobileMenu({
   isLoggedIn,
@@ -57,13 +58,12 @@ export function NavbarMobileMenu({
               <Shield className="h-4 w-4" /> Admin
             </Link>
           )}
-          <Link
-            href="/konto"
+          <PlusButton
             onClick={() => setOpen(false)}
             className="mt-2 inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white"
           >
             <Crown className="h-4 w-4" /> Plus entdecken
-          </Link>
+          </PlusButton>
           {isLoggedIn ? (
             <Link
               href="/konto"

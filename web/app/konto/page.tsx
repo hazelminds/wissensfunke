@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Crown, Flame, LifeBuoy, Lock, LogOut, User as UserIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
+import { PlusButton } from "@/components/PlusButton";
 import { UsernameForm } from "@/components/konto/UsernameForm";
 import { getCurrentUser, isSupabaseConfigured } from "@/lib/auth";
 import { getServerStreak } from "@/lib/streak-server";
@@ -94,6 +95,11 @@ export default async function KontoPage() {
                     : "Dein Plus-Zugang ist aktiv. Danke, dass du dabei bist!"
                   : "Schalte Plus frei für die volle Bestenliste, deinen Spielernamen und zum Sammeln von Medaillen."}
               </p>
+              {!plusActive && (
+                <PlusButton className="glow-primary mt-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:opacity-90">
+                  <Crown className="h-4 w-4" /> Plus entdecken
+                </PlusButton>
+              )}
             </div>
 
             <div className="hairline rounded-3xl bg-surface p-5">

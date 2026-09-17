@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Trophy, Crown, ArrowRight } from "lucide-react";
 import { leaderboards } from "@/content/leaderboard";
+import { PlusButton } from "@/components/PlusButton";
 
 const AVATAR_COLORS = ["bg-quiz", "bg-puzzle"];
 
@@ -34,13 +34,10 @@ export function LeaderboardTeaser({ board }: { board: "quiz" | "puzzle" }) {
         </div>
       </div>
 
-      <Link
-        href="/konto"
-        className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition hover:opacity-80"
-      >
+      <PlusButton className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-primary transition hover:opacity-80">
         <Crown className="h-4 w-4" /> Plus freischalten und Bestenliste sehen{" "}
         <ArrowRight className="h-4 w-4" />
-      </Link>
+      </PlusButton>
     </div>
   );
 }
