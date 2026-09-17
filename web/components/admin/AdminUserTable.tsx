@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, Crown, Shield, ShieldOff, X, XCircle } from "lucide-react";
+import Link from "next/link";
+import { ArrowDown, ArrowUp, ArrowUpDown, Ban, ChevronRight, Crown, Shield, ShieldOff, X, XCircle } from "lucide-react";
 import type { AdminUserRow } from "@/lib/adminData";
 import { AdminUserExportButton } from "@/components/admin/AdminUserExportButton";
 import {
@@ -274,7 +275,20 @@ export function AdminUserTable({
               ) : (
                 sorted.map((u) => (
                   <tr key={u.id} className="border-b border-line last:border-0">
-                    <td className="px-4 py-3 font-medium text-ink">{u.email ?? "—"}</td>
+                    <td className="px-4 py-3 font-medium text-ink">
+                      <Link
+                        href={`/admin/nutzer/${u.id}`}
+                        className="group inline-flex items-center gap-1.5 hover:text-primary"
+                      >
+                        {u.email ?? "—"}
+                        {u.isBanned && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-red-soft px-2 py-0.5 text-[10px] font-bold text-red-dark">
+                            <Ban className="h-2.5 w-2.5" /> Gesperrt
+                          </span>
+                        )}
+                        <ChevronRight className="h-3.5 w-3.5 text-muted opacity-0 transition group-hover:opacity-100" />
+                      </Link>
+                    </td>
                     <td className="px-4 py-3 text-muted">{formatDate(u.createdAt)}</td>
                     <td className="px-4 py-3 text-muted">
                       {u.lastSignInAt ? formatDate(u.lastSignInAt) : "—"}
