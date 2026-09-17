@@ -1,4 +1,7 @@
-import { Crown, Shield, ShieldOff, XCircle } from "lucide-react";
+"use client";
+
+import { useMemo, useState } from "react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Crown, Shield, ShieldOff, X, XCircle } from "lucide-react";
 import type { AdminUserRow } from "@/lib/adminData";
 import { AdminUserExportButton } from "@/components/admin/AdminUserExportButton";
 import {
@@ -18,6 +21,73 @@ function formatEuro(cents: number): string {
   return (cents / 100).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
 }
 
+type PayFilter = "all" | "paying" | "free";
+type SortKey = "createdAt" | "lastSignInAt" | "purchaseCount" | "purchaseTotalCents" | "plusUntil";
+type SortDir = "asc" | "desc";
+
+const sortLabels: Record<SortKey, string> = {
+  createdAt: "Registriert",
+  lastSignInAt: "Login",
+  purchaseCount: "Käufe",
+  purchaseTotalCents: "Umsatz",
+  plusUntil: "Plus",
+};
+
+/** Datumsvergleich auf Tagesebene (YYYY-MM-DD-Präfix) -- reicht für "von/bis"-Filter. */
+function inDateRange(iso: string | null, from: string, to: string): boolean {
+  if (!iso) return false;
+  const day = iso.slice(0, 10);
+  if (from && day < from) return false;
+  if (to && day > to) return false;
+  return true;
+}
+
+/** null sortiert immer ans Ende, unabhängig von der Richtung. */
+function compareNullable(a: string | number | null, b: string | number | null, dir: SortDir): number {
+  if (a === null && b === null) return 0;
+  if (a === null) return 1;
+  if (b === null) return -1;
+  const mult = dir === "asc" ? 1 : -1;
+  if (a < b) return -1 * mult;
+  if (a > b) return 1 * mult;
+  return 0;
+}
+
+function SortHeader({
+  sortKeyName,
+  activeKey,
+  dir,
+  onToggle,
+  children,
+}: {
+  sortKeyName: SortKey;
+  activeKey: SortKey;
+  dir: SortDir;
+  onToggle: (key: SortKey) => void;
+  children: React.ReactNode;
+}) {
+  const active = activeKey === sortKeyName;
+  return (
+    <th className="px-4 py-3 font-semibold">
+      <button
+        onClick={() => onToggle(sortKeyName)}
+        className={`inline-flex items-center gap-1 transition hover:text-ink ${active ? "text-ink" : ""}`}
+      >
+        {children}
+        {active ? (
+          dir === "asc" ? (
+            <ArrowUp className="h-3 w-3" />
+          ) : (
+            <ArrowDown className="h-3 w-3" />
+          )
+        ) : (
+          <ArrowUpDown className="h-3 w-3 opacity-40" />
+        )}
+      </button>
+    </th>
+  );
+}
+
 export function AdminUserTable({
   users,
   currentUserId,
@@ -25,14 +95,144 @@ export function AdminUserTable({
   users: AdminUserRow[];
   currentUserId: string;
 }) {
+  const [payFilter, setPayFilter] = useState<PayFilter>("all");
+  const [regFrom, setRegFrom] = useState("");
+  const [regTo, setRegTo] = useState("");
+  const [loginFrom, setLoginFrom] = useState("");
+  const [loginTo, setLoginTo] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey>("createdAt");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+
+  const hasActiveFilters = payFilter !== "all" || regFrom || regTo || loginFrom || loginTo;
+
+  function resetFilters() {
+    setPayFilter("all");
+    setRegFrom("");
+    setRegTo("");
+    setLoginFrom("");
+    setLoginTo("");
+  }
+
+  function toggleSort(key: SortKey) {
+    if (key === sortKey) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("desc");
+    }
+  }
+
+  const filtered = useMemo(() => {
+    return users.filter((u) => {
+      if (payFilter === "paying" && u.purchaseCount === 0) return false;
+      if (payFilter === "free" && u.purchaseCount > 0) return false;
+      if ((regFrom || regTo) && !inDateRange(u.createdAt, regFrom, regTo)) return false;
+      if ((loginFrom || loginTo) && !inDateRange(u.lastSignInAt, loginFrom, loginTo)) return false;
+      return true;
+    });
+  }, [users, payFilter, regFrom, regTo, loginFrom, loginTo]);
+
+  const sorted = useMemo(() => {
+    const arr = [...filtered];
+    arr.sort((a, b) => {
+      switch (sortKey) {
+        case "createdAt":
+          return compareNullable(a.createdAt, b.createdAt, sortDir);
+        case "lastSignInAt":
+          return compareNullable(a.lastSignInAt, b.lastSignInAt, sortDir);
+        case "purchaseCount":
+          return compareNullable(a.purchaseCount, b.purchaseCount, sortDir);
+        case "purchaseTotalCents":
+          return compareNullable(a.purchaseTotalCents, b.purchaseTotalCents, sortDir);
+        case "plusUntil":
+          return compareNullable(a.plusUntil, b.plusUntil, sortDir);
+        default:
+          return 0;
+      }
+    });
+    return arr;
+  }, [filtered, sortKey, sortDir]);
+
   return (
     <div>
       <div className="mb-4 flex items-center justify-between gap-4">
-        <p className="text-sm text-muted">{users.length} Benutzer (aus Supabase Auth)</p>
+        <p className="text-sm text-muted">
+          {sorted.length === users.length
+            ? `${users.length} Benutzer (aus Supabase Auth)`
+            : `${sorted.length} von ${users.length} Benutzern`}
+          {" · sortiert nach "}
+          {sortLabels[sortKey]} ({sortDir === "asc" ? "aufsteigend" : "absteigend"})
+        </p>
         <div className="flex items-center gap-3">
           <AdminCreateTestUserForm action={createTestUserAction} />
-          <AdminUserExportButton users={users} />
+          <AdminUserExportButton users={sorted} />
         </div>
+      </div>
+
+      <div className="hairline mb-4 flex flex-wrap items-end gap-4 rounded-2xl bg-surface p-4">
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-bold text-muted uppercase">Zahlstatus</span>
+          <div className="hairline flex rounded-full p-0.5">
+            {(["all", "paying", "free"] as PayFilter[]).map((f) => (
+              <button
+                key={f}
+                onClick={() => setPayFilter(f)}
+                className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+                  payFilter === f ? "bg-primary text-white" : "text-ink-soft hover:text-ink"
+                }`}
+              >
+                {f === "all" ? "Alle" : f === "paying" ? "Zahlend" : "Kostenlos"}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-bold text-muted uppercase">Registriert</span>
+          <div className="flex items-center gap-1.5">
+            <input
+              type="date"
+              value={regFrom}
+              onChange={(e) => setRegFrom(e.target.value)}
+              className="hairline rounded-full bg-bg px-3 py-1.5 text-xs text-ink outline-none focus:border-primary/60"
+            />
+            <span className="text-xs text-muted">bis</span>
+            <input
+              type="date"
+              value={regTo}
+              onChange={(e) => setRegTo(e.target.value)}
+              className="hairline rounded-full bg-bg px-3 py-1.5 text-xs text-ink outline-none focus:border-primary/60"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[11px] font-bold text-muted uppercase">Login</span>
+          <div className="flex items-center gap-1.5">
+            <input
+              type="date"
+              value={loginFrom}
+              onChange={(e) => setLoginFrom(e.target.value)}
+              className="hairline rounded-full bg-bg px-3 py-1.5 text-xs text-ink outline-none focus:border-primary/60"
+            />
+            <span className="text-xs text-muted">bis</span>
+            <input
+              type="date"
+              value={loginTo}
+              onChange={(e) => setLoginTo(e.target.value)}
+              className="hairline rounded-full bg-bg px-3 py-1.5 text-xs text-ink outline-none focus:border-primary/60"
+            />
+          </div>
+        </div>
+
+        {hasActiveFilters && (
+          <button
+            onClick={resetFilters}
+            className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold text-muted transition hover:text-ink"
+          >
+            <X className="h-3 w-3" /> Filter zurücksetzen
+          </button>
+        )}
       </div>
 
       <div className="hairline overflow-hidden rounded-2xl bg-surface">
@@ -41,25 +241,44 @@ export function AdminUserTable({
             <thead className="border-b border-line text-xs text-muted uppercase">
               <tr>
                 <th className="px-4 py-3 font-semibold">E-Mail</th>
-                <th className="px-4 py-3 font-semibold">Registriert</th>
-                <th className="px-4 py-3 font-semibold">Käufe</th>
-                <th className="px-4 py-3 font-semibold">Umsatz</th>
-                <th className="px-4 py-3 font-semibold">Plus</th>
+                <SortHeader sortKeyName="createdAt" activeKey={sortKey} dir={sortDir} onToggle={toggleSort}>
+                  Registriert
+                </SortHeader>
+                <SortHeader sortKeyName="lastSignInAt" activeKey={sortKey} dir={sortDir} onToggle={toggleSort}>
+                  Login
+                </SortHeader>
+                <SortHeader sortKeyName="purchaseCount" activeKey={sortKey} dir={sortDir} onToggle={toggleSort}>
+                  Käufe
+                </SortHeader>
+                <SortHeader
+                  sortKeyName="purchaseTotalCents"
+                  activeKey={sortKey}
+                  dir={sortDir}
+                  onToggle={toggleSort}
+                >
+                  Umsatz
+                </SortHeader>
+                <SortHeader sortKeyName="plusUntil" activeKey={sortKey} dir={sortDir} onToggle={toggleSort}>
+                  Plus
+                </SortHeader>
                 <th className="px-4 py-3 font-semibold">Rechte</th>
               </tr>
             </thead>
             <tbody>
-              {users.length === 0 ? (
+              {sorted.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-muted">
-                    Keine Benutzer.
+                  <td colSpan={7} className="px-4 py-6 text-muted">
+                    {users.length === 0 ? "Keine Benutzer." : "Keine Benutzer entsprechen den Filtern."}
                   </td>
                 </tr>
               ) : (
-                users.map((u) => (
+                sorted.map((u) => (
                   <tr key={u.id} className="border-b border-line last:border-0">
                     <td className="px-4 py-3 font-medium text-ink">{u.email ?? "—"}</td>
                     <td className="px-4 py-3 text-muted">{formatDate(u.createdAt)}</td>
+                    <td className="px-4 py-3 text-muted">
+                      {u.lastSignInAt ? formatDate(u.lastSignInAt) : "—"}
+                    </td>
                     <td className="px-4 py-3 text-ink">{u.purchaseCount || "—"}</td>
                     <td className="px-4 py-3 text-ink">
                       {u.purchaseTotalCents > 0 ? formatEuro(u.purchaseTotalCents) : "—"}

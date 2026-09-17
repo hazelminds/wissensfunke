@@ -8,6 +8,8 @@ export interface AdminUserRow {
   id: string;
   email: string | null;
   createdAt: string;
+  /** ISO-Datum des letzten Logins -- null, wenn noch nie eingeloggt (z. B. reiner Gast-Kauf). */
+  lastSignInAt: string | null;
   purchaseCount: number;
   purchaseTotalCents: number;
   isAdmin: boolean;
@@ -50,6 +52,7 @@ export async function listAdminUsers(): Promise<AdminUserRow[]> {
         id: u.id,
         email: u.email ?? null,
         createdAt: u.created_at,
+        lastSignInAt: u.last_sign_in_at ?? null,
         purchaseCount: purchaseMap.get(u.id)?.count ?? 0,
         purchaseTotalCents: purchaseMap.get(u.id)?.total ?? 0,
         isAdmin: bootstrap || adminIds.has(u.id),
