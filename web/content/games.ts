@@ -24,8 +24,8 @@ export interface GameModule {
   type: GameType;
   isPremium: boolean;
   sortOrder: number;
-  /** Nur für type "puzzle": welche Puzzle-Mechanik gerendert wird. */
-  variant?: "sliding" | "whoami";
+  /** Nur für type "puzzle"/"psych": welche Spielmechanik gerendert wird. */
+  variant?: "sliding" | "whoami" | "psych-result" | "psych-compat";
   /** Nur für die Sliding-Puzzle-Variante: Rastergröße. */
   difficulty?: "easy" | "medium" | "hard";
   /** false = taucht nicht in /kategorie/[type] auf (z.B. der tägliche Anker,
@@ -343,6 +343,7 @@ export const games: GameModule[] = [
     level: "weekly-freemium",
     estMinutes: 4,
     type: "psych",
+    variant: "psych-result",
     isPremium: false,
     sortOrder: 40,
   },
@@ -355,6 +356,7 @@ export const games: GameModule[] = [
     level: "weekly-freemium",
     estMinutes: 3,
     type: "psych",
+    variant: "psych-compat",
     isPremium: false,
     sortOrder: 41,
   },

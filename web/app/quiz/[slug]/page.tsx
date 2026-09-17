@@ -12,16 +12,32 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { DailyCapGate } from "@/components/DailyCapGate";
 import { SlidingPuzzle } from "@/components/game/SlidingPuzzle";
 import { WhoAmI } from "@/components/game/WhoAmI";
+import { RelationshipTest } from "@/components/game/RelationshipTest";
+import { FriendCompatibility } from "@/components/game/FriendCompatibility";
 
 export default async function QuizPage({
   params,
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ provider?: string; ref?: string; checkout_error?: string; preview?: string }>;
+  searchParams: Promise<{
+    provider?: string;
+    ref?: string;
+    checkout_error?: string;
+    preview?: string;
+    von?: string;
+    name?: string;
+  }>;
 }) {
   const { slug } = await params;
-  const { provider, ref: paymentRef, checkout_error: checkoutError, preview } = await searchParams;
+  const {
+    provider,
+    ref: paymentRef,
+    checkout_error: checkoutError,
+    preview,
+    von: friendCode,
+    name: friendName,
+  } = await searchParams;
 
   const game = games.find((g) => g.slug === slug);
   if (!game) notFound();
@@ -48,6 +64,8 @@ export default async function QuizPage({
           paymentRef={paymentRef}
           checkoutError={checkoutError}
           previewUnlocked={previewUnlocked}
+          friendCode={friendCode}
+          friendName={friendName}
         />
       </main>
     </div>
@@ -61,6 +79,8 @@ async function QuizContent({
   paymentRef,
   checkoutError,
   previewUnlocked,
+  friendCode,
+  friendName,
 }: {
   slug: string;
   game: (typeof games)[number];
@@ -68,6 +88,8 @@ async function QuizContent({
   paymentRef?: string;
   checkoutError?: string;
   previewUnlocked: boolean;
+  friendCode?: string;
+  friendName?: string;
 }) {
   if (slug === "tages-mini-quiz") {
     return <DailyMiniQuiz quizSet={getDailyQuizSet()} />;
@@ -95,6 +117,22 @@ async function QuizContent({
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
     const player = <WhoAmI title={game.title} color={game.type} round={round} />;
     return game.level === "daily-free" ? player : <DailyCapGate>{player}</DailyCapGate>;
+  }
+
+  if (game.variant === "psych-result") {
+    return (
+      <DailyCapGate>
+        <RelationshipTest title={game.title} />
+      </DailyCapGate>
+    );
+  }
+
+  if (game.variant === "psych-compat") {
+    return (
+      <DailyCapGate>
+        <FriendCompatibility title={game.title} sharedCode={friendCode} sharedName={friendName} />
+      </DailyCapGate>
+    );
   }
 
   const quiz = getQuiz(slug);
