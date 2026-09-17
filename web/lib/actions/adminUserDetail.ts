@@ -4,7 +4,14 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/auth";
 import { isAdminUser } from "@/lib/admin";
-import { addUserNote, banUser, unbanUser, deleteUserAccount, adminSetUsername } from "@/lib/adminData";
+import {
+  addUserNote,
+  banUser,
+  unbanUser,
+  deleteUserAccount,
+  adminSetUsername,
+  adminSetPassword,
+} from "@/lib/adminData";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 
 async function requireAdmin() {
@@ -89,5 +96,18 @@ export async function adminSetUsernameAction(formData: FormData) {
   }
 
   await adminSetUsername(targetUserId, username);
+  revalidatePath(`/admin/nutzer/${targetUserId}`);
+}
+
+export async function adminSetPasswordAction(formData: FormData) {
+  await requireAdmin();
+  const targetUserId = String(formData.get("userId") ?? "");
+  const password = String(formData.get("password") ?? "");
+  if (!targetUserId) return;
+  if (password.length < 6) {
+    throw new Error("Das Passwort muss mindestens 6 Zeichen haben.");
+  }
+
+  await adminSetPassword(targetUserId, password);
   revalidatePath(`/admin/nutzer/${targetUserId}`);
 }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Ban, Crown, ShieldAlert, StickyNote, UserRoundCheck } from "lucide-react";
+import { ArrowLeft, Ban, Crown, KeyRound, ShieldAlert, StickyNote, UserRoundCheck } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { getCurrentUser } from "@/lib/auth";
 import { isAdminUser } from "@/lib/admin";
@@ -11,10 +11,12 @@ import {
   banUserAction,
   unbanUserAction,
   adminSetUsernameAction,
+  adminSetPasswordAction,
   deleteUserAction,
 } from "@/lib/actions/adminUserDetail";
 import { AdminNoteForm } from "@/components/admin/AdminNoteForm";
 import { AdminUsernameForm } from "@/components/admin/AdminUsernameForm";
+import { AdminPasswordForm } from "@/components/admin/AdminPasswordForm";
 import { AdminDeleteUserForm } from "@/components/admin/AdminDeleteUserForm";
 
 function formatDateTime(iso: string): string {
@@ -146,6 +148,18 @@ export default async function AdminUserDetailPage({ params }: { params: Promise<
               userId={detail.id}
               currentUsername={detail.username}
             />
+          </section>
+
+          {/* Passwort */}
+          <section className="hairline rounded-3xl bg-surface p-5">
+            <h2 className="mb-1 flex items-center gap-2 font-display font-bold text-ink">
+              <KeyRound className="h-4 w-4 text-primary" /> Passwort
+            </h2>
+            <p className="mb-3 text-sm text-ink-soft">
+              Setzt ein neues Passwort — z. B. wenn jemand im Support ausgesperrt ist. Das alte
+              Passwort wird danach ungültig.
+            </p>
+            <AdminPasswordForm action={adminSetPasswordAction} userId={detail.id} />
           </section>
 
           {/* Sperren / Löschen */}

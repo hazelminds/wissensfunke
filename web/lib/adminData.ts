@@ -195,6 +195,15 @@ export async function adminSetUsername(userId: string, username: string): Promis
   if (error) throw new Error(error.message);
 }
 
+/** Setzt ein neues Passwort für eine beliebige Person -- z. B. für Support-
+ * Fälle, in denen jemand ausgesperrt ist. Das alte Passwort ist danach
+ * ungültig; bestehende Sessions bleiben unberührt. */
+export async function adminSetPassword(userId: string, password: string): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  const { error } = await supabase.auth.admin.updateUserById(userId, { password });
+  if (error) throw new Error(error.message);
+}
+
 /** Ernennt userId zum Admin. Prüft NICHT selbst, ob der Aufrufer berechtigt
  * ist -- das muss der Aufrufer (die Server Action) vorher sicherstellen. */
 export async function grantAdmin(userId: string, grantedBy: string): Promise<void> {
