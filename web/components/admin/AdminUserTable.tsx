@@ -1,7 +1,14 @@
-import { Shield, ShieldOff } from "lucide-react";
+import { Crown, Shield, ShieldOff, XCircle } from "lucide-react";
 import type { AdminUserRow } from "@/lib/adminData";
 import { AdminUserExportButton } from "@/components/admin/AdminUserExportButton";
-import { grantAdminAction, revokeAdminAction } from "@/lib/actions/admin";
+import {
+  grantAdminAction,
+  revokeAdminAction,
+  grantPlusAction,
+  revokePlusAction,
+  createTestUserAction,
+} from "@/lib/actions/admin";
+import { AdminCreateTestUserForm } from "@/components/admin/AdminCreateTestUserForm";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("de-DE");
@@ -20,9 +27,12 @@ export function AdminUserTable({
 }) {
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between gap-4">
         <p className="text-sm text-muted">{users.length} Benutzer (aus Supabase Auth)</p>
-        <AdminUserExportButton users={users} />
+        <div className="flex items-center gap-3">
+          <AdminCreateTestUserForm action={createTestUserAction} />
+          <AdminUserExportButton users={users} />
+        </div>
       </div>
 
       <div className="hairline overflow-hidden rounded-2xl bg-surface">
@@ -34,13 +44,14 @@ export function AdminUserTable({
                 <th className="px-4 py-3 font-semibold">Registriert</th>
                 <th className="px-4 py-3 font-semibold">Käufe</th>
                 <th className="px-4 py-3 font-semibold">Umsatz</th>
+                <th className="px-4 py-3 font-semibold">Plus</th>
                 <th className="px-4 py-3 font-semibold">Rechte</th>
               </tr>
             </thead>
             <tbody>
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-6 text-muted">
+                  <td colSpan={6} className="px-4 py-6 text-muted">
                     Keine Benutzer.
                   </td>
                 </tr>
@@ -52,6 +63,50 @@ export function AdminUserTable({
                     <td className="px-4 py-3 text-ink">{u.purchaseCount || "—"}</td>
                     <td className="px-4 py-3 text-ink">
                       {u.purchaseTotalCents > 0 ? formatEuro(u.purchaseTotalCents) : "—"}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex flex-col gap-1.5">
+                        {u.plusActive && u.plusUntil ? (
+                          <span className="inline-flex w-fit items-center gap-1 rounded-full bg-gold-soft px-2.5 py-1 text-xs font-semibold text-gold-dark">
+                            <Crown className="h-3 w-3" /> bis {formatDate(u.plusUntil)}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted">
+                            {u.plusUntil ? `Abgelaufen (${formatDate(u.plusUntil)})` : "Kein Plus"}
+                          </span>
+                        )}
+                        <div className="flex items-center gap-1.5">
+                          <form action={grantPlusAction} className="flex items-center gap-1">
+                            <input type="hidden" name="userId" value={u.id} />
+                            <input
+                              type="number"
+                              name="days"
+                              defaultValue={30}
+                              min={1}
+                              max={3650}
+                              className="hairline w-14 rounded-full bg-bg px-2 py-1 text-xs text-ink outline-none focus:border-primary/60"
+                              aria-label="Anzahl Tage"
+                            />
+                            <button
+                              type="submit"
+                              className="hairline inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold text-ink transition hover:bg-bg"
+                            >
+                              <Crown className="h-3 w-3" /> Schenken
+                            </button>
+                          </form>
+                          {u.plusActive && (
+                            <form action={revokePlusAction}>
+                              <input type="hidden" name="userId" value={u.id} />
+                              <button
+                                type="submit"
+                                className="inline-flex items-center gap-1 rounded-full bg-red-soft px-2.5 py-1 text-xs font-semibold text-red-dark transition hover:opacity-80"
+                              >
+                                <XCircle className="h-3 w-3" /> Entziehen
+                              </button>
+                            </form>
+                          )}
+                        </div>
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       {u.isBootstrapAdmin ? (

@@ -5,6 +5,7 @@ import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
 import { getDailyWhoAmIRound, getRandomWhoAmIRound, type WhoAmIDifficulty } from "@/content/whoami";
 import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
 import { getCurrentUser } from "@/lib/auth";
+import { getPlusStatus } from "@/lib/plus";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -98,11 +99,14 @@ async function QuizContent({
     return <DailyRiddle riddle={getDailyRiddle()} />;
   }
 
-  // Ab hier: Weekly-Freemium-Spiele -- unterliegen dem 2-Gratis-Runden-Limit
-  // für ALLE Besucher:innen, Gast oder eingeloggt.
+  // Ab hier: Weekly-Freemium-Spiele -- unterliegen dem 2-Gratis-Runden-Limit,
+  // AUSSER für echte Plus-Mitglieder (Admin-Geschenk oder später echtes Abo).
+  const user = await getCurrentUser();
+  const plusActive = previewUnlocked || (user ? (await getPlusStatus(user.id)).active : false);
+
   if (game.variant === "sliding") {
     return (
-      <DailyCapGate>
+      <DailyCapGate plusActive={plusActive}>
         <SlidingPuzzle title={game.title} color={game.type} difficulty={game.difficulty} />
       </DailyCapGate>
     );
@@ -116,19 +120,16 @@ async function QuizContent({
       game.level === "daily-free" ? getDailyWhoAmIRound(difficulty) : getRandomWhoAmIRound(difficulty);
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
     const player = <WhoAmI title={game.title} color={game.type} round={round} />;
-    return game.level === "daily-free" ? player : <DailyCapGate>{player}</DailyCapGate>;
+    return game.level === "daily-free" ? player : <DailyCapGate plusActive={plusActive}>{player}</DailyCapGate>;
   }
 
   if (game.variant === "psych-result" || game.variant === "psych-compat") {
-    const [fromPayment, user] = await Promise.all([
-      provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
-      getCurrentUser(),
-    ]);
+    const fromPayment = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
     const unlocked = previewUnlocked || fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
 
     if (game.variant === "psych-result") {
       return (
-        <DailyCapGate>
+        <DailyCapGate plusActive={plusActive}>
           <RelationshipTest
             title={game.title}
             initiallyUnlocked={unlocked}
@@ -139,7 +140,7 @@ async function QuizContent({
     }
 
     return (
-      <DailyCapGate>
+      <DailyCapGate plusActive={plusActive}>
         <FriendCompatibility
           title={game.title}
           sharedCode={friendCode}
@@ -153,13 +154,10 @@ async function QuizContent({
 
   const quiz = getQuiz(slug);
   if (quiz) {
-    const [fromPayment, user] = await Promise.all([
-      provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
-      getCurrentUser(),
-    ]);
+    const fromPayment = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
     const unlocked = previewUnlocked || fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
     return (
-      <DailyCapGate>
+      <DailyCapGate plusActive={plusActive}>
         <QuizPlayer
           quiz={quiz}
           initiallyUnlocked={unlocked}

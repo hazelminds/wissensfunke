@@ -11,19 +11,30 @@ import { hasReachedDailyCap } from "@/lib/dailyCap";
  * Paywall mit zwei Optionen -- Tagespass (einmalig, nur heute unbegrenzt)
  * oder Plus-Abo (monatlich, dauerhaft). Täglicher Gratis-Anker
  * (Tages-Rätsel/-Mini-Quiz) läuft nie durch dieses Gate.
+ *
+ * `plusActive` kommt serverseitig aus lib/plus.ts (echtes/geschenktes Plus)
+ * -- für diese Nutzer:innen greift das Limit gar nicht erst.
  */
-export function DailyCapGate({ children }: { children: React.ReactNode }) {
+export function DailyCapGate({
+  children,
+  plusActive = false,
+}: {
+  children: React.ReactNode;
+  plusActive?: boolean;
+}) {
   const [blocked, setBlocked] = useState(false);
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    if (plusActive) return;
     // SSR kennt localStorage nicht -- Cap-Status erst nach dem Mount lesen
     // (gleiches Muster wie StreakBadge).
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setBlocked(hasReachedDailyCap());
     setChecked(true);
-  }, []);
+  }, [plusActive]);
 
+  if (plusActive) return <>{children}</>;
   if (!checked) return null;
 
   if (blocked) {

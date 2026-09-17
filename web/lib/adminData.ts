@@ -2,6 +2,7 @@ import "server-only";
 import { isSupabaseConfigured } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
+import { getAllPlusStatuses } from "@/lib/plus";
 
 export interface AdminUserRow {
   id: string;
@@ -13,17 +14,21 @@ export interface AdminUserRow {
   /** true = Admin nur über die ADMIN_EMAILS-Bootstrap-Variable, nicht über
    * die admin_users-Tabelle -- lässt sich hier nicht entziehen. */
   isBootstrapAdmin: boolean;
+  plusActive: boolean;
+  /** ISO-Datum, bis wann Plus läuft -- auch gesetzt, wenn bereits abgelaufen. */
+  plusUntil: string | null;
 }
 
-/** Echte Nutzerliste aus Supabase Auth, angereichert mit Käufen + Admin-Status. */
+/** Echte Nutzerliste aus Supabase Auth, angereichert mit Käufen, Admin- und Plus-Status. */
 export async function listAdminUsers(): Promise<AdminUserRow[]> {
   if (!isSupabaseConfigured()) return [];
   const supabase = getSupabaseAdmin();
 
-  const [{ data: usersPage }, { data: purchases }, { data: admins }] = await Promise.all([
+  const [{ data: usersPage }, { data: purchases }, { data: admins }, plusMap] = await Promise.all([
     supabase.auth.admin.listUsers({ perPage: 1000 }),
     supabase.from("purchases").select("user_id, amount_cents").eq("status", "paid"),
     supabase.from("admin_users").select("user_id"),
+    getAllPlusStatuses(),
   ]);
 
   const purchaseMap = new Map<string, { count: number; total: number }>();
@@ -40,6 +45,7 @@ export async function listAdminUsers(): Promise<AdminUserRow[]> {
   return (usersPage?.users ?? [])
     .map((u) => {
       const bootstrap = isAdminEmail(u.email);
+      const plus = plusMap.get(u.id);
       return {
         id: u.id,
         email: u.email ?? null,
@@ -48,9 +54,26 @@ export async function listAdminUsers(): Promise<AdminUserRow[]> {
         purchaseTotalCents: purchaseMap.get(u.id)?.total ?? 0,
         isAdmin: bootstrap || adminIds.has(u.id),
         isBootstrapAdmin: bootstrap,
+        plusActive: plus?.active ?? false,
+        plusUntil: plus?.until ?? null,
       };
     })
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+/** Legt ein Test-/Aktionskonto mit fest vergebenem, bereits bestätigtem
+ * Passwort an -- kein Bestätigungslink nötig, direkt einsatzbereit. */
+export async function createTestUser(email: string, password: string): Promise<{ id: string }> {
+  const supabase = getSupabaseAdmin();
+  const { data, error } = await supabase.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+  });
+  if (error || !data.user) {
+    throw new Error(error?.message ?? "Nutzer konnte nicht angelegt werden.");
+  }
+  return { id: data.user.id };
 }
 
 /** Ernennt userId zum Admin. Prüft NICHT selbst, ob der Aufrufer berechtigt

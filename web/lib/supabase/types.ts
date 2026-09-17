@@ -91,6 +91,33 @@ export interface Database {
         };
         Relationships: [];
       };
+      plus_grants: {
+        Row: {
+          user_id: string;
+          plus_until: string;
+          granted_by: string | null;
+          note: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          plus_until: string;
+          granted_by?: string | null;
+          note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          plus_until?: string;
+          granted_by?: string | null;
+          note?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
