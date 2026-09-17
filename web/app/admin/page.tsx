@@ -3,10 +3,12 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { getCurrentUser } from "@/lib/auth";
 import { isAdminUser } from "@/lib/admin";
 import { getAdminStats, listAdminUsers } from "@/lib/adminData";
+import { getAdminTicketList, getUnreadSupportCountForAdmin } from "@/lib/support";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 import { AdminDashboardStats } from "@/components/admin/AdminDashboardStats";
 import { AdminUserTable } from "@/components/admin/AdminUserTable";
 import { AdminGamesTable } from "@/components/admin/AdminGamesTable";
+import { AdminSupportTable } from "@/components/admin/AdminSupportTable";
 
 export default async function AdminPage() {
   const user = await getCurrentUser();
@@ -31,19 +33,26 @@ export default async function AdminPage() {
     );
   }
 
-  const [stats, users] = await Promise.all([getAdminStats(), listAdminUsers()]);
+  const [stats, users, tickets, unreadSupport] = await Promise.all([
+    getAdminStats(),
+    listAdminUsers(),
+    getAdminTicketList(),
+    getUnreadSupportCountForAdmin(),
+  ]);
 
   return (
     <div className="min-h-screen bg-bg">
       <SiteHeader backHref="/" />
       <main className="mx-auto max-w-5xl px-5 py-12">
         <h1 className="font-display text-3xl font-extrabold tracking-tight text-ink">Admin</h1>
-        <p className="mt-1 text-sm text-ink-soft">Spiele, Fragen und Benutzer verwalten.</p>
+        <p className="mt-1 text-sm text-ink-soft">Spiele, Fragen, Benutzer und Support verwalten.</p>
 
         <AdminTabs
           dashboard={<AdminDashboardStats stats={stats} />}
           games={<AdminGamesTable />}
           users={<AdminUserTable users={users} currentUserId={user.id} />}
+          support={<AdminSupportTable tickets={tickets} />}
+          supportUnread={unreadSupport}
         />
       </main>
     </div>

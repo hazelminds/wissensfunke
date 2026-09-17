@@ -1,19 +1,22 @@
-import { Crown, Flame, Lock, LogOut, User as UserIcon } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Crown, Flame, LifeBuoy, Lock, LogOut, User as UserIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
 import { UsernameForm } from "@/components/konto/UsernameForm";
 import { getCurrentUser, isSupabaseConfigured } from "@/lib/auth";
 import { getServerStreak } from "@/lib/streak-server";
 import { getPlusStatus } from "@/lib/plus";
+import { getUnreadSupportCountForUser } from "@/lib/support";
 import { signOut } from "@/lib/actions/auth";
 import { updateUsernameAction } from "@/lib/actions/profile";
 import { streakBadges } from "@/content/streakBadges";
 
 export default async function KontoPage() {
   const user = await getCurrentUser();
-  const [streak, plus] = await Promise.all([
+  const [streak, plus, unreadSupport] = await Promise.all([
     user ? getServerStreak(user.id) : null,
     user ? getPlusStatus(user.id) : null,
+    user ? getUnreadSupportCountForUser(user.id) : 0,
   ]);
   const plusActive = plus?.active ?? false;
   const username = (user?.user_metadata?.username as string | undefined) ?? "";
@@ -60,6 +63,26 @@ export default async function KontoPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-5">
+            {unreadSupport > 0 && (
+              <Link
+                href="/support"
+                className="glow-primary flex items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-left text-white transition hover:opacity-90"
+              >
+                <span className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">
+                    <LifeBuoy className="h-5 w-5" />
+                  </span>
+                  <span>
+                    <span className="block font-display font-bold">
+                      {unreadSupport === 1 ? "Neue Antwort vom Support" : `${unreadSupport} neue Antworten vom Support`}
+                    </span>
+                    <span className="block text-xs text-white/80">Jetzt ansehen</span>
+                  </span>
+                </span>
+                <ArrowRight className="h-4 w-4 shrink-0" />
+              </Link>
+            )}
+
             <div className="hairline rounded-3xl bg-surface p-5">
               <p className="flex items-center gap-2 font-display font-bold text-ink">
                 <Crown className="h-4 w-4 text-gold" /> {plusActive ? "Plus-Status" : "Gratis-Status"}
@@ -141,6 +164,15 @@ export default async function KontoPage() {
               </p>
               <UsernameForm action={updateUsernameAction} currentUsername={username} locked={!plusActive} />
             </div>
+
+            {unreadSupport === 0 && (
+              <Link
+                href="/support"
+                className="hairline inline-flex w-fit items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-ink-soft transition hover:text-ink"
+              >
+                <LifeBuoy className="h-4 w-4" /> Support kontaktieren
+              </Link>
+            )}
 
             <form action={signOut}>
               <button

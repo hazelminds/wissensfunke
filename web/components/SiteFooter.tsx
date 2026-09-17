@@ -35,6 +35,11 @@ export function SiteFooter() {
                     Tests
                   </Link>
                 </li>
+                <li>
+                  <Link href="/support" className="hover:text-ink">
+                    Support
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
