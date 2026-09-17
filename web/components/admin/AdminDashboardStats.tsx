@@ -1,4 +1,4 @@
-import { Users, ShoppingBag, Coins, Flame } from "lucide-react";
+import { Users, ShoppingBag, Coins, Flame, UserPlus } from "lucide-react";
 import type { AdminStats } from "@/lib/adminData";
 import { AdminGameStatsChart } from "@/components/admin/AdminGameStatsChart";
 
@@ -19,6 +19,16 @@ export function AdminDashboardStats({ stats }: { stats: AdminStats }) {
           value={stats.topQuizSlug ?? "—"}
           small
         />
+      </div>
+
+      <p className="mt-6 mb-3 flex items-center gap-2 text-[11px] font-bold text-muted uppercase">
+        <UserPlus className="h-3.5 w-3.5" /> Neue Anmeldungen
+      </p>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Kpi icon={<UserPlus className="h-5 w-5" />} label="Heute" value={stats.newSignupsToday} />
+        <Kpi icon={<UserPlus className="h-5 w-5" />} label="Gestern" value={stats.newSignupsYesterday} />
+        <Kpi icon={<UserPlus className="h-5 w-5" />} label="Dieser Monat" value={stats.newSignupsThisMonth} />
+        <Kpi icon={<UserPlus className="h-5 w-5" />} label="Letzter Monat" value={stats.newSignupsLastMonth} />
       </div>
 
       <AdminGameStatsChart />

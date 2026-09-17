@@ -216,13 +216,35 @@ export interface AdminStats {
   totalPurchases: number;
   totalRevenueCents: number;
   topQuizSlug: string | null;
+  newSignupsToday: number;
+  newSignupsYesterday: number;
+  newSignupsThisMonth: number;
+  newSignupsLastMonth: number;
 }
 
-/** Echte Kennzahlen aus Nutzern + Käufen. Beliebtheits-/Lösequote-Charts pro
- * Spiel und Zeitraum kommen aus lib/analytics.ts (game_events-Tabelle). */
+function isSameUtcDay(iso: string, ref: Date): boolean {
+  const d = new Date(iso);
+  return (
+    d.getUTCFullYear() === ref.getUTCFullYear() &&
+    d.getUTCMonth() === ref.getUTCMonth() &&
+    d.getUTCDate() === ref.getUTCDate()
+  );
+}
+
+/** Echte Kennzahlen aus Nutzern + Käufen. Beliebtheits-/Lösequote-/Umsatz-
+ * Charts pro Spiel und Zeitraum kommen aus lib/analytics.ts. */
 export async function getAdminStats(): Promise<AdminStats> {
   if (!isSupabaseConfigured()) {
-    return { totalUsers: 0, totalPurchases: 0, totalRevenueCents: 0, topQuizSlug: null };
+    return {
+      totalUsers: 0,
+      totalPurchases: 0,
+      totalRevenueCents: 0,
+      topQuizSlug: null,
+      newSignupsToday: 0,
+      newSignupsYesterday: 0,
+      newSignupsThisMonth: 0,
+      newSignupsLastMonth: 0,
+    };
   }
   const supabase = getSupabaseAdmin();
 
@@ -244,10 +266,24 @@ export async function getAdminStats(): Promise<AdminStats> {
     }
   });
 
+  const users = usersPage?.users ?? [];
+  const now = new Date();
+  const yesterday = new Date(now);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const thisMonthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const lastMonthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1));
+
   return {
-    totalUsers: usersPage?.users.length ?? 0,
+    totalUsers: users.length,
     totalPurchases: paid.length,
     totalRevenueCents: paid.reduce((sum, p) => sum + p.amount_cents, 0),
     topQuizSlug,
+    newSignupsToday: users.filter((u) => isSameUtcDay(u.created_at, now)).length,
+    newSignupsYesterday: users.filter((u) => isSameUtcDay(u.created_at, yesterday)).length,
+    newSignupsThisMonth: users.filter((u) => new Date(u.created_at) >= thisMonthStart).length,
+    newSignupsLastMonth: users.filter((u) => {
+      const d = new Date(u.created_at);
+      return d >= lastMonthStart && d < thisMonthStart;
+    }).length,
   };
 }

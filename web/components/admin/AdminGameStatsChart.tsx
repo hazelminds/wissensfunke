@@ -1,9 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BarChart3, Loader2 } from "lucide-react";
-import { getGameStatsAction } from "@/lib/actions/analytics";
-import type { GameStatRow } from "@/lib/analytics";
+import { BarChart3, Coins, Loader2 } from "lucide-react";
+import { getGameStatsAction, getRevenueByGameAction } from "@/lib/actions/analytics";
+import type { GameStatRow, RevenueRow } from "@/lib/analytics";
+
+function formatEuro(cents: number): string {
+  return (cents / 100).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
+}
 
 type Preset = "this-month" | "last-month" | "custom";
 
@@ -33,6 +37,7 @@ export function AdminGameStatsChart() {
   const [customFrom, setCustomFrom] = useState(() => toDateInputValue(lastMonthRange().from));
   const [customTo, setCustomTo] = useState(() => toDateInputValue(new Date()));
   const [rows, setRows] = useState<GameStatRow[]>([]);
+  const [revenueRows, setRevenueRows] = useState<RevenueRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,9 +55,13 @@ export function AdminGameStatsChart() {
       setLoading(true);
       const { from, to } = activeRange();
       try {
-        const data = await getGameStatsAction(from.toISOString(), to.toISOString());
+        const [gameData, revenueData] = await Promise.all([
+          getGameStatsAction(from.toISOString(), to.toISOString()),
+          getRevenueByGameAction(from.toISOString(), to.toISOString()),
+        ]);
         if (!cancelled) {
-          setRows(data);
+          setRows(gameData);
+          setRevenueRows(revenueData);
           setError(null);
         }
       } catch {
@@ -113,34 +122,73 @@ export function AdminGameStatsChart() {
         </div>
       ) : error ? (
         <p className="py-6 text-center text-sm text-red">{error}</p>
-      ) : rows.length === 0 ? (
-        <p className="py-6 text-center text-sm text-muted">Noch keine Spiel-Daten in diesem Zeitraum.</p>
       ) : (
-        <div className="flex flex-col gap-3">
-          {rows.map((r) => (
-            <div key={r.slug} className="flex items-center gap-3">
-              <span className="w-[190px] shrink-0 truncate text-[13px] font-bold text-ink">
-                <span className="mr-1.5">{r.emoji}</span>
-                {r.title}
-              </span>
-              <div className="h-6 flex-1 overflow-hidden rounded-full bg-bg">
-                <div
-                  className="flex h-full items-center rounded-full bg-gradient-to-r from-primary to-coral px-2.5 transition-[width] duration-500"
-                  style={{ width: `${Math.max(6, (r.started / maxStarted) * 100)}%` }}
-                >
-                  <span className="text-[11px] font-bold whitespace-nowrap text-white">{r.started}</span>
+        <>
+          {rows.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted">Noch keine Spiel-Daten in diesem Zeitraum.</p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {rows.map((r) => (
+                <div key={r.slug} className="flex items-center gap-3">
+                  <span className="w-[190px] shrink-0 truncate text-[13px] font-bold text-ink">
+                    <span className="mr-1.5">{r.emoji}</span>
+                    {r.title}
+                  </span>
+                  <div className="h-6 flex-1 overflow-hidden rounded-full bg-bg">
+                    <div
+                      className="flex h-full items-center rounded-full bg-gradient-to-r from-primary to-coral px-2.5 transition-[width] duration-500"
+                      style={{ width: `${Math.max(6, (r.started / maxStarted) * 100)}%` }}
+                    >
+                      <span className="text-[11px] font-bold whitespace-nowrap text-white">{r.started}</span>
+                    </div>
+                  </div>
+                  <span className="w-[92px] shrink-0 text-right text-[12px] font-bold text-muted">
+                    {r.completed} gelöst
+                    <br />
+                    <span className={r.completionRate >= 50 ? "text-green-dark" : "text-coral-dark"}>
+                      {r.completionRate}%
+                    </span>
+                  </span>
                 </div>
-              </div>
-              <span className="w-[92px] shrink-0 text-right text-[12px] font-bold text-muted">
-                {r.completed} gelöst
-                <br />
-                <span className={r.completionRate >= 50 ? "text-green-dark" : "text-coral-dark"}>
-                  {r.completionRate}%
-                </span>
-              </span>
+              ))}
             </div>
-          ))}
-        </div>
+          )}
+
+          <div className="mt-6 border-t border-line pt-5">
+            <h4 className="mb-4 flex items-center gap-2 font-display font-bold text-ink">
+              <Coins className="h-4 w-4 text-gold" /> Umsatz pro Spiel
+            </h4>
+            {revenueRows.length === 0 ? (
+              <p className="py-4 text-center text-sm text-muted">Noch kein Umsatz in diesem Zeitraum.</p>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {revenueRows.map((r) => {
+                  const maxRevenue = Math.max(1, ...revenueRows.map((x) => x.revenueCents));
+                  return (
+                    <div key={r.slug} className="flex items-center gap-3">
+                      <span className="w-[190px] shrink-0 truncate text-[13px] font-bold text-ink">
+                        {r.title}
+                      </span>
+                      <div className="h-6 flex-1 overflow-hidden rounded-full bg-bg">
+                        <div
+                          className="flex h-full items-center rounded-full bg-gradient-to-r from-gold to-gold-dark px-2.5 transition-[width] duration-500"
+                          style={{ width: `${Math.max(6, (r.revenueCents / maxRevenue) * 100)}%` }}
+                        >
+                          <span className="text-[11px] font-bold whitespace-nowrap text-white">
+                            {formatEuro(r.revenueCents)}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="w-[92px] shrink-0 text-right text-[12px] font-bold text-muted">
+                        {r.purchaseCount} {r.purchaseCount === 1 ? "Kauf" : "Käufe"}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

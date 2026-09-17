@@ -2,7 +2,14 @@
 
 import { getCurrentUser } from "@/lib/auth";
 import { isAdminUser } from "@/lib/admin";
-import { logGameEvent, getGameStats, type GameEventType, type GameStatRow } from "@/lib/analytics";
+import {
+  logGameEvent,
+  getGameStats,
+  getRevenueByGame,
+  type GameEventType,
+  type GameStatRow,
+  type RevenueRow,
+} from "@/lib/analytics";
 
 /** Wird direkt aus den Spiel-Komponenten aufgerufen (nicht über ein Formular) --
  * verschluckt jeden Fehler, damit ein DB-Hänger nie den Spielfluss stört. */
@@ -26,4 +33,9 @@ async function requireAdmin() {
 export async function getGameStatsAction(fromISO: string, toISO: string): Promise<GameStatRow[]> {
   await requireAdmin();
   return getGameStats(new Date(fromISO), new Date(toISO));
+}
+
+export async function getRevenueByGameAction(fromISO: string, toISO: string): Promise<RevenueRow[]> {
+  await requireAdmin();
+  return getRevenueByGame(new Date(fromISO), new Date(toISO));
 }

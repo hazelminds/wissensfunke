@@ -2,6 +2,7 @@ import "server-only";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/auth";
 import { games } from "@/content/games";
+import { getUnlockable } from "@/content/unlockables";
 
 export type GameEventType = "started" | "completed";
 
@@ -61,4 +62,41 @@ export async function getGameStats(from: Date, to: Date): Promise<GameStatRow[]>
       };
     })
     .sort((a, b) => b.started - a.started);
+}
+
+export interface RevenueRow {
+  slug: string;
+  title: string;
+  revenueCents: number;
+  purchaseCount: number;
+}
+
+/** Umsatz pro Spiel im Zeitraum [from, to], absteigend -- gefiltert auf
+ * tatsächlich bezahlte Käufe (paid_at), nicht nur angelegte Checkout-Versuche. */
+export async function getRevenueByGame(from: Date, to: Date): Promise<RevenueRow[]> {
+  if (!isSupabaseConfigured()) return [];
+  const supabase = getSupabaseAdmin();
+  const { data } = await supabase
+    .from("purchases")
+    .select("quiz_slug, amount_cents")
+    .eq("status", "paid")
+    .gte("paid_at", from.toISOString())
+    .lte("paid_at", to.toISOString());
+
+  const totals = new Map<string, { revenueCents: number; purchaseCount: number }>();
+  (data ?? []).forEach((p) => {
+    const entry = totals.get(p.quiz_slug) ?? { revenueCents: 0, purchaseCount: 0 };
+    entry.revenueCents += p.amount_cents;
+    entry.purchaseCount += 1;
+    totals.set(p.quiz_slug, entry);
+  });
+
+  return [...totals.entries()]
+    .map(([slug, t]) => ({
+      slug,
+      title: getUnlockable(slug)?.title ?? slug,
+      revenueCents: t.revenueCents,
+      purchaseCount: t.purchaseCount,
+    }))
+    .sort((a, b) => b.revenueCents - a.revenueCents);
 }
