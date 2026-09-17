@@ -3,6 +3,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/auth";
+import { isEmailBanned } from "@/lib/userStatus";
+
+const BANNED_MESSAGE = "Dieses Konto wurde gesperrt. Bei Fragen wende dich an den Support.";
 
 function siteUrl(): string {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -33,6 +36,9 @@ export async function signInWithMagicLink(
   });
 
   if (error) {
+    if (await isEmailBanned(email)) {
+      return { status: "error", message: BANNED_MESSAGE };
+    }
     return { status: "error", message: error.message };
   }
   return { status: "sent", message: email };
@@ -62,6 +68,9 @@ export async function signInWithPassword(
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
+    if (await isEmailBanned(email)) {
+      return { status: "error", message: BANNED_MESSAGE };
+    }
     return { status: "error", message: "E-Mail oder Passwort ist falsch." };
   }
   redirect("/");

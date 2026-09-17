@@ -3,14 +3,7 @@ import { isSupabaseConfigured } from "@/lib/auth";
 import { isAdminEmail } from "@/lib/admin";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getAllPlusStatuses, getPlusStatus } from "@/lib/plus";
-
-/** Supabase setzt banned_until bei einer dauerhaften Sperre auf ein Datum
- * weit in der Zukunft (z. B. Jahr 2500) statt auf null -- "in der Zukunft"
- * reicht als Kriterium, egal ob befristet oder dauerhaft gesperrt. */
-function isUserBanned(bannedUntil: string | null | undefined): boolean {
-  if (!bannedUntil) return false;
-  return new Date(bannedUntil).getTime() > Date.now();
-}
+import { isUserBanned } from "@/lib/userStatus";
 
 export interface AdminUserRow {
   id: string;
