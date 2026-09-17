@@ -21,6 +21,10 @@ export interface RelationshipType {
   emoji: string;
   description: string;
   gradientClass: string;
+  /** Ausführliche Analyse -- hinter dem Einmalkauf (siehe unlockPriceCents unten). */
+  strengths: string;
+  watchOut: string;
+  compatTip: string;
 }
 
 export const relationshipTypes: RelationshipType[] = [
@@ -31,6 +35,12 @@ export const relationshipTypes: RelationshipType[] = [
     description:
       "Du liebst mit dem ganzen Herzen und lässt dich gern von großen Gefühlen tragen. Kerzenschein-Dinner, spontane Liebesbotschaften, Gespräche bis spät in die Nacht — für dich ist Romantik kein Klischee, sondern Lebenselixier. Achte nur darauf, dass der Alltag mit deinen hohen Erwartungen mithalten kann.",
     gradientClass: "from-[hsl(340,80%,60%)] to-[hsl(340,80%,48%)]",
+    strengths:
+      "Du schenkst deinem Gegenüber intensive Aufmerksamkeit und sorgst dafür, dass sich eine Beziehung nie routiniert anfühlt. Deine Begeisterungsfähigkeit steckt an und macht dich zu einem liebevollen, aufmerksamen Partner.",
+    watchOut:
+      "Nach der anfänglichen Verliebtheit können die hohen Erwartungen an ständige Romantik zur Belastung werden — nicht jeder Alltag lässt sich in ein Filmdrehbuch verwandeln. Auch ruhige, unspektakuläre Phasen gehören zu einer gesunden Beziehung dazu.",
+    compatTip:
+      "Am besten harmonierst du mit Menschen, die deine Emotionalität zu schätzen wissen, ohne sich davon überrollt zu fühlen — ein „Fels in der Brandung“ kann dir dabei guten Boden unter den Füßen geben.",
   },
   {
     id: "fels",
@@ -39,6 +49,12 @@ export const relationshipTypes: RelationshipType[] = [
     description:
       "Verlässlichkeit ist für dich der Kern jeder guten Beziehung. Du musst nicht jeden Tag Feuerwerk erleben — ein ruhiger Alltag mit einem Menschen, auf den Verlass ist, bedeutet dir mehr als jede große Geste. Pass nur auf, dass aus Routine nicht Stillstand wird.",
     gradientClass: "from-[hsl(210,70%,55%)] to-[hsl(210,70%,42%)]",
+    strengths:
+      "Auf dich ist Verlass — in stressigen Zeiten bist du der ruhende Pol, der einer Beziehung Stabilität gibt. Du hältst Versprechen und schaffst so ein Fundament, auf dem Vertrauen wachsen kann.",
+    watchOut:
+      "Deine Vorliebe für Routine kann dazu führen, dass Spontaneität und Überraschung zu kurz kommen. Ab und zu bewusst aus der Komfortzone auszubrechen, hält eine Beziehung lebendig.",
+    compatTip:
+      "Du passt gut zu Menschen, die deine Verlässlichkeit brauchen, ohne sie als selbstverständlich zu nehmen — mit einem Freigeist kannst du lernen, auch mal loszulassen.",
   },
   {
     id: "freigeist",
@@ -47,6 +63,12 @@ export const relationshipTypes: RelationshipType[] = [
     description:
       "Nähe ja, aber bitte mit Freiraum. Du brauchst eigene Projekte, eigene Freunde und Zeit für dich selbst, um in einer Beziehung aufzublühen. Für dich bedeutet Liebe, den anderen so zu nehmen, wie er ist — und selbst genauso frei sein zu dürfen. Sprich dein Bedürfnis nach Freiraum offen an, damit es nicht als Distanz missverstanden wird.",
     gradientClass: "from-[hsl(160,60%,48%)] to-[hsl(160,60%,36%)]",
+    strengths:
+      "Du respektierst die Individualität deines Gegenübers und lässt einer Beziehung Raum zum Atmen. Das macht dich zu einem Partner, bei dem sich niemand eingeengt fühlt.",
+    watchOut:
+      "Dein starkes Bedürfnis nach Freiraum kann bei jemandem, der mehr Nähe braucht, wie Desinteresse wirken — auch wenn das Gegenteil der Fall ist. Klare Kommunikation darüber ist entscheidend.",
+    compatTip:
+      "Am wohlsten fühlst du dich mit jemandem, der ebenfalls ein eigenständiges Leben führt — mit einem Beschützer-Typ solltest du früh offen über eure unterschiedlichen Nähe-Bedürfnisse sprechen.",
   },
   {
     id: "beschuetzer",
@@ -55,8 +77,19 @@ export const relationshipTypes: RelationshipType[] = [
     description:
       "Du gibst in Beziehungen viel — vielleicht manchmal mehr, als gut für dich ist. Für Menschen, die dir wichtig sind, würdest du Berge versetzen, und du hast ein feines Gespür dafür, wann jemand Unterstützung braucht. Denk daran: Eine gute Beziehung ist keine Einbahnstraße — lass dich auch selbst beschützen.",
     gradientClass: "from-[hsl(38,90%,58%)] to-[hsl(28,90%,50%)]",
+    strengths:
+      "Du bist aufmerksam, fürsorglich und hast ein feines Gespür für die Bedürfnisse anderer. In Krisenzeiten ist niemand so verlässlich an der Seite seines Partners wie du.",
+    watchOut:
+      "Die Gefahr: Du gibst so viel, dass die eigenen Bedürfnisse hintenanstehen — auf Dauer macht das unzufrieden. Eine gute Beziehung lebt vom Geben und Nehmen.",
+    compatTip:
+      "Mit einem Romantiker entsteht oft eine besonders innige Verbindung — achte aber darauf, dass die Fürsorge nicht einseitig bleibt.",
   },
 ];
+
+/** Preis der ausführlichen Typanalyse — immer VOR dem Klick auf "Freischalten" sichtbar (Compliance §5). */
+export const unlockPriceCents = 299;
+export const unlockTitle = "Ausführliche Typanalyse";
+export const unlockDescription = "Deine Stärken, Stolpersteine und ein Kompatibilitäts-Tipp zu deinem Beziehungstyp.";
 
 export const relationshipQuestions: RelationshipQuestion[] = [
   {

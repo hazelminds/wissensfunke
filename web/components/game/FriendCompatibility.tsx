@@ -1,31 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Copy, RefreshCw, Share2 } from "lucide-react";
 import {
   compatQuestions,
   decodeAnswers,
   encodeAnswers,
   tierForPct,
+  unlockPriceCents,
+  unlockTitle,
+  unlockDescription,
 } from "@/content/freundeskompatibilitaet";
+import { formatPrice } from "@/content/quizzes";
+import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 
 type Screen = "start" | "quiz" | "share" | "compare";
 
 const letters = ["A", "B", "C", "D"];
 const badgeColors = ["bg-primary", "bg-coral", "bg-green", "bg-gold"];
+const attemptStorageKey = (code: string) => `wf_attempt_freundes-kompatibilitaet_${code}`;
 
 export function FriendCompatibility({
   title,
   sharedCode,
   sharedName,
+  initiallyUnlocked,
+  checkoutError = false,
 }: {
   title: string;
   sharedCode?: string;
   sharedName?: string;
+  initiallyUnlocked: boolean;
+  checkoutError?: boolean;
 }) {
   const partnerAnswers = sharedCode ? decodeAnswers(sharedCode) : null;
   const isCompareMode = !!partnerAnswers;
+  const unlocked = initiallyUnlocked;
 
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
@@ -35,6 +46,37 @@ export function FriendCompatibility({
   const [copied, setCopied] = useState(false);
   const total = compatQuestions.length;
   const question = compatQuestions[current];
+
+  // Rücksprung von der Zahlungsseite: der Client-State (answers) ging bei der
+  // Navigation verloren -- hier aus localStorage restaurieren, damit man
+  // nicht den ganzen Vergleich nochmal machen muss (gleiches Muster wie
+  // QuizPlayer/RelationshipTest). Nur relevant für die Vergleichsseite, denn
+  // nur dort gibt es überhaupt eine ausführliche Analyse zum Freischalten.
+  useEffect(() => {
+    if (!isCompareMode || !sharedCode) return;
+    if (!initiallyUnlocked && !checkoutError) return;
+    try {
+      const raw = localStorage.getItem(attemptStorageKey(sharedCode));
+      if (raw) {
+        const saved = JSON.parse(raw) as { answers: number[] };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setAnswers(saved.answers);
+        setScreen("compare");
+      }
+    } catch {
+      // localStorage nicht verfügbar -- kein Problem, Start-Screen bleibt.
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (screen !== "compare" || !sharedCode) return;
+    try {
+      localStorage.setItem(attemptStorageKey(sharedCode), JSON.stringify({ answers }));
+    } catch {
+      // s.o.
+    }
+  }, [screen, sharedCode, answers]);
 
   function start() {
     setCurrent(0);
@@ -264,7 +306,11 @@ export function FriendCompatibility({
                 </span>
                 <p className="text-[13px] leading-snug font-semibold text-ink">{q.question}</p>
               </div>
-              <div className="mt-2 ml-[30px] flex flex-col gap-1 text-[12px] leading-relaxed text-ink-soft">
+              <div
+                className={`mt-2 ml-[30px] flex flex-col gap-1 text-[12px] leading-relaxed text-ink-soft ${
+                  !unlocked ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""
+                }`}
+              >
                 <p>
                   <span className="font-bold">Du:</span> {q.options[answers[i]]}
                 </p>
@@ -278,6 +324,50 @@ export function FriendCompatibility({
             </div>
           );
         })}
+      </div>
+
+      {checkoutError && (
+        <div className="rounded-xl bg-gold-soft px-4 py-3 text-[13px] font-semibold text-gold-dark">
+          ⚙️ Die Bezahlfunktion wird gerade eingerichtet — die ausführliche Analyse ist in Kürze
+          freischaltbar. Euer Ergebnis oben bleibt euch natürlich erhalten.
+        </div>
+      )}
+
+      <div className="flex flex-col gap-4 rounded-2xl border-2 border-line bg-surface p-5">
+        <div>
+          <h3 className="font-display text-[16px] font-semibold text-ink">📊 {unlockTitle}</h3>
+          <p className="text-[12.5px] text-muted">{unlockDescription}</p>
+        </div>
+
+        <p
+          className={`text-[13.5px] leading-relaxed text-ink ${
+            !unlocked ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""
+          }`}
+        >
+          {tier.detail}
+        </p>
+
+        {unlocked ? (
+          <p className="flex items-center gap-1.5 text-[13.5px] font-extrabold text-green-dark">
+            ✅ Freigeschaltet
+          </p>
+        ) : (
+          <div className="flex items-center justify-between gap-3.5">
+            <div>
+              <p className="font-display text-xl font-bold text-gold-dark">
+                {formatPrice(unlockPriceCents)}
+              </p>
+              <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
+            </div>
+            <form action={createUnlockCheckout.bind(null, "freundes-kompatibilitaet")}>
+              {sharedCode && <input type="hidden" name="von" value={sharedCode} />}
+              {sharedName && <input type="hidden" name="name" value={sharedName} />}
+              <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
+                🔓 Freischalten
+              </button>
+            </form>
+          </div>
+        )}
       </div>
 
       <button

@@ -119,18 +119,34 @@ async function QuizContent({
     return game.level === "daily-free" ? player : <DailyCapGate>{player}</DailyCapGate>;
   }
 
-  if (game.variant === "psych-result") {
-    return (
-      <DailyCapGate>
-        <RelationshipTest title={game.title} />
-      </DailyCapGate>
-    );
-  }
+  if (game.variant === "psych-result" || game.variant === "psych-compat") {
+    const [fromPayment, user] = await Promise.all([
+      provider && paymentRef ? verifyUnlock(provider, paymentRef, slug) : Promise.resolve(false),
+      getCurrentUser(),
+    ]);
+    const unlocked = previewUnlocked || fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
 
-  if (game.variant === "psych-compat") {
+    if (game.variant === "psych-result") {
+      return (
+        <DailyCapGate>
+          <RelationshipTest
+            title={game.title}
+            initiallyUnlocked={unlocked}
+            checkoutError={checkoutError === "not_configured"}
+          />
+        </DailyCapGate>
+      );
+    }
+
     return (
       <DailyCapGate>
-        <FriendCompatibility title={game.title} sharedCode={friendCode} sharedName={friendName} />
+        <FriendCompatibility
+          title={game.title}
+          sharedCode={friendCode}
+          sharedName={friendName}
+          initiallyUnlocked={unlocked}
+          checkoutError={checkoutError === "not_configured"}
+        />
       </DailyCapGate>
     );
   }

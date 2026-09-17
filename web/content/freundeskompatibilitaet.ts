@@ -90,6 +90,8 @@ export interface CompatTier {
   emoji: string;
   description: string;
   gradientClass: string;
+  /** Ausführliche Analyse -- hinter dem Einmalkauf (siehe unlockPriceCents unten). */
+  detail: string;
 }
 
 export const compatTiers: CompatTier[] = [
@@ -99,6 +101,8 @@ export const compatTiers: CompatTier[] = [
     emoji: "🧲",
     description: "Kaum eine Antwort war gleich — und trotzdem seid ihr Freunde. Das sagt mehr über eure Freundschaft als jeder Test.",
     gradientClass: "from-[hsl(260,60%,58%)] to-[hsl(260,60%,46%)]",
+    detail:
+      "Bei den meisten Fragen habt ihr komplett unterschiedlich geantwortet — und trotzdem funktioniert eure Freundschaft. Das ist ein gutes Zeichen: Ihr schätzt euch nicht wegen der Gemeinsamkeiten, sondern weil ihr euch gegenseitig neue Perspektiven zeigt. Solche Freundschaften sind oft besonders bereichernd, solange ihr eure unterschiedlichen Bedürfnisse — etwa wie oft man sich meldet oder wie man Streit klärt — offen anspricht, statt sie als selbstverständlich vorauszusetzen.",
   },
   {
     minPct: 30,
@@ -106,6 +110,8 @@ export const compatTiers: CompatTier[] = [
     emoji: "🎨",
     description: "Ihr tickt in einigen Dingen ziemlich unterschiedlich — genau das macht eure Freundschaft spannend.",
     gradientClass: "from-[hsl(28,90%,58%)] to-[hsl(12,85%,52%)]",
+    detail:
+      "Ihr liegt bei einigen zentralen Themen auf einer Linie, tickt aber bei anderen — etwa wie ihr mit Streit umgeht oder wie viel Nähe ihr braucht — ziemlich unterschiedlich. Das ist völlig normal und macht eure Freundschaft interessant. Wichtig ist, bei den Punkten, wo ihr euch unterscheidet, bewusst aufeinander zuzugehen, statt anzunehmen, der andere tickt automatisch wie man selbst.",
   },
   {
     minPct: 55,
@@ -113,6 +119,8 @@ export const compatTiers: CompatTier[] = [
     emoji: "🤝",
     description: "Ihr ergänzt euch gut und liegt bei den wichtigen Dingen auf einer Linie.",
     gradientClass: "from-[hsl(160,60%,48%)] to-[hsl(160,60%,36%)]",
+    detail:
+      "Bei den meisten Fragen wart ihr euch einig — ihr müsst euch selten erklären, weil ihr intuitiv versteht, wie der andere tickt. Das macht den Alltag als Freunde leicht: Ihr könnt euch aufeinander verlassen, ohne viele Worte zu brauchen. Die wenigen Punkte, bei denen ihr unterschiedlich geantwortet habt, lohnen sich trotzdem für ein kurzes Gespräch.",
   },
   {
     minPct: 80,
@@ -120,12 +128,19 @@ export const compatTiers: CompatTier[] = [
     emoji: "👯",
     description: "Ihr tickt erstaunlich gleich! Kein Wunder, dass ihr euch so gut versteht.",
     gradientClass: "from-[hsl(340,80%,60%)] to-[hsl(340,80%,48%)]",
+    detail:
+      "Fast jede Antwort war identisch — kein Wunder, dass ihr euch blind versteht. Solche Freundschaften fühlen sich oft an, als würde man sich selbst gegenübersitzen: gleiche Erwartungen an Nähe, gleicher Umgang mit Konflikten, gleiches Verständnis von Loyalität. Der einzige Risikofaktor bei so viel Übereinstimmung: Achtet darauf, euch trotzdem gegenseitig zu challengen und neue Perspektiven reinzulassen.",
   },
 ];
 
 export function tierForPct(pct: number): CompatTier {
   return [...compatTiers].reverse().find((t) => pct >= t.minPct) ?? compatTiers[0];
 }
+
+/** Preis der ausführlichen Analyse — immer VOR dem Klick auf "Freischalten" sichtbar (Compliance §5). */
+export const unlockPriceCents = 299;
+export const unlockTitle = "Ausführliche Analyse";
+export const unlockDescription = "Was euer Ergebnis wirklich über eure Freundschaft aussagt.";
 
 /** Kodiert die Antwort-Indizes kompakt für die URL (z.B. "0-2-1-3-0-1-2-3"). */
 export function encodeAnswers(indices: number[]): string {

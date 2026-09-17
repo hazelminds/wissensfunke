@@ -1,27 +1,70 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RefreshCw } from "lucide-react";
 import {
   relationshipQuestions,
   relationshipTypes,
   resultTypeFor,
+  unlockPriceCents,
+  unlockTitle,
+  unlockDescription,
   type RelationshipType,
 } from "@/content/beziehungstyp";
+import { formatPrice } from "@/content/quizzes";
+import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 
 type Screen = "start" | "quiz" | "result";
 
 const letters = ["A", "B", "C", "D"];
 const badgeColors = ["bg-primary", "bg-coral", "bg-green", "bg-gold"];
+const attemptStorageKey = "wf_attempt_beziehungstyp";
 
-export function RelationshipTest({ title }: { title: string }) {
+export function RelationshipTest({
+  title,
+  initiallyUnlocked,
+  checkoutError = false,
+}: {
+  title: string;
+  initiallyUnlocked: boolean;
+  checkoutError?: boolean;
+}) {
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [scores, setScores] = useState<Record<string, number>>({});
+  const unlocked = initiallyUnlocked;
   const total = relationshipQuestions.length;
   const question = relationshipQuestions[current];
+
+  // Rücksprung von der Zahlungsseite: der Client-State (scores) ging bei der
+  // Navigation verloren -- hier aus localStorage restaurieren, damit man
+  // nicht den ganzen Test nochmal machen muss (gleiches Muster wie QuizPlayer).
+  useEffect(() => {
+    if (!initiallyUnlocked && !checkoutError) return;
+    try {
+      const raw = localStorage.getItem(attemptStorageKey);
+      if (raw) {
+        const saved = JSON.parse(raw) as { scores: Record<string, number> };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setScores(saved.scores);
+        setScreen("result");
+      }
+    } catch {
+      // localStorage nicht verfügbar -- kein Problem, Start-Screen bleibt.
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (screen !== "result") return;
+    try {
+      localStorage.setItem(attemptStorageKey, JSON.stringify({ scores }));
+    } catch {
+      // s.o.
+    }
+  }, [screen, scores]);
 
   function start() {
     setCurrent(0);
@@ -185,6 +228,56 @@ export function RelationshipTest({ title }: { title: string }) {
             );
           })}
         </div>
+      </div>
+
+      {checkoutError && (
+        <div className="rounded-xl bg-gold-soft px-4 py-3 text-[13px] font-semibold text-gold-dark">
+          ⚙️ Die Bezahlfunktion wird gerade eingerichtet — die ausführliche Typanalyse ist in
+          Kürze freischaltbar. Dein Ergebnis oben bleibt dir natürlich erhalten.
+        </div>
+      )}
+
+      <div className="flex flex-col gap-4 rounded-2xl border-2 border-line bg-surface p-5">
+        <div>
+          <h3 className="font-display text-[16px] font-semibold text-ink">📊 {unlockTitle}</h3>
+          <p className="text-[12.5px] text-muted">{unlockDescription}</p>
+        </div>
+
+        <div
+          className={`flex flex-col gap-3 text-[13.5px] leading-relaxed ${
+            !unlocked ? "pointer-events-none blur-[6px] opacity-55 select-none" : ""
+          }`}
+        >
+          <p className="text-ink">
+            <span className="font-bold">Deine Stärken:</span> {result.strengths}
+          </p>
+          <p className="text-ink">
+            <span className="font-bold">Worauf du achten solltest:</span> {result.watchOut}
+          </p>
+          <p className="text-ink">
+            <span className="font-bold">Kompatibilitäts-Tipp:</span> {result.compatTip}
+          </p>
+        </div>
+
+        {unlocked ? (
+          <p className="flex items-center gap-1.5 text-[13.5px] font-extrabold text-green-dark">
+            ✅ Freigeschaltet
+          </p>
+        ) : (
+          <div className="flex items-center justify-between gap-3.5">
+            <div>
+              <p className="font-display text-xl font-bold text-gold-dark">
+                {formatPrice(unlockPriceCents)}
+              </p>
+              <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
+            </div>
+            <form action={createUnlockCheckout.bind(null, "beziehungstyp")}>
+              <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
+                🔓 Freischalten
+              </button>
+            </form>
+          </div>
+        )}
       </div>
 
       <p className="text-center text-[12px] text-muted">
