@@ -35,7 +35,7 @@ export function NavbarMobileMenu({
             Spiele
           </Link>
           <Link
-            href="/#tests"
+            href="/kategorie/psych"
             onClick={() => setOpen(false)}
             className="py-2.5 text-sm text-ink-soft hover:text-ink"
           >

@@ -47,7 +47,10 @@ export async function SiteHeader({
             <Link href="/#spiele" className="text-sm text-ink-soft transition-colors hover:text-ink">
               Spiele
             </Link>
-            <Link href="/#tests" className="text-sm text-ink-soft transition-colors hover:text-ink">
+            <Link
+              href="/kategorie/psych"
+              className="text-sm text-ink-soft transition-colors hover:text-ink"
+            >
               Tests
             </Link>
             <Link

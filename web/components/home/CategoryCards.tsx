@@ -39,7 +39,7 @@ export function CategoryCards() {
         </Link>
       </div>
 
-      <div id="tests" className="grid scroll-mt-24 gap-4 md:grid-cols-3 md:gap-5">
+      <div className="grid gap-4 md:grid-cols-3 md:gap-5">
         {categories.map((c) => {
           const meta = gameTypeMeta[c.id];
           return (

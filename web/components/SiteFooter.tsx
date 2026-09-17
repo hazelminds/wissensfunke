@@ -31,7 +31,7 @@ export function SiteFooter() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/#tests" className="hover:text-ink">
+                  <Link href="/kategorie/psych" className="hover:text-ink">
                     Tests
                   </Link>
                 </li>
