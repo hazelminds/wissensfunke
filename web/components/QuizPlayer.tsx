@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor, sampleQuestions } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
+import { logGameEventAction } from "@/lib/actions/analytics";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
@@ -80,6 +81,7 @@ export function QuizPlayer({
     setSelected(null);
     setAnswers([]);
     setScreen("quiz");
+    logGameEventAction(quiz.slug, "started").catch(() => null);
   }
 
   function selectAnswer(index: number) {
@@ -94,6 +96,7 @@ export function QuizPlayer({
   function nextQuestion() {
     if (current + 1 >= roundQuestions.length) {
       setScreen("result");
+      logGameEventAction(quiz.slug, "completed").catch(() => null);
       return;
     }
     setCurrent((c) => c + 1);

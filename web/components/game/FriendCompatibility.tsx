@@ -14,6 +14,7 @@ import {
 import { formatPrice } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { logGameEventAction } from "@/lib/actions/analytics";
 
 type Screen = "start" | "quiz" | "share" | "compare";
 
@@ -83,6 +84,7 @@ export function FriendCompatibility({
     setSelected(null);
     setAnswers([]);
     setScreen("quiz");
+    logGameEventAction("freundes-kompatibilitaet", "started").catch(() => null);
   }
 
   function select(index: number) {
@@ -95,6 +97,7 @@ export function FriendCompatibility({
     if (current + 1 >= total) {
       incrementTodayPlayCount();
       setScreen(isCompareMode ? "compare" : "share");
+      logGameEventAction("freundes-kompatibilitaet", "completed").catch(() => null);
       return;
     }
     setCurrent((c) => c + 1);

@@ -1,5 +1,6 @@
 import { Users, ShoppingBag, Coins, Flame } from "lucide-react";
 import type { AdminStats } from "@/lib/adminData";
+import { AdminGameStatsChart } from "@/components/admin/AdminGameStatsChart";
 
 function formatEuro(cents: number): string {
   return (cents / 100).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
@@ -20,11 +21,7 @@ export function AdminDashboardStats({ stats }: { stats: AdminStats }) {
         />
       </div>
 
-      <div className="hairline mt-6 rounded-2xl bg-surface p-5 text-sm text-ink-soft">
-        Charts zu Trefferquote und Beliebtheit pro Thema kommen, sobald das Punkte-Tracking
-        (scores-Tabelle) live ist — die Kennzahlen oben sind bereits echt, aus Supabase Auth und
-        den Käufen.
-      </div>
+      <AdminGameStatsChart />
     </div>
   );
 }

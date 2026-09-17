@@ -1,11 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { DailyRiddle as DailyRiddleData } from "@/content/daily";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
+import { logGameEventAction } from "@/lib/actions/analytics";
 
 export function DailyRiddle({ riddle }: { riddle: DailyRiddleData }) {
+  useEffect(() => {
+    logGameEventAction("tages-raetsel", "started").catch(() => null);
+  }, []);
+
   const [revealed, setRevealed] = useState(false);
   const [streakCount, setStreakCount] = useState(0);
 
@@ -14,6 +19,7 @@ export function DailyRiddle({ riddle }: { riddle: DailyRiddleData }) {
     const server = await recordServerStreakCompletion().catch(() => null);
     setStreakCount(server?.count ?? local.count);
     setRevealed(true);
+    logGameEventAction("tages-raetsel", "completed").catch(() => null);
   }
 
   return (

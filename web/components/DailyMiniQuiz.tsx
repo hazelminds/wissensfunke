@@ -1,14 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dailyCategoryIcons, type DailyQuizSet } from "@/content/daily";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
+import { logGameEventAction } from "@/lib/actions/analytics";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Answer = { correct: boolean };
 
 export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
+  useEffect(() => {
+    logGameEventAction("tages-mini-quiz", "started").catch(() => null);
+  }, []);
+
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
@@ -34,6 +39,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
       const server = await recordServerStreakCompletion().catch(() => null);
       setStreakCount(server?.count ?? local.count);
       setDone(true);
+      logGameEventAction("tages-mini-quiz", "completed").catch(() => null);
       return;
     }
     setCurrent((c) => c + 1);

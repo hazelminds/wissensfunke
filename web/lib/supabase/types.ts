@@ -205,6 +205,30 @@ export interface Database {
         };
         Relationships: [];
       };
+      game_events: {
+        Row: {
+          id: number;
+          slug: string;
+          event: "started" | "completed";
+          user_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          slug: string;
+          event: "started" | "completed";
+          user_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          slug?: string;
+          event?: "started" | "completed";
+          user_id?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

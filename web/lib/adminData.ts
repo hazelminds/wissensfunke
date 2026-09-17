@@ -218,8 +218,8 @@ export interface AdminStats {
   topQuizSlug: string | null;
 }
 
-/** Echte Kennzahlen aus Nutzern + Käufen. Punkte-/Trefferquote-Charts
- * brauchen die noch fehlende scores-Tabelle. */
+/** Echte Kennzahlen aus Nutzern + Käufen. Beliebtheits-/Lösequote-Charts pro
+ * Spiel und Zeitraum kommen aus lib/analytics.ts (game_events-Tabelle). */
 export async function getAdminStats(): Promise<AdminStats> {
   if (!isSupabaseConfigured()) {
     return { totalUsers: 0, totalPurchases: 0, totalRevenueCents: 0, topQuizSlug: null };

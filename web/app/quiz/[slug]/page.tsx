@@ -107,7 +107,7 @@ async function QuizContent({
   if (game.variant === "sliding") {
     return (
       <DailyCapGate plusActive={plusActive}>
-        <SlidingPuzzle title={game.title} color={game.type} difficulty={game.difficulty} />
+        <SlidingPuzzle slug={slug} title={game.title} color={game.type} difficulty={game.difficulty} />
       </DailyCapGate>
     );
   }
@@ -119,7 +119,7 @@ async function QuizContent({
     const round =
       game.level === "daily-free" ? getDailyWhoAmIRound(difficulty) : getRandomWhoAmIRound(difficulty);
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
-    const player = <WhoAmI title={game.title} color={game.type} round={round} />;
+    const player = <WhoAmI slug={slug} title={game.title} color={game.type} round={round} />;
     return game.level === "daily-free" ? player : <DailyCapGate plusActive={plusActive}>{player}</DailyCapGate>;
   }
 

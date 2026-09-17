@@ -14,6 +14,7 @@ import {
 import { formatPrice } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { logGameEventAction } from "@/lib/actions/analytics";
 
 type Screen = "start" | "quiz" | "result";
 
@@ -71,6 +72,7 @@ export function RelationshipTest({
     setSelected(null);
     setScores({});
     setScreen("quiz");
+    logGameEventAction("beziehungstyp", "started").catch(() => null);
   }
 
   function select(index: number) {
@@ -84,6 +86,7 @@ export function RelationshipTest({
     if (current + 1 >= total) {
       incrementTodayPlayCount();
       setScreen("result");
+      logGameEventAction("beziehungstyp", "completed").catch(() => null);
       return;
     }
     setCurrent((c) => c + 1);

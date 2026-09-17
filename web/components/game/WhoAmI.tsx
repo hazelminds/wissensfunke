@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowRight, Trophy, RefreshCw, Lightbulb, Sparkles } from "lucide-react";
 import type { WhoAmIRound } from "@/content/whoami";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { logGameEventAction } from "@/lib/actions/analytics";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 function normalize(s: string): string {
@@ -24,7 +25,17 @@ function fmtTime(s: number): string {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
-export function WhoAmI({ title, color, round }: { title: string; color: string; round: WhoAmIRound }) {
+export function WhoAmI({
+  slug,
+  title,
+  color,
+  round,
+}: {
+  slug: string;
+  title: string;
+  color: string;
+  round: WhoAmIRound;
+}) {
   const { hints, solution, aliases } = round;
   const total = hints.length;
 
@@ -34,6 +45,13 @@ export function WhoAmI({ title, color, round }: { title: string; color: string; 
   const [status, setStatus] = useState<"won" | "lost" | null>(null);
   const [startTime] = useState(() => Date.now());
   const [elapsed, setElapsed] = useState(0);
+
+  // Kein Start-Screen -- die erste Runde beginnt beim Mounten, restart()
+  // unten loggt jede weitere Runde separat.
+  useEffect(() => {
+    logGameEventAction(slug, "started").catch(() => null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const isCorrect = (g: string) => {
     const n = normalize(g);
@@ -51,6 +69,7 @@ export function WhoAmI({ title, color, round }: { title: string; color: string; 
     if (won) {
       recordDailyCompletion();
       recordServerStreakCompletion().catch(() => null);
+      logGameEventAction(slug, "completed").catch(() => null);
     }
   };
 
@@ -75,6 +94,7 @@ export function WhoAmI({ title, color, round }: { title: string; color: string; 
     setWrong(0);
     setStatus(null);
     setElapsed(0);
+    logGameEventAction(slug, "started").catch(() => null);
   };
 
   const finalScore = Math.max(100, 1000 - revealed * 120 - wrong * 60 - Math.round(elapsed) * 2);

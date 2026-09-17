@@ -5,6 +5,7 @@ import { RefreshCw, Eye, Trophy } from "lucide-react";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { logGameEventAction } from "@/lib/actions/analytics";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Difficulty = "easy" | "medium" | "hard";
@@ -105,10 +106,12 @@ interface DragState {
 }
 
 export function SlidingPuzzle({
+  slug,
   title,
   color,
   difficulty = "easy",
 }: {
+  slug: string;
   title: string;
   color: string;
   difficulty?: Difficulty;
@@ -127,6 +130,13 @@ export function SlidingPuzzle({
   const [drag, setDrag] = useState<DragState | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const [boardSize, setBoardSize] = useState(0);
+
+  // Kein Start-Screen hier -- die erste Runde beginnt bereits beim Mounten,
+  // "Neu mischen" (reset) unten loggt jede weitere Runde separat.
+  useEffect(() => {
+    logGameEventAction(slug, "started").catch(() => null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const el = boardRef.current;
@@ -153,7 +163,8 @@ export function SlidingPuzzle({
     setElapsed(0);
     setSolved(false);
     setDrag(null);
-  }, [n, difficulty]);
+    logGameEventAction(slug, "started").catch(() => null);
+  }, [n, difficulty, slug]);
 
   const tryMove = useCallback(
     (pos: number) => {
@@ -170,9 +181,10 @@ export function SlidingPuzzle({
         incrementTodayPlayCount();
         recordDailyCompletion();
         recordServerStreakCompletion().catch(() => null);
+        logGameEventAction(slug, "completed").catch(() => null);
       }
     },
-    [board, empty, n, solved],
+    [board, empty, n, solved, slug],
   );
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>, pos: number) => {
