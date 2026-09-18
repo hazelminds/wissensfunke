@@ -373,6 +373,10 @@ export function FriendCompatibility({
         )}
       </div>
 
+      <p className="text-center text-[12px] text-muted">
+        Nur zur Unterhaltung, keine psychologische Diagnose oder Beratung.
+      </p>
+
       <button
         onClick={start}
         className="glow-primary inline-flex items-center justify-center gap-1.5 self-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"

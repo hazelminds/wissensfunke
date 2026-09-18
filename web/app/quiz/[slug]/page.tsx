@@ -15,6 +15,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getPlusStatus } from "@/lib/plus";
 import { getSeenQuestions } from "@/lib/seenQuestionsServer";
 import { pickUnseen } from "@/lib/seenQuestions";
+import { getPsychTest } from "@/content/psychTests";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -24,6 +25,7 @@ import { SlidingPuzzle } from "@/components/game/SlidingPuzzle";
 import { WhoAmI } from "@/components/game/WhoAmI";
 import { RelationshipTest } from "@/components/game/RelationshipTest";
 import { FriendCompatibility } from "@/components/game/FriendCompatibility";
+import { PsychResultTest } from "@/components/game/PsychResultTest";
 
 export default async function QuizPage({
   params,
@@ -169,6 +171,16 @@ async function QuizContent({
       />
     );
     return game.level === "daily-free" ? player : <DailyCapGate plusActive={plusActive}>{player}</DailyCapGate>;
+  }
+
+  if (game.variant === "psych-generic") {
+    const test = getPsychTest(slug);
+    if (!test) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
+    return (
+      <DailyCapGate plusActive={plusActive}>
+        <PsychResultTest test={test} plusActive={plusActive} />
+      </DailyCapGate>
+    );
   }
 
   if (game.variant === "psych-result" || game.variant === "psych-compat") {
