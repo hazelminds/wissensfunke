@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
@@ -55,10 +57,27 @@ export default async function QuizPage({
   // echte Berechtigungsprüfung.
   const previewUnlocked = preview === "plus";
 
+  // Wirklich nur einen Schritt zurück, nicht auf die Startseite: die drei
+  // "Wer bin ich?"-Stufen kommen von der eigenen Auswahlseite, die beiden
+  // täglichen Anker haben keine Kategorie (nur von der Startseite verlinkt),
+  // alles andere kommt aus der jeweiligen Kategorie-Übersicht.
+  const backHref =
+    slug === "wer-bin-ich-leicht" || slug === "wer-bin-ich-mittel" || slug === "wer-bin-ich-schwer"
+      ? "/quiz/wer-bin-ich"
+      : slug === "tages-raetsel" || slug === "tages-mini-quiz"
+        ? "/"
+        : `/kategorie/${game.type}`;
+
   return (
     <div className="min-h-screen bg-bg">
       <SiteHeader backHref="/" showStreak={slug === "tages-raetsel" || slug === "tages-mini-quiz"} />
       <main className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
+        <Link
+          href={backHref}
+          className="-mb-4 inline-flex w-fit items-center gap-1.5 text-sm text-ink-soft transition hover:text-ink"
+        >
+          <ArrowLeft className="h-4 w-4" /> Zurück
+        </Link>
         {previewUnlocked && (
           <div className="rounded-xl bg-gold-soft px-4 py-3 text-[13px] font-semibold text-gold-dark">
             🔍 Test-Vorschau aktiv — zeigt die Ansicht eines freigeschalteten/Plus-Mitglieds. Kein
