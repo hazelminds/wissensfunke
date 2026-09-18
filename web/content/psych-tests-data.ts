@@ -68,7 +68,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich spreche es sofort direkt an", type: "direkt" },
           { text: "Ich formuliere es vorsichtig als Vorschlag", type: "diplomatisch" },
           { text: "Ich warte ab, ob es sich wiederholt", type: "zurueckhaltend" },
-          { text: "Ich formuliere es vorsichtig als Vorschlag", type: "diplomatisch" },
+          { text: "Ich packe es in einen sanften Hinweis, ohne anzugreifen", type: "diplomatisch" },
         ],
       },
       {
@@ -77,7 +77,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...der/die, der/die klar Position bezieht", type: "direkt" },
           { text: "...der/die, der/die versucht zu vermitteln", type: "diplomatisch" },
           { text: "...der/die, der/die erstmal zuhört", type: "zurueckhaltend" },
-          { text: "...der/die, der/die versucht zu vermitteln", type: "diplomatisch" },
+          { text: "...der/die, der/die nach einem Mittelweg sucht", type: "diplomatisch" },
         ],
       },
       {
@@ -86,7 +86,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich sage sofort, was mich stört", type: "direkt" },
           { text: "Ich bringe es behutsam im richtigen Moment an", type: "diplomatisch" },
           { text: "Ich brauche erst Zeit, bevor ich reden kann", type: "zurueckhaltend" },
-          { text: "Ich bringe es behutsam im richtigen Moment an", type: "diplomatisch" },
+          { text: "Ich warte den passenden Moment ab und sag es sanft", type: "diplomatisch" },
         ],
       },
       {
@@ -95,7 +95,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich widerspreche sofort, wenn ich anderer Meinung bin", type: "direkt" },
           { text: "Ich bedanke mich erstmal und denke dann nach", type: "diplomatisch" },
           { text: "Ich ziehe mich zurück und verarbeite es für mich", type: "zurueckhaltend" },
-          { text: "Ich bedanke mich erstmal und denke dann nach", type: "diplomatisch" },
+          { text: "Ich nehme es ruhig auf und frage höflich nach", type: "diplomatisch" },
         ],
       },
       {
@@ -104,7 +104,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...schreibe ich klar, was ich denke", type: "direkt" },
           { text: "...formuliere ich vorsichtig, um niemanden zu verletzen", type: "diplomatisch" },
           { text: "...lese ich meist nur mit", type: "zurueckhaltend" },
-          { text: "...formuliere ich vorsichtig, um niemanden zu verletzen", type: "diplomatisch" },
+          { text: "...wähle ich meine Worte besonders behutsam", type: "diplomatisch" },
         ],
       },
       {
@@ -113,7 +113,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich sage klipp und klar, was ich denke", type: "direkt" },
           { text: "Ich packe die Kritik zwischen positive Punkte", type: "diplomatisch" },
           { text: "Ich stelle lieber Fragen, statt zu bewerten", type: "zurueckhaltend" },
-          { text: "Ich packe die Kritik zwischen positive Punkte", type: "diplomatisch" },
+          { text: "Ich formuliere es als freundlichen Verbesserungsvorschlag", type: "diplomatisch" },
         ],
       },
       {
@@ -122,7 +122,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...sofort, ich sage es klar", type: "direkt" },
           { text: "...an einem betont ruhigen, kontrollierten Ton", type: "diplomatisch" },
           { text: "...kaum, ich werde eher still", type: "zurueckhaltend" },
-          { text: "...an einem betont ruhigen, kontrollierten Ton", type: "diplomatisch" },
+          { text: "...daran, dass ich besonders höflich werde", type: "diplomatisch" },
         ],
       },
       {
@@ -131,7 +131,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...kaum vor, ich sage einfach, was ansteht", type: "direkt" },
           { text: "...vor, indem ich mir die richtigen Worte überlege", type: "diplomatisch" },
           { text: "...lange vor, am liebsten schriftlich", type: "zurueckhaltend" },
-          { text: "...vor, indem ich mir die richtigen Worte überlege", type: "diplomatisch" },
+          { text: "...vor, indem ich mir eine sanfte Formulierung zurechtlege", type: "diplomatisch" },
         ],
       },
       {
@@ -140,7 +140,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...dass klar ist, woran wir sind", type: "direkt" },
           { text: "...dass sich niemand verletzt fühlt", type: "diplomatisch" },
           { text: "...dass ich Zeit hatte, es zu verarbeiten", type: "zurueckhaltend" },
-          { text: "...dass sich niemand verletzt fühlt", type: "diplomatisch" },
+          { text: "...dass der Ton freundlich bleibt", type: "diplomatisch" },
         ],
       },
     ],
@@ -194,7 +194,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Freut mich, schön wenn er/sie sich gut versteht", type: "gelassen" },
           { text: "Ich beobachte es kurz aus dem Augenwinkel", type: "situativ" },
           { text: "Ich gehe rüber und mische mich ein", type: "intensiv" },
-          { text: "Ich beobachte es kurz aus dem Augenwinkel", type: "situativ" },
+          { text: "Ich frage mich kurz, ob da mehr dahintersteckt", type: "situativ" },
         ],
       },
       {
@@ -203,7 +203,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Gar nicht, ist nicht meine Sache", type: "gelassen" },
           { text: "Ich werde kurz neugierig, frage aber nicht nach", type: "situativ" },
           { text: "Ich frage direkt, wer da schreibt", type: "intensiv" },
-          { text: "Ich werde kurz neugierig, frage aber nicht nach", type: "situativ" },
+          { text: "Ein kleiner Stich, aber ich lass es auf mich beruhen", type: "situativ" },
         ],
       },
       {
@@ -212,7 +212,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Kein Problem, Vergangenheit ist Vergangenheit", type: "gelassen" },
           { text: "Ich frage höflich nach, worum es geht", type: "situativ" },
           { text: "Das beunruhigt mich richtig", type: "intensiv" },
-          { text: "Ich frage höflich nach, worum es geht", type: "situativ" },
+          { text: "Ich werde etwas wachsamer, sag aber nichts", type: "situativ" },
         ],
       },
       {
@@ -221,7 +221,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Nie, das interessiert mich nicht", type: "gelassen" },
           { text: "Ab und zu, eher zufällig", type: "situativ" },
           { text: "Regelmäßig, ich behalte es im Blick", type: "intensiv" },
-          { text: "Ab und zu, eher zufällig", type: "situativ" },
+          { text: "Nur wenn mir gerade danach ist", type: "situativ" },
         ],
       },
       {
@@ -230,7 +230,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Völlig entspannt, jede:r braucht mal Freiraum", type: "gelassen" },
           { text: "Ein kleines Kribbeln, aber im Griff", type: "situativ" },
           { text: "Ich mache mir viele Gedanken", type: "intensiv" },
-          { text: "Ein kleines Kribbeln, aber im Griff", type: "situativ" },
+          { text: "Ein kurzer Gedanke daran, mehr nicht", type: "situativ" },
         ],
       },
       {
@@ -239,7 +239,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich finde das eher amüsant als bedrohlich", type: "gelassen" },
           { text: "Ich beobachte, wie mein Schatz reagiert", type: "situativ" },
           { text: "Ich fühle mich sofort unwohl", type: "intensiv" },
-          { text: "Ich beobachte, wie mein Schatz reagiert", type: "situativ" },
+          { text: "Ich werde etwas aufmerksamer, halte mich aber zurück", type: "situativ" },
         ],
       },
     ],
@@ -293,7 +293,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wenige, aber die kenne ich schon ewig", type: "loyalist" },
           { text: "Viele, ich lerne ständig neue Leute kennen", type: "freigeist" },
           { text: "Einen festen Kern plus wechselnde Bekannte", type: "ausgleicher" },
-          { text: "Einen festen Kern plus wechselnde Bekannte", type: "ausgleicher" },
+          { text: "Ein paar enge, dazu viele lockere Bekanntschaften", type: "ausgleicher" },
         ],
       },
       {
@@ -302,7 +302,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wie halte ich Kontakt zu meinen alten Freund:innen?", type: "loyalist" },
           { text: "Endlich neue Leute kennenlernen!", type: "freigeist" },
           { text: "Beides -- alte Kontakte pflegen und neue finden", type: "ausgleicher" },
-          { text: "Beides -- alte Kontakte pflegen und neue finden", type: "ausgleicher" },
+          { text: "Beides gleichzeitig, ich will nichts verlieren", type: "ausgleicher" },
         ],
       },
       {
@@ -311,7 +311,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich bleibe erstmal in seiner/ihrer Nähe", type: "loyalist" },
           { text: "Ich mische mich sofort unter die Gäste", type: "freigeist" },
           { text: "Ich beobachte kurz, dann suche ich Anschluss", type: "ausgleicher" },
-          { text: "Ich beobachte kurz, dann suche ich Anschluss", type: "ausgleicher" },
+          { text: "Ich halte mich erst zurück und taue dann auf", type: "ausgleicher" },
         ],
       },
       {
@@ -320,7 +320,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Als wäre keine Zeit vergangen", type: "loyalist" },
           { text: "Nett, aber wir haben uns wohl auseinandergelebt", type: "freigeist" },
           { text: "Kommt drauf an, wie gut wir uns verstanden haben", type: "ausgleicher" },
-          { text: "Kommt drauf an, wie gut wir uns verstanden haben", type: "ausgleicher" },
+          { text: "Ich geb der Sache eine faire Chance, mal sehen", type: "ausgleicher" },
         ],
       },
       {
@@ -329,7 +329,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Regelmäßig, das ist mir wichtig", type: "loyalist" },
           { text: "Unregelmäßig, dafür mit wechselnden Leuten", type: "freigeist" },
           { text: "Je nachdem, wie es gerade passt", type: "ausgleicher" },
-          { text: "Je nachdem, wie es gerade passt", type: "ausgleicher" },
+          { text: "Unterschiedlich, ganz nach Lebensphase", type: "ausgleicher" },
         ],
       },
       {
@@ -338,7 +338,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich gebe ihr eine echte zweite Chance", type: "loyalist" },
           { text: "Ich lasse sie eher einschlafen", type: "freigeist" },
           { text: "Ich spreche es an und schaue weiter", type: "ausgleicher" },
-          { text: "Ich spreche es an und schaue weiter", type: "ausgleicher" },
+          { text: "Ich kläre es und entscheide dann von Fall zu Fall", type: "ausgleicher" },
         ],
       },
       {
@@ -347,7 +347,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...eher zurückhaltend, echte Nähe braucht Zeit", type: "loyalist" },
           { text: "...total offen, viele meiner Kontakte kamen so zustande", type: "freigeist" },
           { text: "...offen, aber selektiv, wen ich vertiefe", type: "ausgleicher" },
-          { text: "...offen, aber selektiv, wen ich vertiefe", type: "ausgleicher" },
+          { text: "...offen für neue Kontakte, aber wählerisch bei echter Nähe", type: "ausgleicher" },
         ],
       },
       {
@@ -356,7 +356,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mit meinem engsten Kreis, ganz vertraut", type: "loyalist" },
           { text: "Auf Events, wo ich neue Leute treffe", type: "freigeist" },
           { text: "Eine Mischung aus beidem", type: "ausgleicher" },
-          { text: "Eine Mischung aus beidem", type: "ausgleicher" },
+          { text: "Etwas von beidem, ganz nach Laune", type: "ausgleicher" },
         ],
       },
       {
@@ -365,7 +365,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Verlässlichkeit über die Jahre", type: "loyalist" },
           { text: "Frische Impulse und neue Sichtweisen", type: "freigeist" },
           { text: "Eine gute Balance aus beidem", type: "ausgleicher" },
-          { text: "Eine gute Balance aus beidem", type: "ausgleicher" },
+          { text: "Die richtige Mischung aus Nähe und Freiraum", type: "ausgleicher" },
         ],
       },
     ],
@@ -419,7 +419,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...sammle ich alle Fakten und wäge ab", type: "analytiker" },
           { text: "...frage ich, wie sich alle Beteiligten fühlen", type: "harmoniser" },
           { text: "...entscheide ich schnell aus dem Bauch heraus", type: "macher" },
-          { text: "...frage ich, wie sich alle Beteiligten fühlen", type: "harmoniser" },
+          { text: "...hole ich mir die Meinung der anderen ein", type: "harmoniser" },
         ],
       },
       {
@@ -428,7 +428,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...die Analyse und Struktur", type: "analytiker" },
           { text: "...die Vermittlung zwischen unterschiedlichen Meinungen", type: "harmoniser" },
           { text: "...die Führung und den Antrieb", type: "macher" },
-          { text: "...die Vermittlung zwischen unterschiedlichen Meinungen", type: "harmoniser" },
+          { text: "...dafür zu sorgen, dass alle gut zusammenarbeiten", type: "harmoniser" },
         ],
       },
       {
@@ -437,7 +437,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich analysiere erst, worum es eigentlich geht", type: "analytiker" },
           { text: "Ich versuche sofort zu schlichten", type: "harmoniser" },
           { text: "Ich sage klar meine Meinung und handle danach", type: "macher" },
-          { text: "Ich versuche sofort zu schlichten", type: "harmoniser" },
+          { text: "Mir ist wichtig, dass sich wieder alle vertragen", type: "harmoniser" },
         ],
       },
       {
@@ -446,7 +446,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Unlogisches, widersprüchliches Verhalten", type: "analytiker" },
           { text: "Unnötige Konflikte und Streit", type: "harmoniser" },
           { text: "Zögern und endlose Diskussionen ohne Ergebnis", type: "macher" },
-          { text: "Zögern und endlose Diskussionen ohne Ergebnis", type: "macher" },
+          { text: "Wenn nichts vorangeht und alles im Kreis läuft", type: "macher" },
         ],
       },
       {
@@ -455,7 +455,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...ein spannendes Buch oder Rätsel lösen", type: "analytiker" },
           { text: "...Zeit mit geliebten Menschen verbringen", type: "harmoniser" },
           { text: "...ein Projekt endlich fertigstellen", type: "macher" },
-          { text: "...Zeit mit geliebten Menschen verbringen", type: "harmoniser" },
+          { text: "...für die Menschen da sein, die mir wichtig sind", type: "harmoniser" },
         ],
       },
       {
@@ -464,7 +464,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich erkläre sachlich, was schiefgelaufen ist", type: "analytiker" },
           { text: "Ich versuche, es einfühlsam anzusprechen", type: "harmoniser" },
           { text: "Ich sage es direkt und schaue nach vorn", type: "macher" },
-          { text: "Ich sage es direkt und schaue nach vorn", type: "macher" },
+          { text: "Ich benenne es kurz und mache gleich weiter", type: "macher" },
         ],
       },
       {
@@ -473,7 +473,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...die Datenlage und der Plan dahinter", type: "analytiker" },
           { text: "...wer alles beteiligt ist", type: "harmoniser" },
           { text: "...wann es endlich losgeht", type: "macher" },
-          { text: "...wer alles beteiligt ist", type: "harmoniser" },
+          { text: "...wie gut das Team zusammenpasst", type: "harmoniser" },
         ],
       },
       {
@@ -482,7 +482,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...durchdacht und besonnen", type: "analytiker" },
           { text: "...warmherzig und ausgleichend", type: "harmoniser" },
           { text: "...tatkräftig und entschlossen", type: "macher" },
-          { text: "...warmherzig und ausgleichend", type: "harmoniser" },
+          { text: "...einfühlsam und verständnisvoll", type: "harmoniser" },
         ],
       },
       {
@@ -491,7 +491,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich brauche kurz, um neu zu kalkulieren", type: "analytiker" },
           { text: "Ich passe mich an, Hauptsache alle sind zufrieden", type: "harmoniser" },
           { text: "Kein Problem, ich improvisiere einfach", type: "macher" },
-          { text: "Ich passe mich an, Hauptsache alle sind zufrieden", type: "harmoniser" },
+          { text: "Ich sorge dafür, dass niemand zu kurz kommt", type: "harmoniser" },
         ],
       },
       {
@@ -500,7 +500,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...knifflige Probleme zu lösen", type: "analytiker" },
           { text: "...ein gutes Team-Gefühl", type: "harmoniser" },
           { text: "...sichtbare Ergebnisse und Fortschritt", type: "macher" },
-          { text: "...sichtbare Ergebnisse und Fortschritt", type: "macher" },
+          { text: "...spürbar voranzukommen", type: "macher" },
         ],
       },
       {
@@ -509,7 +509,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Detailliert, mit Vergleichen und Recherche", type: "analytiker" },
           { text: "Gemeinsam, jede Meinung zählt", type: "harmoniser" },
           { text: "Grob, den Rest klären wir vor Ort", type: "macher" },
-          { text: "Gemeinsam, jede Meinung zählt", type: "harmoniser" },
+          { text: "Im Austausch mit allen, damit sich niemand übergangen fühlt", type: "harmoniser" },
         ],
       },
       {
@@ -518,7 +518,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich will genau verstehen, warum", type: "analytiker" },
           { text: "Ich nehme es mir erstmal zu Herzen", type: "harmoniser" },
           { text: "Ich überlege kurz und mache dann weiter", type: "macher" },
-          { text: "Ich nehme es mir erstmal zu Herzen", type: "harmoniser" },
+          { text: "Es beschäftigt mich, auch wenn ich nichts sage", type: "harmoniser" },
         ],
       },
       {
@@ -527,7 +527,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Gründlich und methodisch", type: "analytiker" },
           { text: "Kooperativ und rücksichtsvoll", type: "harmoniser" },
           { text: "Schnell und ergebnisorientiert", type: "macher" },
-          { text: "Schnell und ergebnisorientiert", type: "macher" },
+          { text: "Zügig und auf das Ergebnis fokussiert", type: "macher" },
         ],
       },
       {
@@ -536,7 +536,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...der/die, der/die einen Plan macht", type: "analytiker" },
           { text: "...der/die, der/die beruhigt und zusammenhält", type: "harmoniser" },
           { text: "...der/die, der/die sofort handelt", type: "macher" },
-          { text: "...der/die, der/die sofort handelt", type: "macher" },
+          { text: "...der/die, der/die als Erste:r loslegt", type: "macher" },
         ],
       },
       {
@@ -545,7 +545,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Dass sie logisch nachvollziehbar ist", type: "analytiker" },
           { text: "Dass niemand dabei vor den Kopf gestoßen wird", type: "harmoniser" },
           { text: "Dass sie schnell umsetzbar ist", type: "macher" },
-          { text: "Dass niemand dabei vor den Kopf gestoßen wird", type: "harmoniser" },
+          { text: "Dass die Stimmung dabei nicht leidet", type: "harmoniser" },
         ],
       },
       {
@@ -554,7 +554,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...du etwas Kompliziertes verstanden hast", type: "analytiker" },
           { text: "...alle um dich herum glücklich waren", type: "harmoniser" },
           { text: "...du sichtbar etwas geschafft hast", type: "macher" },
-          { text: "...du sichtbar etwas geschafft hast", type: "macher" },
+          { text: "...du etwas konkret abhaken konntest", type: "macher" },
         ],
       },
     ],
@@ -608,7 +608,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Das wird super!", type: "optimist" },
           { text: "Mal sehen, was realistisch machbar ist", type: "realist" },
           { text: "Was könnte alles schiefgehen?", type: "pessimist" },
-          { text: "Mal sehen, was realistisch machbar ist", type: "realist" },
+          { text: "Ich schau mir erstmal die Rahmenbedingungen an", type: "realist" },
         ],
       },
       {
@@ -617,7 +617,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wird schon nicht so schlimm", type: "optimist" },
           { text: "Ich schau nochmal später nach, ob es sich ändert", type: "realist" },
           { text: "Ich sage lieber gleich ab", type: "pessimist" },
-          { text: "Ich schau nochmal später nach, ob es sich ändert", type: "realist" },
+          { text: "Ich behalte die Vorhersage im Auge und entscheide kurzfristig", type: "realist" },
         ],
       },
       {
@@ -626,7 +626,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich freue mich schon auf den Job", type: "optimist" },
           { text: "Ich bereite mich gut vor und bin gespannt", type: "realist" },
           { text: "Ich rechne eher nicht damit, dass es klappt", type: "pessimist" },
-          { text: "Ich bereite mich gut vor und bin gespannt", type: "realist" },
+          { text: "Ich wäge meine Chancen realistisch ab", type: "realist" },
         ],
       },
       {
@@ -635,7 +635,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Klingt spannend, mach das!", type: "optimist" },
           { text: "Ich frage nach konkreten Zahlen und Plänen", type: "realist" },
           { text: "Ich warne eher vor den Risiken", type: "pessimist" },
-          { text: "Ich frage nach konkreten Zahlen und Plänen", type: "realist" },
+          { text: "Ich will erst die Kalkulation dahinter sehen", type: "realist" },
         ],
       },
       {
@@ -644,7 +644,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wird schon irgendwie klappen", type: "optimist" },
           { text: "Ich rechne aus, wie knapp es wird", type: "realist" },
           { text: "Ich gehe davon aus, dass ich es nicht schaffe", type: "pessimist" },
-          { text: "Ich rechne aus, wie knapp es wird", type: "realist" },
+          { text: "Ich schätze nüchtern ein, ob es noch reicht", type: "realist" },
         ],
       },
       {
@@ -653,7 +653,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Die vielen guten Momente dazwischen", type: "optimist" },
           { text: "Eine nüchterne Bilanz aus gut und schlecht", type: "realist" },
           { text: "Vor allem das, was schiefgelaufen ist", type: "pessimist" },
-          { text: "Eine nüchterne Bilanz aus gut und schlecht", type: "realist" },
+          { text: "Ein sachlicher Blick auf das, was wirklich war", type: "realist" },
         ],
       },
     ],
@@ -707,7 +707,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich lege sofort los, mit voller Energie", type: "kampf" },
           { text: "Ich schiebe es noch ein bisschen vor mir her", type: "flucht" },
           { text: "Ich mache einen Plan und arbeite ihn ab", type: "cool" },
-          { text: "Ich mache einen Plan und arbeite ihn ab", type: "cool" },
+          { text: "Ich bleibe ruhig und gehe es strukturiert an", type: "cool" },
         ],
       },
       {
@@ -716,7 +716,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich spreche es sofort direkt an", type: "kampf" },
           { text: "Ich gehe ihm lieber aus dem Weg", type: "flucht" },
           { text: "Ich beobachte erstmal, bevor ich reagiere", type: "cool" },
-          { text: "Ich beobachte erstmal, bevor ich reagiere", type: "cool" },
+          { text: "Ich lasse mir erst die Fakten geben, bevor ich handle", type: "cool" },
         ],
       },
       {
@@ -725,7 +725,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich versuche fieberhaft, es sofort zu reparieren", type: "kampf" },
           { text: "Ich brauche einen Moment, um mich zu sammeln", type: "flucht" },
           { text: "Ich improvisiere ruhig und mache trotzdem weiter", type: "cool" },
-          { text: "Ich improvisiere ruhig und mache trotzdem weiter", type: "cool" },
+          { text: "Ich bleibe gelassen und such eine pragmatische Lösung", type: "cool" },
         ],
       },
       {
@@ -734,7 +734,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich stürze mich rein und arbeite alles ab", type: "kampf" },
           { text: "Ich fühle mich überfordert und mache erstmal Pause", type: "flucht" },
           { text: "Ich priorisiere ruhig und arbeite Schritt für Schritt", type: "cool" },
-          { text: "Ich priorisiere ruhig und arbeite Schritt für Schritt", type: "cool" },
+          { text: "Ich sortiere in Ruhe, was zuerst dran ist", type: "cool" },
         ],
       },
       {
@@ -743,7 +743,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich will sofort handeln und etwas unternehmen", type: "kampf" },
           { text: "Ich muss erstmal allein sein damit", type: "flucht" },
           { text: "Ich denke erst in Ruhe darüber nach", type: "cool" },
-          { text: "Ich denke erst in Ruhe darüber nach", type: "cool" },
+          { text: "Ich lass es erstmal sacken, bevor ich reagiere", type: "cool" },
         ],
       },
       {
@@ -752,7 +752,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich werde ungeduldig und suche nach Alternativen", type: "kampf" },
           { text: "Ich schalte innerlich ab und ertrage es", type: "flucht" },
           { text: "Ich rufe an und informiere entspannt über die Verspätung", type: "cool" },
-          { text: "Ich rufe an und informiere entspannt über die Verspätung", type: "cool" },
+          { text: "Ich bleibe gelassen und sag kurz Bescheid", type: "cool" },
         ],
       },
       {
@@ -761,7 +761,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich mische mich ein, um zu schlichten", type: "kampf" },
           { text: "Ich verlasse lieber den Raum", type: "flucht" },
           { text: "Ich beobachte ruhig, bevor ich reagiere", type: "cool" },
-          { text: "Ich beobachte ruhig, bevor ich reagiere", type: "cool" },
+          { text: "Ich behalte einen kühlen Kopf und schau erstmal zu", type: "cool" },
         ],
       },
       {
@@ -770,7 +770,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...Anspannung und dem Drang, aktiv zu werden", type: "kampf" },
           { text: "...dem Bedürfnis, mich zurückzuziehen", type: "flucht" },
           { text: "...eher wenig, ich bleibe meist ruhig", type: "cool" },
-          { text: "...eher wenig, ich bleibe meist ruhig", type: "cool" },
+          { text: "...kaum etwas, ich wirke meist gefasst", type: "cool" },
         ],
       },
       {
@@ -779,7 +779,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...eine körperliche Aktivität, um Druck abzubauen", type: "kampf" },
           { text: "...komplette Ruhe und Alleinsein", type: "flucht" },
           { text: "...einen strukturierten Rückblick, was gut lief", type: "cool" },
-          { text: "...einen strukturierten Rückblick, was gut lief", type: "cool" },
+          { text: "...eine ruhige Analyse, was ich mitnehmen kann", type: "cool" },
         ],
       },
     ],
@@ -833,7 +833,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...erschöpft, ich brauche jetzt Ruhe", type: "introvertiert" },
           { text: "...voller Energie, am liebsten geht's weiter", type: "extrovertiert" },
           { text: "...unterschiedlich, kommt auf den Abend an", type: "ambivert" },
-          { text: "...unterschiedlich, kommt auf den Abend an", type: "ambivert" },
+          { text: "...meistens okay, aber es hängt vom Abend ab", type: "ambivert" },
         ],
       },
       {
@@ -842,7 +842,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ein ruhiger Abend allein oder zu zweit", type: "introvertiert" },
           { text: "Ausgehen mit vielen Leuten", type: "extrovertiert" },
           { text: "Je nach Wochenverlauf mal so, mal so", type: "ambivert" },
-          { text: "Je nach Wochenverlauf mal so, mal so", type: "ambivert" },
+          { text: "Kommt ganz auf meine Energie an diesem Tag an", type: "ambivert" },
         ],
       },
       {
@@ -851,7 +851,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...schnell überfordert, brauche Anlaufzeit", type: "introvertiert" },
           { text: "...schnell in meinem Element", type: "extrovertiert" },
           { text: "...wohl, wenn ich mich langsam eingewöhnen kann", type: "ambivert" },
-          { text: "...wohl, wenn ich mich langsam eingewöhnen kann", type: "ambivert" },
+          { text: "...zunehmend besser, je länger ich dabei bin", type: "ambivert" },
         ],
       },
       {
@@ -860,7 +860,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...allein und in Stille", type: "introvertiert" },
           { text: "...im Gespräch mit anderen", type: "extrovertiert" },
           { text: "...mal so, mal so, je nach Thema", type: "ambivert" },
-          { text: "...mal so, mal so, je nach Thema", type: "ambivert" },
+          { text: "...unterschiedlich, je nachdem worum es geht", type: "ambivert" },
         ],
       },
       {
@@ -869,7 +869,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Eher zögerlich, ich hatte mir was anderes vorgenommen", type: "introvertiert" },
           { text: "Sofortige Zusage, klingt super!", type: "extrovertiert" },
           { text: "Kommt drauf an, wie mein Tag lief", type: "ambivert" },
-          { text: "Kommt drauf an, wie mein Tag lief", type: "ambivert" },
+          { text: "Hängt von meiner Stimmung in dem Moment ab", type: "ambivert" },
         ],
       },
       {
@@ -878,7 +878,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...eher selten, ich beobachte erstmal", type: "introvertiert" },
           { text: "...oft und gerne als Erste:r", type: "extrovertiert" },
           { text: "...wenn ich wirklich was Wichtiges beizutragen habe", type: "ambivert" },
-          { text: "...wenn ich wirklich was Wichtiges beizutragen habe", type: "ambivert" },
+          { text: "...manchmal öfter, manchmal seltener, je nach Thema", type: "ambivert" },
         ],
       },
       {
@@ -887,7 +887,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ein ruhiger Rückzugsort, wenige Menschen", type: "introvertiert" },
           { text: "Ein Ort mit viel Trubel und Kontakten", type: "extrovertiert" },
           { text: "Beides in einer guten Mischung", type: "ambivert" },
-          { text: "Beides in einer guten Mischung", type: "ambivert" },
+          { text: "Etwas Ruhe und etwas Trubel, im Wechsel", type: "ambivert" },
         ],
       },
       {
@@ -896,7 +896,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...bin ich komplett erschöpft", type: "introvertiert" },
           { text: "...bin ich eher noch aufgedreht", type: "extrovertiert" },
           { text: "...brauche ich kurz Ruhe, dann geht's wieder", type: "ambivert" },
-          { text: "...brauche ich kurz Ruhe, dann geht's wieder", type: "ambivert" },
+          { text: "...ist es unterschiedlich, mal erschöpft, mal noch wach", type: "ambivert" },
         ],
       },
       {
@@ -905,7 +905,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...der/die ruhige Beobachter:in", type: "introvertiert" },
           { text: "...die Seele jeder Party", type: "extrovertiert" },
           { text: "...unterschiedlich, je nach Anlass", type: "ambivert" },
-          { text: "...unterschiedlich, je nach Anlass", type: "ambivert" },
+          { text: "...beides, je nachdem in welcher Stimmung ich bin", type: "ambivert" },
         ],
       },
     ],
@@ -959,7 +959,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mir kommen fast selbst die Tränen", type: "hochempathisch" },
           { text: "Ich fühle mit, bleibe aber gefasst und höre zu", type: "ausgewogen" },
           { text: "Ich frage sachlich, was ich praktisch helfen kann", type: "sachlich" },
-          { text: "Ich frage sachlich, was ich praktisch helfen kann", type: "sachlich" },
+          { text: "Ich überlege direkt, was jetzt konkret zu tun ist", type: "sachlich" },
         ],
       },
       {
@@ -968,7 +968,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich bin komplett mitgenommen", type: "hochempathisch" },
           { text: "Es berührt mich, aber ich bleibe im Film", type: "ausgewogen" },
           { text: "Ich beobachte es eher distanziert", type: "sachlich" },
-          { text: "Ich beobachte es eher distanziert", type: "sachlich" },
+          { text: "Ich nehme es eher als Geschichte wahr, ohne große Regung", type: "sachlich" },
         ],
       },
       {
@@ -977,7 +977,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich merke es sofort und spreche ihn an", type: "hochempathisch" },
           { text: "Ich bemerke es und frage vorsichtig nach", type: "ausgewogen" },
           { text: "Ich merke es erst, wenn er es sagt", type: "sachlich" },
-          { text: "Ich merke es erst, wenn er es sagt", type: "sachlich" },
+          { text: "Sowas fällt mir eher selten von allein auf", type: "sachlich" },
         ],
       },
       {
@@ -986,7 +986,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...emotional stark involviert und mittendrin", type: "hochempathisch" },
           { text: "...bemüht, beide Seiten zu verstehen", type: "ausgewogen" },
           { text: "...eher neutral und faktenorientiert", type: "sachlich" },
-          { text: "...eher neutral und faktenorientiert", type: "sachlich" },
+          { text: "...darauf bedacht, die Fakten zu klären", type: "sachlich" },
         ],
       },
       {
@@ -995,7 +995,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...selbst emotional erschöpft", type: "hochempathisch" },
           { text: "...berührt, aber stabil", type: "ausgewogen" },
           { text: "...unverändert, es war ein normales Gespräch", type: "sachlich" },
-          { text: "...unverändert, es war ein normales Gespräch", type: "sachlich" },
+          { text: "...eigentlich wie vorher, es hat mich kaum mitgenommen", type: "sachlich" },
         ],
       },
       {
@@ -1004,7 +1004,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Es berührt mich sofort, ich frage nach", type: "hochempathisch" },
           { text: "Ich überlege kurz, ob ich helfen kann", type: "ausgewogen" },
           { text: "Ich gehe eher unbeteiligt weiter", type: "sachlich" },
-          { text: "Ich gehe eher unbeteiligt weiter", type: "sachlich" },
+          { text: "Ich nehme es wahr, geh aber normal weiter", type: "sachlich" },
         ],
       },
       {
@@ -1013,7 +1013,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...wie es bei der Person ankommen könnte", type: "hochempathisch" },
           { text: "...eine gute Balance aus Klarheit und Rücksicht", type: "ausgewogen" },
           { text: "...die sachliche Richtigkeit des Inhalts", type: "sachlich" },
-          { text: "...die sachliche Richtigkeit des Inhalts", type: "sachlich" },
+          { text: "...ob das Gesagte inhaltlich stimmt", type: "sachlich" },
         ],
       },
       {
@@ -1022,7 +1022,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Sehr oft, es interessiert mich wirklich", type: "hochempathisch" },
           { text: "Regelmäßig, vor allem bei nahestehenden Menschen", type: "ausgewogen" },
           { text: "Eher selten, außer es liegt nahe", type: "sachlich" },
-          { text: "Eher selten, außer es liegt nahe", type: "sachlich" },
+          { text: "Nicht besonders oft, es ergibt sich eher selten", type: "sachlich" },
         ],
       },
       {
@@ -1031,7 +1031,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...bringen mich sofort zum Weinen", type: "hochempathisch" },
           { text: "...berühren mich spürbar", type: "ausgewogen" },
           { text: "...beeindrucken mich eher wenig emotional", type: "sachlich" },
-          { text: "...beeindrucken mich eher wenig emotional", type: "sachlich" },
+          { text: "...lassen mich meist eher unberührt", type: "sachlich" },
         ],
       },
     ],
@@ -1085,7 +1085,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...aufgeräumt, alles an seinem Platz", type: "ordentlich" },
           { text: "...ein kreatives Durcheinander, aber ich finde alles", type: "kreativchaos" },
           { text: "...kommt drauf an, wie die Woche lief", type: "gemischt" },
-          { text: "...kommt drauf an, wie die Woche lief", type: "gemischt" },
+          { text: "...unterschiedlich, je nachdem wie viel gerade los ist", type: "gemischt" },
         ],
       },
       {
@@ -1094,7 +1094,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Kein Problem, es ist eh schon aufgeräumt", type: "ordentlich" },
           { text: "Ich schiebe alles schnell in eine Ecke", type: "kreativchaos" },
           { text: "Ich räume in Rekordzeit das Nötigste weg", type: "gemischt" },
-          { text: "Ich räume in Rekordzeit das Nötigste weg", type: "gemischt" },
+          { text: "Ich schaff in Eile wenigstens das Gröbste weg", type: "gemischt" },
         ],
       },
       {
@@ -1103,7 +1103,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Regelmäßig, das ist Routine für mich", type: "ordentlich" },
           { text: "Selten, nur wenn's wirklich nötig wird", type: "kreativchaos" },
           { text: "Phasenweise, mal mehr, mal weniger", type: "gemischt" },
-          { text: "Phasenweise, mal mehr, mal weniger", type: "gemischt" },
+          { text: "Es kommt in Wellen, mal öfter, mal seltener", type: "gemischt" },
         ],
       },
       {
@@ -1112,7 +1112,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Sofort gefunden, fester Platz an der Tür", type: "ordentlich" },
           { text: "Dauert, aber ich weiß irgendwie, wo ungefähr", type: "kreativchaos" },
           { text: "Unterschiedlich, mal schnell, mal nervig", type: "gemischt" },
-          { text: "Unterschiedlich, mal schnell, mal nervig", type: "gemischt" },
+          { text: "Kommt drauf an, wie ordentlich die Woche war", type: "gemischt" },
         ],
       },
       {
@@ -1121,7 +1121,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...passiert sofort, kein Wäscheberg in Sicht", type: "ordentlich" },
           { text: "...der 'saubere Wäscheberg' ist mein System", type: "kreativchaos" },
           { text: "...meistens zeitnah, manchmal stapelt es sich", type: "gemischt" },
-          { text: "...meistens zeitnah, manchmal stapelt es sich", type: "gemischt" },
+          { text: "...meist okay, aber manchmal wird's doch ein Berg", type: "gemischt" },
         ],
       },
       {
@@ -1130,7 +1130,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Stressig, ich muss sie sofort beseitigen", type: "ordentlich" },
           { text: "Völlig normal, stört mich kaum", type: "kreativchaos" },
           { text: "Kommt auf mein Level an, manchmal nervt's", type: "gemischt" },
-          { text: "Kommt auf mein Level an, manchmal nervt's", type: "gemischt" },
+          { text: "Je nach Tag, an manchen stört's mich mehr", type: "gemischt" },
         ],
       },
     ],
@@ -1184,7 +1184,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Kein Problem, ich bin schnell wach", type: "morgenmensch" },
           { text: "Das ist für mich mitten in der Nacht", type: "nachteule" },
           { text: "Geht so, kommt auf den Vortag an", type: "flexibel" },
-          { text: "Geht so, kommt auf den Vortag an", type: "flexibel" },
+          { text: "Unterschiedlich, je nachdem wie spät ich ins Bett kam", type: "flexibel" },
         ],
       },
       {
@@ -1193,7 +1193,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...schon ziemlich müde", type: "morgenmensch" },
           { text: "...gerade erst richtig wach", type: "nachteule" },
           { text: "...unterschiedlich, mal müde, mal wach", type: "flexibel" },
-          { text: "...unterschiedlich, mal müde, mal wach", type: "flexibel" },
+          { text: "...kommt auf den Tag an, mal so, mal so", type: "flexibel" },
         ],
       },
       {
@@ -1202,7 +1202,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...morgens, direkt nach dem Aufstehen", type: "morgenmensch" },
           { text: "...abends oder nachts", type: "nachteule" },
           { text: "...wann immer sich gerade Zeit findet", type: "flexibel" },
-          { text: "...wann immer sich gerade Zeit findet", type: "flexibel" },
+          { text: "...dann, wann es gerade am besten passt", type: "flexibel" },
         ],
       },
       {
@@ -1211,7 +1211,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...trotzdem früh, aus Gewohnheit", type: "morgenmensch" },
           { text: "...spät, endlich mal ausschlafen", type: "nachteule" },
           { text: "...zu ganz unterschiedlichen Zeiten", type: "flexibel" },
-          { text: "...zu ganz unterschiedlichen Zeiten", type: "flexibel" },
+          { text: "...unterschiedlich, je nach Vorwoche", type: "flexibel" },
         ],
       },
       {
@@ -1220,7 +1220,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...super, perfekte Zeit für mich", type: "morgenmensch" },
           { text: "...furchtbar, viel zu früh", type: "nachteule" },
           { text: "...machbar, wenn ich mich drauf einstelle", type: "flexibel" },
-          { text: "...machbar, wenn ich mich drauf einstelle", type: "flexibel" },
+          { text: "...geht schon, mit etwas Vorlauf kein Problem", type: "flexibel" },
         ],
       },
       {
@@ -1229,7 +1229,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...beim Morgenkaffee", type: "morgenmensch" },
           { text: "...spät abends im Bett", type: "nachteule" },
           { text: "...zu ganz unterschiedlichen Tageszeiten", type: "flexibel" },
-          { text: "...zu ganz unterschiedlichen Tageszeiten", type: "flexibel" },
+          { text: "...eigentlich zu jeder Tageszeit, ganz unterschiedlich", type: "flexibel" },
         ],
       },
     ],
@@ -1283,7 +1283,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Detaillierte Liste mit Tagesplänen", type: "planer" },
           { text: "Koffer packen, Flug buchen, fertig", type: "spontan" },
           { text: "Unterkunft fix, Rest spontan vor Ort", type: "mix" },
-          { text: "Unterkunft fix, Rest spontan vor Ort", type: "mix" },
+          { text: "Die wichtigsten Eckpunkte stehen, Rest ergibt sich", type: "mix" },
         ],
       },
       {
@@ -1292,7 +1292,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Vorher recherchiert, mit Bewertungen verglichen", type: "planer" },
           { text: "Das, was mir spontan über den Weg läuft", type: "spontan" },
           { text: "Ein, zwei vorab gemerkt, sonst spontan", type: "mix" },
-          { text: "Ein, zwei vorab gemerkt, sonst spontan", type: "mix" },
+          { text: "Ein paar Favoriten im Hinterkopf, Rest nach Lust", type: "mix" },
         ],
       },
       {
@@ -1301,7 +1301,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Das bringt meinen ganzen Plan durcheinander", type: "planer" },
           { text: "Kein Problem, ich schaue einfach, was passiert", type: "spontan" },
           { text: "Ich passe den Rest des Tages flexibel an", type: "mix" },
-          { text: "Ich passe den Rest des Tages flexibel an", type: "mix" },
+          { text: "Ich bau den Plan spontan etwas um", type: "mix" },
         ],
       },
       {
@@ -1310,7 +1310,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mehrere, ich will bestens vorbereitet sein", type: "planer" },
           { text: "Keine, ich entdecke lieber selbst", type: "spontan" },
           { text: "Einen groben Überblick reicht mir", type: "mix" },
-          { text: "Einen groben Überblick reicht mir", type: "mix" },
+          { text: "Nur so viel, dass ich ungefähr Bescheid weiß", type: "mix" },
         ],
       },
       {
@@ -1319,7 +1319,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...bis auf den Euro genau im Voraus", type: "planer" },
           { text: "...gar nicht, ich schau, wie weit es reicht", type: "spontan" },
           { text: "...grob, mit etwas Puffer für Spontanes", type: "mix" },
-          { text: "...grob, mit etwas Puffer für Spontanes", type: "mix" },
+          { text: "...ungefähr, mit etwas Luft nach oben", type: "mix" },
         ],
       },
       {
@@ -1328,7 +1328,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Passt das in meinen Zeitplan? Ich muss checken", type: "planer" },
           { text: "Sofort dahin, klingt aufregend!", type: "spontan" },
           { text: "Wenn Zeit ist, gerne, sonst beim nächsten Mal", type: "mix" },
-          { text: "Wenn Zeit ist, gerne, sonst beim nächsten Mal", type: "mix" },
+          { text: "Wenn's reinpasst, klar - sonst auch okay", type: "mix" },
         ],
       },
       {
@@ -1337,7 +1337,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...Monate im Voraus", type: "planer" },
           { text: "...kurzfristig, je nach Lust", type: "spontan" },
           { text: "...ein paar Wochen vorher", type: "mix" },
-          { text: "...ein paar Wochen vorher", type: "mix" },
+          { text: "...mit etwas Vorlauf, aber nicht zu früh", type: "mix" },
         ],
       },
       {
@@ -1346,7 +1346,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...die perfekt geplanten Highlights", type: "planer" },
           { text: "...die unerwarteten, spontanen Momente", type: "spontan" },
           { text: "...eine gute Mischung aus beidem", type: "mix" },
-          { text: "...eine gute Mischung aus beidem", type: "mix" },
+          { text: "...eine Kombination aus Plan und Zufall", type: "mix" },
         ],
       },
       {
@@ -1355,7 +1355,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...nach einer durchdachten Packliste", type: "planer" },
           { text: "...in letzter Minute, irgendwie passt's", type: "spontan" },
           { text: "...mit einer groben Liste im Kopf", type: "mix" },
-          { text: "...mit einer groben Liste im Kopf", type: "mix" },
+          { text: "...nach Gefühl, mit einer ungefähren Vorstellung", type: "mix" },
         ],
       },
     ],
@@ -1409,7 +1409,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...bin zufrieden, ich habe wieder was gespart", type: "sparfuchs" },
           { text: "...freue mich über die schönen Dinge, die ich mir geleistet habe", type: "genuss" },
           { text: "...schaue eigentlich eher selten aktiv nach", type: "vermeider" },
-          { text: "...schaue eigentlich eher selten aktiv nach", type: "vermeider" },
+          { text: "...vermeide es eigentlich, genauer hinzuschauen", type: "vermeider" },
         ],
       },
       {
@@ -1418,7 +1418,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Direkt aufs Sparkonto", type: "sparfuchs" },
           { text: "Wird sofort in etwas Schönes investiert", type: "genuss" },
           { text: "Bleibt erstmal einfach liegen", type: "vermeider" },
-          { text: "Bleibt erstmal einfach liegen", type: "vermeider" },
+          { text: "Ich denke später mal drüber nach, was ich damit mache", type: "vermeider" },
         ],
       },
       {
@@ -1427,7 +1427,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Regelmäßig, fast jede Woche", type: "sparfuchs" },
           { text: "Unregelmäßig, hauptsächlich wenn's mich interessiert", type: "genuss" },
           { text: "Selten bis nie", type: "vermeider" },
-          { text: "Selten bis nie", type: "vermeider" },
+          { text: "Kaum, das Thema meide ich eher", type: "vermeider" },
         ],
       },
       {
@@ -1436,7 +1436,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich überlege lange, ob sich die Ausgabe lohnt", type: "sparfuchs" },
           { text: "Ich kaufe es sofort, das Leben ist kurz", type: "genuss" },
           { text: "Ich schiebe die Entscheidung erstmal vor mir her", type: "vermeider" },
-          { text: "Ich schiebe die Entscheidung erstmal vor mir her", type: "vermeider" },
+          { text: "Ich verdräng die Entscheidung erstmal", type: "vermeider" },
         ],
       },
       {
@@ -1445,7 +1445,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Vertraut, ich arbeite gerne damit", type: "sparfuchs" },
           { text: "Etwas einengend für meinen Geschmack", type: "genuss" },
           { text: "Ehrlich gesagt etwas unangenehm", type: "vermeider" },
-          { text: "Ehrlich gesagt etwas unangenehm", type: "vermeider" },
+          { text: "Ich weich dem Thema am liebsten aus", type: "vermeider" },
         ],
       },
       {
@@ -1454,7 +1454,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...sofort, am liebsten direkt am selben Tag", type: "sparfuchs" },
           { text: "...zeitnah, aber ohne große Eile", type: "genuss" },
           { text: "...manchmal ziemlich spät", type: "vermeider" },
-          { text: "...manchmal ziemlich spät", type: "vermeider" },
+          { text: "...oft erst, wenn's schon knapp wird", type: "vermeider" },
         ],
       },
       {
@@ -1463,7 +1463,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...ausführlich Preise und Angebote", type: "sparfuchs" },
           { text: "...kaum, Hauptsache es gefällt mir", type: "genuss" },
           { text: "...eher wenig, ich kaufe eher spontan", type: "vermeider" },
-          { text: "...eher wenig, ich kaufe eher spontan", type: "vermeider" },
+          { text: "...gar nicht groß, ich will's einfach nicht wissen", type: "vermeider" },
         ],
       },
       {
@@ -1472,7 +1472,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Zu viel unnötig auszugeben", type: "sparfuchs" },
           { text: "Mir nichts Schönes gönnen zu können", type: "genuss" },
           { text: "Der ganze Überblick allgemein", type: "vermeider" },
-          { text: "Der ganze Überblick allgemein", type: "vermeider" },
+          { text: "Mich überhaupt damit zu beschäftigen", type: "vermeider" },
         ],
       },
       {
@@ -1481,7 +1481,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich gebe gerne konkrete Sparttipps", type: "sparfuchs" },
           { text: "Ich rate, sich auch mal was zu gönnen", type: "genuss" },
           { text: "Ich fühle mich dafür nicht die richtige Ansprechperson", type: "vermeider" },
-          { text: "Ich fühle mich dafür nicht die richtige Ansprechperson", type: "vermeider" },
+          { text: "Ich weiche dem Thema lieber aus", type: "vermeider" },
         ],
       },
     ],
@@ -1535,7 +1535,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Weg damit, ich brauch es nicht", type: "minimalist" },
           { text: "Behalten, es hängt eine Erinnerung dran", type: "sammler" },
           { text: "Nur behalten, wenn es wirklich noch passt", type: "kurator" },
-          { text: "Nur behalten, wenn es wirklich noch passt", type: "kurator" },
+          { text: "Nur, wenn es noch zu mir passt und gut sitzt", type: "kurator" },
         ],
       },
       {
@@ -1544,7 +1544,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Übersichtlich, jedes Teil hat seinen Zweck", type: "minimalist" },
           { text: "Vollgepackt mit Erinnerungsstücken aus jeder Lebensphase", type: "sammler" },
           { text: "Sorgfältig ausgewählte Lieblingsstücke", type: "kurator" },
-          { text: "Sorgfältig ausgewählte Lieblingsstücke", type: "kurator" },
+          { text: "Bewusst zusammengestellt, jedes Teil mit Bedacht gewählt", type: "kurator" },
         ],
       },
       {
@@ -1553,7 +1553,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich kaufe fast nie welche", type: "minimalist" },
           { text: "Ich sammle sie liebend gerne", type: "sammler" },
           { text: "Nur ein besonderes Stück pro Reise", type: "kurator" },
-          { text: "Nur ein besonderes Stück pro Reise", type: "kurator" },
+          { text: "Ich such mir gezielt ein einziges besonderes Stück aus", type: "kurator" },
         ],
       },
       {
@@ -1562,7 +1562,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Easy, ich besitze eh nicht viel", type: "minimalist" },
           { text: "Aufwendig, so viele liebe Erinnerungsstücke", type: "sammler" },
           { text: "Gut planbar, da alles ausgewählt ist", type: "kurator" },
-          { text: "Gut planbar, da alles ausgewählt ist", type: "kurator" },
+          { text: "Entspannt, weil ich nur Ausgewähltes besitze", type: "kurator" },
         ],
       },
       {
@@ -1571,7 +1571,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...selten, nur wenn wirklich nötig", type: "minimalist" },
           { text: "...oft, viele Dinge gefallen mir einfach", type: "sammler" },
           { text: "...bewusst, nach reiflicher Überlegung", type: "kurator" },
-          { text: "...bewusst, nach reiflicher Überlegung", type: "kurator" },
+          { text: "...mit Bedacht, nur wenn es wirklich passt", type: "kurator" },
         ],
       },
       {
@@ -1580,7 +1580,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...beruhigend und einladend", type: "minimalist" },
           { text: "...irgendwie unpersönlich und leer", type: "sammler" },
           { text: "...wie eine spannende Möglichkeit, ihn gezielt zu füllen", type: "kurator" },
-          { text: "...wie eine spannende Möglichkeit, ihn gezielt zu füllen", type: "kurator" },
+          { text: "...wie eine Einladung, ihn mit Bedacht einzurichten", type: "kurator" },
         ],
       },
     ],
@@ -1634,7 +1634,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Einen klaren Plan mit Meilensteinen", type: "strukturiert" },
           { text: "Freiraum, um erstmal Ideen zu sammeln", type: "kreativ" },
           { text: "Ein grobes Ziel, dann lege ich los", type: "pragmatisch" },
-          { text: "Ein grobes Ziel, dann lege ich los", type: "pragmatisch" },
+          { text: "Ich will einfach direkt loslegen können", type: "pragmatisch" },
         ],
       },
       {
@@ -1643,7 +1643,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...ordentlich organisiert mit festem System", type: "strukturiert" },
           { text: "...inspirierend, mit vielen Anregungen um mich herum", type: "kreativ" },
           { text: "...funktional, Hauptsache es klappt", type: "pragmatisch" },
-          { text: "...funktional, Hauptsache es klappt", type: "pragmatisch" },
+          { text: "...praktisch, ohne viel Schnickschnack", type: "pragmatisch" },
         ],
       },
       {
@@ -1652,7 +1652,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...strukturiert, in klaren Punkten", type: "strukturiert" },
           { text: "...offen im Gespräch, mit Raum für Ideen", type: "kreativ" },
           { text: "...knapp und konkret, worauf es ankommt", type: "pragmatisch" },
-          { text: "...knapp und konkret, worauf es ankommt", type: "pragmatisch" },
+          { text: "...direkt und ohne viel Drumherum", type: "pragmatisch" },
         ],
       },
       {
@@ -1661,7 +1661,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...brauche ich Zeit, um neu zu planen", type: "strukturiert" },
           { text: "...sehe ich sofort neue Möglichkeiten darin", type: "kreativ" },
           { text: "...suche ich schnell einen pragmatischen Weg weiter", type: "pragmatisch" },
-          { text: "...suche ich schnell einen pragmatischen Weg weiter", type: "pragmatisch" },
+          { text: "...finde ich zügig eine machbare Alternative", type: "pragmatisch" },
         ],
       },
       {
@@ -1670,7 +1670,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...hilfreich, sie geben mir Struktur", type: "strukturiert" },
           { text: "...einengend für meinen kreativen Prozess", type: "kreativ" },
           { text: "...normal, ich arbeite einfach drauf hin", type: "pragmatisch" },
-          { text: "...normal, ich arbeite einfach drauf hin", type: "pragmatisch" },
+          { text: "...unaufgeregt, ich erledige es einfach", type: "pragmatisch" },
         ],
       },
       {
@@ -1679,7 +1679,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...klaren To-Dos und nächsten Schritten", type: "strukturiert" },
           { text: "...neuen, ungewöhnlichen Ideen", type: "kreativ" },
           { text: "...konkreten, umsetzbaren Vorschlägen", type: "pragmatisch" },
-          { text: "...konkreten, umsetzbaren Vorschlägen", type: "pragmatisch" },
+          { text: "...Vorschlägen, die sich direkt umsetzen lassen", type: "pragmatisch" },
         ],
       },
       {
@@ -1688,7 +1688,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ein sauber abgeschlossener Prozess", type: "strukturiert" },
           { text: "Eine originelle Lösung zu finden", type: "kreativ" },
           { text: "Ein sichtbares, nützliches Ergebnis", type: "pragmatisch" },
-          { text: "Ein sichtbares, nützliches Ergebnis", type: "pragmatisch" },
+          { text: "Etwas Brauchbares am Ende in der Hand zu haben", type: "pragmatisch" },
         ],
       },
       {
@@ -1697,7 +1697,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...minutiös durchgeplant", type: "strukturiert" },
           { text: "...eher locker, mit viel offener Zeit", type: "kreativ" },
           { text: "...gefüllt mit dem Nötigsten, effizient", type: "pragmatisch" },
-          { text: "...gefüllt mit dem Nötigsten, effizient", type: "pragmatisch" },
+          { text: "...knapp, aber effizient getaktet", type: "pragmatisch" },
         ],
       },
       {
@@ -1706,7 +1706,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...alles nach Plan gelaufen ist", type: "strukturiert" },
           { text: "...du eine wirklich gute Idee hattest", type: "kreativ" },
           { text: "...du konkret etwas abgeschlossen hast", type: "pragmatisch" },
-          { text: "...du konkret etwas abgeschlossen hast", type: "pragmatisch" },
+          { text: "...etwas erledigt vom Tisch ist", type: "pragmatisch" },
         ],
       },
     ],
@@ -1760,7 +1760,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wer ist noch dabei, lass uns loslegen", type: "team" },
           { text: "Ich fange am liebsten gleich selbst an", type: "solo" },
           { text: "Kommt auf die Art des Projekts an", type: "situativ" },
-          { text: "Kommt auf die Art des Projekts an", type: "situativ" },
+          { text: "Hängt davon ab, was gerade gebraucht wird", type: "situativ" },
         ],
       },
       {
@@ -1769,7 +1769,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...besser mit anderen, die mich pushen", type: "team" },
           { text: "...deutlich effizienter allein und fokussiert", type: "solo" },
           { text: "...unterschiedlich, je nach Aufgabe", type: "situativ" },
-          { text: "...unterschiedlich, je nach Aufgabe", type: "situativ" },
+          { text: "...verschieden, je nachdem was ansteht", type: "situativ" },
         ],
       },
       {
@@ -1778,7 +1778,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich hole mir Meinungen von anderen ein", type: "team" },
           { text: "Ich entscheide lieber allein", type: "solo" },
           { text: "Kommt drauf an, wie wichtig die Entscheidung ist", type: "situativ" },
-          { text: "Kommt drauf an, wie wichtig die Entscheidung ist", type: "situativ" },
+          { text: "Hängt von der Tragweite der Entscheidung ab", type: "situativ" },
         ],
       },
       {
@@ -1787,7 +1787,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...in der Gruppe, im Austausch mit anderen", type: "team" },
           { text: "...allein, in Ruhe für mich", type: "solo" },
           { text: "...erst allein, dann im Austausch verfeinern", type: "situativ" },
-          { text: "...erst allein, dann im Austausch verfeinern", type: "situativ" },
+          { text: "...unterschiedlich, mal allein, mal in der Gruppe", type: "situativ" },
         ],
       },
       {
@@ -1796,7 +1796,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wenn das ganze Team gelobt wird", type: "team" },
           { text: "Wenn meine eigene Leistung anerkannt wird", type: "solo" },
           { text: "Beides ist mir wichtig, je nach Kontext", type: "situativ" },
-          { text: "Beides ist mir wichtig, je nach Kontext", type: "situativ" },
+          { text: "Kommt drauf an, was gerade zählt", type: "situativ" },
         ],
       },
       {
@@ -1805,7 +1805,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ungewohnt, mir fehlt der Austausch", type: "team" },
           { text: "Super, endlich freie Bahn", type: "solo" },
           { text: "Geht, aber ich hätte gern etwas Rückhalt", type: "situativ" },
-          { text: "Geht, aber ich hätte gern etwas Rückhalt", type: "situativ" },
+          { text: "Machbar, auch wenn ich mir Unterstützung wünschen würde", type: "situativ" },
         ],
       },
     ],
@@ -1859,7 +1859,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mit einer inspirierenden Vision, wohin die Reise geht", type: "visionaer" },
           { text: "Mit einem Gespräch über die Stärken jeder Person", type: "coach" },
           { text: "Mit einem klaren Plan und sofortigem Start", type: "macher" },
-          { text: "Mit einem klaren Plan und sofortigem Start", type: "macher" },
+          { text: "Ich verteile sofort klare Aufgaben und lege los", type: "macher" },
         ],
       },
       {
@@ -1868,7 +1868,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich erinnere an das größere Ziel und die Bedeutung", type: "visionaer" },
           { text: "Ich biete Unterstützung und Entwicklung an", type: "coach" },
           { text: "Ich gebe klares, direktes Feedback", type: "macher" },
-          { text: "Ich gebe klares, direktes Feedback", type: "macher" },
+          { text: "Ich spreche es direkt und ohne Umschweife an", type: "macher" },
         ],
       },
       {
@@ -1877,7 +1877,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ausgerichtet am langfristigen Ziel", type: "visionaer" },
           { text: "Im Dialog, mit viel Beteiligung aller", type: "coach" },
           { text: "Schnell und pragmatisch", type: "macher" },
-          { text: "Schnell und pragmatisch", type: "macher" },
+          { text: "Zügig, ohne lange abzuwägen", type: "macher" },
         ],
       },
       {
@@ -1886,7 +1886,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Etwas Großes zu erschaffen", type: "visionaer" },
           { text: "Menschen wachsen zu sehen", type: "coach" },
           { text: "Sichtbare Ergebnisse zu liefern", type: "macher" },
-          { text: "Sichtbare Ergebnisse zu liefern", type: "macher" },
+          { text: "Dinge tatsächlich ins Ziel zu bringen", type: "macher" },
         ],
       },
       {
@@ -1895,7 +1895,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich erinnere an das eigentliche große Ziel", type: "visionaer" },
           { text: "Ich frage jede Person nach ihrer Sicht", type: "coach" },
           { text: "Ich bringe es sofort auf den Punkt und lenke um", type: "macher" },
-          { text: "Ich bringe es sofort auf den Punkt und lenke um", type: "macher" },
+          { text: "Ich greife sofort ein und bringe es zurück auf Kurs", type: "macher" },
         ],
       },
       {
@@ -1904,7 +1904,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Verknüpft mit dem großen Bild und Sinn dahinter", type: "visionaer" },
           { text: "Individuell, auf die Person zugeschnitten", type: "coach" },
           { text: "Kurz, klar und konkret", type: "macher" },
-          { text: "Kurz, klar und konkret", type: "macher" },
+          { text: "Direkt und ohne viele Worte", type: "macher" },
         ],
       },
       {
@@ -1913,7 +1913,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...überzeuge ich mit der großen Perspektive", type: "visionaer" },
           { text: "...höre ich mir alle Bedenken genau an", type: "coach" },
           { text: "...entscheide ich trotzdem, wenn ich überzeugt bin", type: "macher" },
-          { text: "...entscheide ich trotzdem, wenn ich überzeugt bin", type: "macher" },
+          { text: "...setze ich mich durch, wenn ich vom Weg überzeugt bin", type: "macher" },
         ],
       },
       {
@@ -1922,7 +1922,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...inspirierend und zukunftsorientiert", type: "visionaer" },
           { text: "...unterstützend und fördernd", type: "coach" },
           { text: "...entscheidungsfreudig und tatkräftig", type: "macher" },
-          { text: "...entscheidungsfreudig und tatkräftig", type: "macher" },
+          { text: "...zupackend und schnell in der Umsetzung", type: "macher" },
         ],
       },
       {
@@ -1931,7 +1931,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Dass alle an dasselbe große Ziel glauben", type: "visionaer" },
           { text: "Dass sich jede Person entwickeln kann", type: "coach" },
           { text: "Dass alle effizient zusammenarbeiten", type: "macher" },
-          { text: "Dass alle effizient zusammenarbeiten", type: "macher" },
+          { text: "Dass die Arbeit schnell vorangeht", type: "macher" },
         ],
       },
       {
@@ -1940,7 +1940,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich richte den Blick wieder auf das Ziel", type: "visionaer" },
           { text: "Ich sorge dafür, dass sich niemand allein fühlt", type: "coach" },
           { text: "Ich suche sofort nach dem nächsten Schritt", type: "macher" },
-          { text: "Ich suche sofort nach dem nächsten Schritt", type: "macher" },
+          { text: "Ich handle sofort und packe die Lösung an", type: "macher" },
         ],
       },
       {
@@ -1949,7 +1949,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mit einem klaren, großen Zukunftsbild", type: "visionaer" },
           { text: "Mit Fokus auf die Entwicklung der Menschen", type: "coach" },
           { text: "Mit konkreten, messbaren Meilensteinen", type: "macher" },
-          { text: "Mit konkreten, messbaren Meilensteinen", type: "macher" },
+          { text: "Mit klaren Etappenzielen, die ich abhake", type: "macher" },
         ],
       },
       {
@@ -1958,7 +1958,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mich um die kleinen Details zu kümmern", type: "visionaer" },
           { text: "Schnelle, harte Entscheidungen zu treffen", type: "coach" },
           { text: "Genug Geduld für langsame Prozesse zu haben", type: "macher" },
-          { text: "Genug Geduld für langsame Prozesse zu haben", type: "macher" },
+          { text: "Auf langsame Abstimmungsrunden zu warten", type: "macher" },
         ],
       },
       {
@@ -1967,7 +1967,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Als Beweis, dass die große Idee funktioniert", type: "visionaer" },
           { text: "Als Ergebnis des Wachstums jeder einzelnen Person", type: "coach" },
           { text: "Als klares, messbares Ergebnis harter Arbeit", type: "macher" },
-          { text: "Als klares, messbares Ergebnis harter Arbeit", type: "macher" },
+          { text: "Als handfesten Beweis harter Arbeit", type: "macher" },
         ],
       },
       {
@@ -1976,7 +1976,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich erinnere an das gemeinsame große Ziel", type: "visionaer" },
           { text: "Ich biete ein persönliches Gespräch an", type: "coach" },
           { text: "Ich gebe klare, handfeste Anweisungen", type: "macher" },
-          { text: "Ich gebe klare, handfeste Anweisungen", type: "macher" },
+          { text: "Ich gebe konkrete Schritte vor, an denen man sich festhalten kann", type: "macher" },
         ],
       },
       {
@@ -1985,7 +1985,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich erkläre zuerst das große Ganze", type: "visionaer" },
           { text: "Ich nehme mir viel Zeit für persönliches Onboarding", type: "coach" },
           { text: "Ich gebe klare Aufgaben zum direkten Einstieg", type: "macher" },
-          { text: "Ich gebe klare Aufgaben zum direkten Einstieg", type: "macher" },
+          { text: "Ich lasse es direkt mit konkreten Aufgaben loslegen", type: "macher" },
         ],
       },
       {
@@ -1994,7 +1994,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Andere für eine große Idee zu begeistern", type: "visionaer" },
           { text: "Jede Person bestmöglich zu unterstützen", type: "coach" },
           { text: "Verlässlich Ergebnisse zu liefern", type: "macher" },
-          { text: "Verlässlich Ergebnisse zu liefern", type: "macher" },
+          { text: "Zuverlässig zu liefern, worauf man sich verlassen kann", type: "macher" },
         ],
       },
     ],
@@ -2048,7 +2048,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich sage klar, dass ich gerade keine Zeit habe", type: "grenzensetzer" },
           { text: "Ich überlege, ob es sich zeitlich einrichten lässt", type: "abwaeger" },
           { text: "Ich sage zu, auch wenn es eng wird", type: "gefallensuecht" },
-          { text: "Ich sage zu, auch wenn es eng wird", type: "gefallensuecht" },
+          { text: "Ich helf trotzdem, auch wenn's mir eigentlich zu viel ist", type: "gefallensuecht" },
         ],
       },
       {
@@ -2057,7 +2057,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich sage direkt ab", type: "grenzensetzer" },
           { text: "Ich denke erst drüber nach, bevor ich antworte", type: "abwaeger" },
           { text: "Ich sage zu, um niemanden zu enttäuschen", type: "gefallensuecht" },
-          { text: "Ich sage zu, um niemanden zu enttäuschen", type: "gefallensuecht" },
+          { text: "Ich geh meistens doch hin, um niemanden zu kränken", type: "gefallensuecht" },
         ],
       },
       {
@@ -2066,7 +2066,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich spreche es irgendwann klar an", type: "grenzensetzer" },
           { text: "Ich wäge jedes Mal neu ab", type: "abwaeger" },
           { text: "Ich helfe weiter, auch wenn's mich stört", type: "gefallensuecht" },
-          { text: "Ich helfe weiter, auch wenn's mich stört", type: "gefallensuecht" },
+          { text: "Ich mach trotzdem mit, obwohl es mich nervt", type: "gefallensuecht" },
         ],
       },
       {
@@ -2075,7 +2075,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich sage, dass mein Wochenende mir wichtig ist", type: "grenzensetzer" },
           { text: "Ich frage nach Details, bevor ich entscheide", type: "abwaeger" },
           { text: "Ich sage eher zu, auch wenn's mir schwerfällt", type: "gefallensuecht" },
-          { text: "Ich sage eher zu, auch wenn's mir schwerfällt", type: "gefallensuecht" },
+          { text: "Ich willige meistens ein, auch gegen mein Gefühl", type: "gefallensuecht" },
         ],
       },
       {
@@ -2084,7 +2084,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Erleichtert, es war die richtige Entscheidung", type: "grenzensetzer" },
           { text: "Zufrieden, weil ich es mir gut überlegt habe", type: "abwaeger" },
           { text: "Schuldig, obwohl es gerechtfertigt war", type: "gefallensuecht" },
-          { text: "Schuldig, obwohl es gerechtfertigt war", type: "gefallensuecht" },
+          { text: "Unwohl, ich denk noch lang drüber nach", type: "gefallensuecht" },
         ],
       },
       {
@@ -2093,7 +2093,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich bleibe bei meiner Entscheidung", type: "grenzensetzer" },
           { text: "Ich erkläre nochmal ruhig meine Gründe", type: "abwaeger" },
           { text: "Ich überlege, ob ich doch noch zusage", type: "gefallensuecht" },
-          { text: "Ich überlege, ob ich doch noch zusage", type: "gefallensuecht" },
+          { text: "Ich fühl mich schlecht und knick oft ein", type: "gefallensuecht" },
         ],
       },
     ],
@@ -2147,7 +2147,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Wie fühlt es sich an? Das entscheidet meist", type: "bauch" },
           { text: "Eine Liste mit Vor- und Nachteilen", type: "kopf" },
           { text: "Erst das Gefühl checken, dann die Fakten", type: "kombi" },
-          { text: "Erst das Gefühl checken, dann die Fakten", type: "kombi" },
+          { text: "Ich spür erstmal rein und prüfe es danach nüchtern", type: "kombi" },
         ],
       },
       {
@@ -2156,7 +2156,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...spontan, wenn mir etwas gefällt", type: "bauch" },
           { text: "...nach Preisvergleich und Recherche", type: "kopf" },
           { text: "...spontan, aber mit kurzem Realitätscheck", type: "kombi" },
-          { text: "...spontan, aber mit kurzem Realitätscheck", type: "kombi" },
+          { text: "...aus dem Bauch, aber mit kurzem Nachdenken", type: "kombi" },
         ],
       },
       {
@@ -2165,7 +2165,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...weiß ich meist sofort, ob's passt", type: "bauch" },
           { text: "...brauche ich mehrere Treffen für ein Urteil", type: "kopf" },
           { text: "...habe ich einen ersten Eindruck, prüfe ihn aber", type: "kombi" },
-          { text: "...habe ich einen ersten Eindruck, prüfe ihn aber", type: "kombi" },
+          { text: "...verlass ich mich auf mein Gefühl, hinterfrag es aber", type: "kombi" },
         ],
       },
       {
@@ -2174,7 +2174,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich höre am Ende doch auf mich selbst", type: "bauch" },
           { text: "Ich wäge alle Meinungen systematisch ab", type: "kopf" },
           { text: "Ich sammle alle Meinungen und prüfe mein Gefühl dazu", type: "kombi" },
-          { text: "Ich sammle alle Meinungen und prüfe mein Gefühl dazu", type: "kombi" },
+          { text: "Ich höre zu, entscheide aber letztlich mit Kopf und Bauch", type: "kombi" },
         ],
       },
       {
@@ -2183,7 +2183,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Nach Gefühl, was sich richtig anfühlt", type: "bauch" },
           { text: "Mit genauer Kalkulation", type: "kopf" },
           { text: "Bauchgefühl, mit einem Zahlen-Check danach", type: "kombi" },
-          { text: "Bauchgefühl, mit einem Zahlen-Check danach", type: "kombi" },
+          { text: "Erst intuitiv, dann rechne ich es nochmal durch", type: "kombi" },
         ],
       },
       {
@@ -2192,7 +2192,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...meist schon nach dem ersten Betreten", type: "bauch" },
           { text: "...erst nach ausführlichem Vergleich mit Alternativen", type: "kopf" },
           { text: "...Bauchgefühl zuerst, dann alle Fakten prüfen", type: "kombi" },
-          { text: "...Bauchgefühl zuerst, dann alle Fakten prüfen", type: "kombi" },
+          { text: "...erst der Eindruck, dann die nüchterne Prüfung", type: "kombi" },
         ],
       },
       {
@@ -2201,7 +2201,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Selten, mein Gefühl liegt meist richtig", type: "bauch" },
           { text: "Auch selten, ich habe ja alles geprüft", type: "kopf" },
           { text: "Kaum, die Kombination funktioniert für mich", type: "kombi" },
-          { text: "Kaum, die Kombination funktioniert für mich", type: "kombi" },
+          { text: "Selten, weil ich beides gegeneinander abwäge", type: "kombi" },
         ],
       },
       {
@@ -2210,7 +2210,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...das Bauchgefühl", type: "bauch" },
           { text: "...die rationale Argumentation", type: "kopf" },
           { text: "...eine Abwägung aus beidem", type: "kombi" },
-          { text: "...eine Abwägung aus beidem", type: "kombi" },
+          { text: "...eine Mischung aus Gefühl und Verstand", type: "kombi" },
         ],
       },
       {
@@ -2219,7 +2219,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Sehr schnell, fast intuitiv", type: "bauch" },
           { text: "Eher langsam, mit gründlicher Prüfung", type: "kopf" },
           { text: "Mittelschnell, erst fühlen, dann prüfen", type: "kombi" },
-          { text: "Mittelschnell, erst fühlen, dann prüfen", type: "kombi" },
+          { text: "Weder schnell noch langsam, Gefühl und Prüfung zusammen", type: "kombi" },
         ],
       },
     ],
@@ -2273,7 +2273,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich spreche es direkt und offen an", type: "konfrontativ" },
           { text: "Ich suche früh nach einer gemeinsamen Lösung", type: "vermittelnd" },
           { text: "Ich hoffe, es löst sich von allein", type: "vermeidend" },
-          { text: "Ich hoffe, es löst sich von allein", type: "vermeidend" },
+          { text: "Ich warte lieber ab, statt es anzusprechen", type: "vermeidend" },
         ],
       },
       {
@@ -2282,7 +2282,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...sehr direkt in dem, was mich stört", type: "konfrontativ" },
           { text: "...bemüht, schnell einen Mittelweg zu finden", type: "vermittelnd" },
           { text: "...eher still und ziehe mich zurück", type: "vermeidend" },
-          { text: "...eher still und ziehe mich zurück", type: "vermeidend" },
+          { text: "...eher zurückhaltend, ich sag lieber nichts", type: "vermeidend" },
         ],
       },
       {
@@ -2291,7 +2291,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich sage klar meine Meinung dazu", type: "konfrontativ" },
           { text: "Ich versuche zu vermitteln", type: "vermittelnd" },
           { text: "Ich halte mich komplett raus", type: "vermeidend" },
-          { text: "Ich halte mich komplett raus", type: "vermeidend" },
+          { text: "Ich misch mich da lieber nicht ein", type: "vermeidend" },
         ],
       },
       {
@@ -2300,7 +2300,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich verteidige meinen Standpunkt entschieden", type: "konfrontativ" },
           { text: "Ich suche nach einer Position, die beide teilen können", type: "vermittelnd" },
           { text: "Ich lasse das Thema lieber fallen", type: "vermeidend" },
-          { text: "Ich lasse das Thema lieber fallen", type: "vermeidend" },
+          { text: "Ich steig lieber aus der Diskussion aus", type: "vermeidend" },
         ],
       },
       {
@@ -2309,7 +2309,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Unangenehm, aber notwendig", type: "konfrontativ" },
           { text: "Anstrengend, aber lösbar mit gutem Willen", type: "vermittelnd" },
           { text: "Sehr unangenehm, ich vermeide es lieber ganz", type: "vermeidend" },
-          { text: "Sehr unangenehm, ich vermeide es lieber ganz", type: "vermeidend" },
+          { text: "Richtig unangenehm, ich geh dem lieber komplett aus dem Weg", type: "vermeidend" },
         ],
       },
       {
@@ -2318,7 +2318,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich verteidige meinen Standpunkt sofort", type: "konfrontativ" },
           { text: "Ich schlage eine Lösung vor, die für beide passt", type: "vermittelnd" },
           { text: "Ich versuche, das Gespräch möglichst kurz zu halten", type: "vermeidend" },
-          { text: "Ich versuche, das Gespräch möglichst kurz zu halten", type: "vermeidend" },
+          { text: "Ich nicke und will die Sache schnell hinter mich bringen", type: "vermeidend" },
         ],
       },
       {
@@ -2327,7 +2327,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich vertrete meine Position mit Nachdruck", type: "konfrontativ" },
           { text: "Ich moderiere zwischen den Positionen", type: "vermittelnd" },
           { text: "Ich melde mich eher zurückhaltend zu Wort", type: "vermeidend" },
-          { text: "Ich melde mich eher zurückhaltend zu Wort", type: "vermeidend" },
+          { text: "Ich halte mich mit meiner Meinung eher zurück", type: "vermeidend" },
         ],
       },
       {
@@ -2336,7 +2336,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Dass die Wahrheit klar auf den Tisch kommt", type: "konfrontativ" },
           { text: "Dass am Ende alle zufrieden sind", type: "vermittelnd" },
           { text: "Dass die Situation schnell wieder ruhig wird", type: "vermeidend" },
-          { text: "Dass die Situation schnell wieder ruhig wird", type: "vermeidend" },
+          { text: "Dass es einfach schnell vorbei ist", type: "vermeidend" },
         ],
       },
       {
@@ -2345,7 +2345,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...erleichtert, die Dinge sind jetzt klar", type: "konfrontativ" },
           { text: "...zufrieden, wenn eine Lösung gefunden wurde", type: "vermittelnd" },
           { text: "...erschöpft, auch wenn er gut gelöst wurde", type: "vermeidend" },
-          { text: "...erschöpft, auch wenn er gut gelöst wurde", type: "vermeidend" },
+          { text: "...mitgenommen, selbst wenn am Ende alles gut wurde", type: "vermeidend" },
         ],
       },
       {
@@ -2354,7 +2354,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich kontere sofort mit meiner eigenen Sicht", type: "konfrontativ" },
           { text: "Ich versuche, die Situation zu beruhigen", type: "vermittelnd" },
           { text: "Ich sage möglichst wenig dazu", type: "vermeidend" },
-          { text: "Ich sage möglichst wenig dazu", type: "vermeidend" },
+          { text: "Ich schweige lieber und lass es über mich ergehen", type: "vermeidend" },
         ],
       },
       {
@@ -2363,7 +2363,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich spreche das Muster irgendwann klar an", type: "konfrontativ" },
           { text: "Ich suche nach einer dauerhaften gemeinsamen Regelung", type: "vermittelnd" },
           { text: "Ich hoffe, dass es sich irgendwann von selbst gibt", type: "vermeidend" },
-          { text: "Ich hoffe, dass es sich irgendwann von selbst gibt", type: "vermeidend" },
+          { text: "Ich lass es lieber schleifen, statt es anzusprechen", type: "vermeidend" },
         ],
       },
       {
@@ -2372,7 +2372,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Geduldig zu bleiben, wenn andere langsamer sind", type: "konfrontativ" },
           { text: "Auch mal für die eigene Position hart zu bleiben", type: "vermittelnd" },
           { text: "Das Thema überhaupt anzusprechen", type: "vermeidend" },
-          { text: "Das Thema überhaupt anzusprechen", type: "vermeidend" },
+          { text: "Den ersten Schritt zu machen und es anzusprechen", type: "vermeidend" },
         ],
       },
       {
@@ -2381,7 +2381,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich bleibe bei meiner klaren Position", type: "konfrontativ" },
           { text: "Ich versuche aktiv zu beruhigen und zu vermitteln", type: "vermittelnd" },
           { text: "Ich ziehe mich am liebsten zurück", type: "vermeidend" },
-          { text: "Ich ziehe mich am liebsten zurück", type: "vermeidend" },
+          { text: "Ich flüchte am liebsten aus der Situation", type: "vermeidend" },
         ],
       },
       {
@@ -2390,7 +2390,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Fast immer, sobald sie mir auffallen", type: "konfrontativ" },
           { text: "Wenn ich eine gute Lösung im Kopf habe", type: "vermittelnd" },
           { text: "Selten, meist erst, wenn es nicht mehr anders geht", type: "vermeidend" },
-          { text: "Selten, meist erst, wenn es nicht mehr anders geht", type: "vermeidend" },
+          { text: "Eher nie von mir aus, erst wenn's gar nicht mehr anders geht", type: "vermeidend" },
         ],
       },
       {
@@ -2399,7 +2399,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Das führt selten zu echten Lösungen", type: "konfrontativ" },
           { text: "Manchmal verständlich, aber nicht immer hilfreich", type: "vermittelnd" },
           { text: "Ich verstehe das gut, ich mache es oft selbst", type: "vermeidend" },
-          { text: "Ich verstehe das gut, ich mache es oft selbst", type: "vermeidend" },
+          { text: "Kann ich total nachvollziehen, mach ich ja selbst so", type: "vermeidend" },
         ],
       },
       {
@@ -2408,7 +2408,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...direkt und unmissverständlich", type: "konfrontativ" },
           { text: "...ausgleichend und lösungsorientiert", type: "vermittelnd" },
           { text: "...zurückhaltend und konfliktscheu", type: "vermeidend" },
-          { text: "...zurückhaltend und konfliktscheu", type: "vermeidend" },
+          { text: "...eher vermeidend, wenn's brenzlig wird", type: "vermeidend" },
         ],
       },
     ],
@@ -2462,7 +2462,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Spannend, mal sehen, was sich ergibt", type: "abenteurer" },
           { text: "Ich warte ab und passe mich an, was kommt", type: "anpasser" },
           { text: "Ich mache mir Sorgen um Bewährtes", type: "traditionalist" },
-          { text: "Ich mache mir Sorgen um Bewährtes", type: "traditionalist" },
+          { text: "Ich frage mich, was das für das Bestehende bedeutet", type: "traditionalist" },
         ],
       },
       {
@@ -2471,7 +2471,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Klingt aufregend, warum nicht!", type: "abenteurer" },
           { text: "Ich müsste mich erst dran gewöhnen, aber machbar", type: "anpasser" },
           { text: "Eher nicht, ich bin hier verwurzelt", type: "traditionalist" },
-          { text: "Eher nicht, ich bin hier verwurzelt", type: "traditionalist" },
+          { text: "Lieber nicht, ich häng an meinem jetzigen Zuhause", type: "traditionalist" },
         ],
       },
       {
@@ -2480,7 +2480,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Cool, ich probiere sie sofort aus", type: "abenteurer" },
           { text: "Ich lerne sie zügig, auch wenn's Umstellung braucht", type: "anpasser" },
           { text: "Ich hätte die alte lieber behalten", type: "traditionalist" },
-          { text: "Ich hätte die alte lieber behalten", type: "traditionalist" },
+          { text: "Ich vermisse die vertraute alte Version", type: "traditionalist" },
         ],
       },
       {
@@ -2489,7 +2489,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Kein Problem, ich finde eine neue Routine", type: "abenteurer" },
           { text: "Ich brauche kurz, dann finde ich mich zurecht", type: "anpasser" },
           { text: "Das bringt mich ziemlich durcheinander", type: "traditionalist" },
-          { text: "Das bringt mich ziemlich durcheinander", type: "traditionalist" },
+          { text: "Das wirft mich ziemlich aus der Bahn", type: "traditionalist" },
         ],
       },
       {
@@ -2498,7 +2498,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Aufgeregt und voller Vorfreude", type: "abenteurer" },
           { text: "Gemischt, aber grundsätzlich zuversichtlich", type: "anpasser" },
           { text: "Eher nervös und unsicher", type: "traditionalist" },
-          { text: "Eher nervös und unsicher", type: "traditionalist" },
+          { text: "Eher angespannt, ich mag Gewohntes lieber", type: "traditionalist" },
         ],
       },
       {
@@ -2507,7 +2507,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Toll, mehr neue Leute kennenlernen", type: "abenteurer" },
           { text: "Ich öffne mich, brauche aber etwas Zeit", type: "anpasser" },
           { text: "Ich vermisse die alte, vertraute Dynamik", type: "traditionalist" },
-          { text: "Ich vermisse die alte, vertraute Dynamik", type: "traditionalist" },
+          { text: "Mir fehlt die alte, eingespielte Gruppe", type: "traditionalist" },
         ],
       },
       {
@@ -2516,7 +2516,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich stürze mich einfach rein", type: "abenteurer" },
           { text: "Mit etwas Vorbereitung, dann geht's los", type: "anpasser" },
           { text: "Sehr behutsam, mit viel Bedenkzeit", type: "traditionalist" },
-          { text: "Sehr behutsam, mit viel Bedenkzeit", type: "traditionalist" },
+          { text: "Sehr vorsichtig, ich brauch lange zum Überlegen", type: "traditionalist" },
         ],
       },
       {
@@ -2525,7 +2525,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Neugier und Vorfreude", type: "abenteurer" },
           { text: "Eine Mischung aus Respekt und Zuversicht", type: "anpasser" },
           { text: "Sorge um das, was verloren geht", type: "traditionalist" },
-          { text: "Sorge um das, was verloren geht", type: "traditionalist" },
+          { text: "Die Angst, etwas Wichtiges zu verlieren", type: "traditionalist" },
         ],
       },
       {
@@ -2534,7 +2534,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...waren fast alle eine gute Entscheidung", type: "abenteurer" },
           { text: "...haben sich die meisten gut eingespielt", type: "anpasser" },
           { text: "...hätte ich mir manche auch sparen können", type: "traditionalist" },
-          { text: "...hätte ich mir manche auch sparen können", type: "traditionalist" },
+          { text: "...hätte ich lieber manches beim Alten gelassen", type: "traditionalist" },
         ],
       },
     ],
@@ -2588,7 +2588,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...die Verantwortung und den Kampf ums Richtige", type: "held" },
           { text: "...einen eigenwilligen, unkonventionellen Lösungsweg", type: "antiheld" },
           { text: "...die Unterstützung derer, die vorne kämpfen", type: "sidekick" },
-          { text: "...die Unterstützung derer, die vorne kämpfen", type: "sidekick" },
+          { text: "...denen den Rücken freihalten, die vorne kämpfen", type: "sidekick" },
         ],
       },
       {
@@ -2597,7 +2597,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...klar, ich weiß, was richtig ist", type: "held" },
           { text: "...komplex, es gibt selten nur schwarz oder weiß", type: "antiheld" },
           { text: "...an das gebunden, was das Team braucht", type: "sidekick" },
-          { text: "...an das gebunden, was das Team braucht", type: "sidekick" },
+          { text: "...danach ausgerichtet, was der Gruppe am meisten hilft", type: "sidekick" },
         ],
       },
       {
@@ -2606,7 +2606,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...die anführende Figur", type: "held" },
           { text: "...der/die geheimnisvolle Einzelgänger:in mit eigenem Plan", type: "antiheld" },
           { text: "...die verlässliche Unterstützung im Hintergrund", type: "sidekick" },
-          { text: "...die verlässliche Unterstützung im Hintergrund", type: "sidekick" },
+          { text: "...die treue Stütze an der Seite der Hauptfigur", type: "sidekick" },
         ],
       },
       {
@@ -2615,7 +2615,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich halte mich meist genau daran", type: "held" },
           { text: "Ich breche sie, wenn's dem Ziel dient", type: "antiheld" },
           { text: "Ich orientiere mich an dem, was die Gruppe entscheidet", type: "sidekick" },
-          { text: "Ich orientiere mich an dem, was die Gruppe entscheidet", type: "sidekick" },
+          { text: "Ich halte mich an das, worauf sich die Gruppe einigt", type: "sidekick" },
         ],
       },
       {
@@ -2624,7 +2624,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Etwas Gutes für andere zu bewirken", type: "held" },
           { text: "Meinen eigenen Weg zu gehen", type: "antiheld" },
           { text: "Für die Menschen da zu sein, die mir wichtig sind", type: "sidekick" },
-          { text: "Für die Menschen da zu sein, die mir wichtig sind", type: "sidekick" },
+          { text: "Denen den Rücken zu stärken, die ich liebe", type: "sidekick" },
         ],
       },
       {
@@ -2633,7 +2633,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...am Ende das Böse besiegt", type: "held" },
           { text: "...die überraschendste Entwicklung durchmacht", type: "antiheld" },
           { text: "...mit Humor für Erleichterung sorgt", type: "sidekick" },
-          { text: "...mit Humor für Erleichterung sorgt", type: "sidekick" },
+          { text: "...mit einem guten Spruch die Stimmung rettet", type: "sidekick" },
         ],
       },
       {
@@ -2642,7 +2642,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...Entschlossenheit und klare Führung", type: "held" },
           { text: "...unkonventionelle, überraschende Lösungen", type: "antiheld" },
           { text: "...Loyalität und emotionale Unterstützung", type: "sidekick" },
-          { text: "...Loyalität und emotionale Unterstützung", type: "sidekick" },
+          { text: "...Treue und ein offenes Ohr für andere", type: "sidekick" },
         ],
       },
       {
@@ -2651,7 +2651,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich stelle mich sofort dagegen", type: "held" },
           { text: "Ich handle auf meine eigene, ungewöhnliche Weise", type: "antiheld" },
           { text: "Ich unterstütze die, die dagegen ankämpfen", type: "sidekick" },
-          { text: "Ich unterstütze die, die dagegen ankämpfen", type: "sidekick" },
+          { text: "Ich steh denen zur Seite, die sich wehren", type: "sidekick" },
         ],
       },
       {
@@ -2660,7 +2660,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...als klare:r Gewinner:in des Guten dastehen", type: "held" },
           { text: "...eine überraschende, eigene Wendung genommen haben", type: "antiheld" },
           { text: "...den Menschen geholfen haben, die es gebraucht haben", type: "sidekick" },
-          { text: "...den Menschen geholfen haben, die es gebraucht haben", type: "sidekick" },
+          { text: "...für die da gewesen sein, die mich gebraucht haben", type: "sidekick" },
         ],
       },
     ],
@@ -2714,7 +2714,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...den 70ern, Soul und Rock", type: "70er" },
           { text: "...den 90ern, Pop und Grunge", type: "90er" },
           { text: "...heute, aktuelle Charts und Playlists", type: "gegenwart" },
-          { text: "...heute, aktuelle Charts und Playlists", type: "gegenwart" },
+          { text: "...den aktuellen Streaming-Charts von jetzt", type: "gegenwart" },
         ],
       },
       {
@@ -2723,7 +2723,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...Vinyl auflegen und entspannen", type: "70er" },
           { text: "...einer alten VHS-Kassette oder Retro-Game", type: "90er" },
           { text: "...Streaming und den neuesten Serien", type: "gegenwart" },
-          { text: "...Streaming und den neuesten Serien", type: "gegenwart" },
+          { text: "...dem neuesten Serien-Release zum Bingen", type: "gegenwart" },
         ],
       },
       {
@@ -2732,7 +2732,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...Schlaghosen und Flower-Power", type: "70er" },
           { text: "...Baggy-Jeans und Bandshirts", type: "90er" },
           { text: "...aktuellen Trends von heute", type: "gegenwart" },
-          { text: "...aktuellen Trends von heute", type: "gegenwart" },
+          { text: "...dem, was gerade angesagt ist", type: "gegenwart" },
         ],
       },
       {
@@ -2741,7 +2741,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Persönlich, von Angesicht zu Angesicht", type: "70er" },
           { text: "Anrufe und handgeschriebene Nachrichten", type: "90er" },
           { text: "Chat, Social Media, ständig erreichbar", type: "gegenwart" },
-          { text: "Chat, Social Media, ständig erreichbar", type: "gegenwart" },
+          { text: "Über Apps, jederzeit und überall erreichbar", type: "gegenwart" },
         ],
       },
       {
@@ -2750,7 +2750,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Frei, entspannt, im Hier leben", type: "70er" },
           { text: "Nostalgisch und ein bisschen rebellisch", type: "90er" },
           { text: "Vernetzt, schnell, immer up to date", type: "gegenwart" },
-          { text: "Vernetzt, schnell, immer up to date", type: "gegenwart" },
+          { text: "Digital, dynamisch, immer am Puls der Zeit", type: "gegenwart" },
         ],
       },
       {
@@ -2759,7 +2759,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ein entspannter Klassiker", type: "70er" },
           { text: "Ein nostalgischer 90er-Kultfilm", type: "90er" },
           { text: "Der neueste Streaming-Hit", type: "gegenwart" },
-          { text: "Der neueste Streaming-Hit", type: "gegenwart" },
+          { text: "Was gerade frisch releast wurde", type: "gegenwart" },
         ],
       },
     ],
@@ -2813,7 +2813,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Streaming-Dienst öffnen", type: "serie" },
           { text: "Ein gutes Buch aufschlagen", type: "buch" },
           { text: "Kommt auf die Stimmung an", type: "beides" },
-          { text: "Kommt auf die Stimmung an", type: "beides" },
+          { text: "Je nachdem, worauf ich gerade Lust hab", type: "beides" },
         ],
       },
       {
@@ -2822,7 +2822,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Mit Bildern, Musik und Schauspiel", type: "serie" },
           { text: "Mit meiner eigenen Vorstellungskraft", type: "buch" },
           { text: "Beides hat seinen eigenen Reiz", type: "beides" },
-          { text: "Beides hat seinen eigenen Reiz", type: "beides" },
+          { text: "Beides zieht mich auf seine eigene Art rein", type: "beides" },
         ],
       },
       {
@@ -2831,7 +2831,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ständig, ganze Staffeln an einem Wochenende", type: "serie" },
           { text: "Ja, aber eher mit Büchern über Nacht", type: "buch" },
           { text: "Beides schon vorgekommen", type: "beides" },
-          { text: "Beides schon vorgekommen", type: "beides" },
+          { text: "Kommt vor, bei beidem gleichermaßen", type: "beides" },
         ],
       },
       {
@@ -2840,7 +2840,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...dem Tablet für eine Folge", type: "serie" },
           { text: "...einem Buch zum Runterkommen", type: "buch" },
           { text: "...beidem, je nach Müdigkeit", type: "beides" },
-          { text: "...beidem, je nach Müdigkeit", type: "beides" },
+          { text: "...mal dem einen, mal dem anderen", type: "beides" },
         ],
       },
       {
@@ -2849,7 +2849,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Toll, sofort die Serie starten", type: "serie" },
           { text: "Klingt gut, ich besorge mir das Buch", type: "buch" },
           { text: "Kommt drauf an, was verfügbar ist", type: "beides" },
-          { text: "Kommt drauf an, was verfügbar ist", type: "beides" },
+          { text: "Ich schau einfach, was sich gerade anbietet", type: "beides" },
         ],
       },
       {
@@ -2858,7 +2858,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Die visuelle Umsetzung und Atmosphäre", type: "serie" },
           { text: "Die Sprache und die eigene Vorstellungskraft", type: "buch" },
           { text: "Beides trägt gleichermaßen zur Faszination bei", type: "beides" },
-          { text: "Beides trägt gleichermaßen zur Faszination bei", type: "beides" },
+          { text: "Beides fesselt mich auf seine eigene Weise", type: "beides" },
         ],
       },
     ],
@@ -2912,7 +2912,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...die beschützende Rolle", type: "drache" },
           { text: "...die motivierende Rolle nach Rückschlägen", type: "phoenix" },
           { text: "...die verbindende, positive Stimmung", type: "einhorn" },
-          { text: "...die verbindende, positive Stimmung", type: "einhorn" },
+          { text: "...die, die gute Laune verbreitet", type: "einhorn" },
         ],
       },
       {
@@ -2921,7 +2921,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...kämpfe ich sofort um das, was mir wichtig ist", type: "drache" },
           { text: "...stehe ich wieder auf, stärker als zuvor", type: "phoenix" },
           { text: "...suche ich Trost bei mir wichtigen Menschen", type: "einhorn" },
-          { text: "...suche ich Trost bei mir wichtigen Menschen", type: "einhorn" },
+          { text: "...hole ich mir Kraft aus schönen Momenten", type: "einhorn" },
         ],
       },
       {
@@ -2930,7 +2930,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Stark und respekteinflößend", type: "drache" },
           { text: "Unzerstörbar und wandlungsfähig", type: "phoenix" },
           { text: "Sanft, magisch und einzigartig", type: "einhorn" },
-          { text: "Sanft, magisch und einzigartig", type: "einhorn" },
+          { text: "Verspielt, leuchtend und besonders", type: "einhorn" },
         ],
       },
       {
@@ -2939,7 +2939,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "Ich stelle mich sofort schützend davor", type: "drache" },
           { text: "Ich helfe ihnen, gestärkt daraus hervorzugehen", type: "phoenix" },
           { text: "Ich versuche, mit Sanftheit zu beruhigen", type: "einhorn" },
-          { text: "Ich versuche, mit Sanftheit zu beruhigen", type: "einhorn" },
+          { text: "Ich versuche, mit Wärme die Lage zu entschärfen", type: "einhorn" },
         ],
       },
       {
@@ -2948,7 +2948,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "'Ich beschütze, was mir wichtig ist'", type: "drache" },
           { text: "'Aus der Asche steige ich wieder auf'", type: "phoenix" },
           { text: "'Ich bringe Magie in den Alltag'", type: "einhorn" },
-          { text: "'Ich bringe Magie in den Alltag'", type: "einhorn" },
+          { text: "'Ich verzaubere den Alltag ein kleines bisschen'", type: "einhorn" },
         ],
       },
       {
@@ -2957,7 +2957,7 @@ export const psychTestsData: PsychTestDefinition[] = [
           { text: "...ein mächtiger Wächter über ein Reich", type: "drache" },
           { text: "...ein Wesen, das nie wirklich untergeht", type: "phoenix" },
           { text: "...ein Wesen, das Hoffnung und Freude verbreitet", type: "einhorn" },
-          { text: "...ein Wesen, das Hoffnung und Freude verbreitet", type: "einhorn" },
+          { text: "...ein Wesen, das Licht in dunkle Momente bringt", type: "einhorn" },
         ],
       },
     ],
