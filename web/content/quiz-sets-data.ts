@@ -3819,10 +3819,10 @@ export const moreDailyQuizSets: DailyQuizSet[] = [
       },
       {
         category: "Sport",
-        question: "Wie viele Ringe zeigt das olympische Symbol?",
-        options: ["4", "5", "6", "7"],
-        correctIndex: 1,
-        explanation: "Die fünf Ringe symbolisieren die fünf bewohnten Kontinente.",
+        question: "Bei welcher Leichtathletik-Disziplin überquert man eine Latte mit Hilfe einer Stange?",
+        options: ["Weitsprung", "Hochsprung", "Stabhochsprung", "Dreisprung"],
+        correctIndex: 2,
+        explanation: "Beim Stabhochsprung nutzen Athlet:innen eine flexible Stange, um sich über die Latte zu katapultieren.",
       },
       {
         category: "Musik",
@@ -8919,10 +8919,10 @@ export const moreDailyQuizSets: DailyQuizSet[] = [
       },
       {
         category: "Geschichte",
-        question: "In welchem Jahr fiel die Berliner Mauer?",
-        options: ["1987", "1989", "1991", "1993"],
+        question: "In welchem Land liegt die berühmte Höhle von Lascaux mit ihren steinzeitlichen Wandmalereien?",
+        options: ["Spanien", "Frankreich", "Italien", "Portugal"],
         correctIndex: 1,
-        explanation: "Die Berliner Mauer fiel am 9. November 1989.",
+        explanation: "Die Höhle von Lascaux in Südfrankreich enthält rund 17.000 Jahre alte Wandmalereien.",
       },
       {
         category: "Chemie",
@@ -9737,10 +9737,10 @@ export const moreDailyQuizSets: DailyQuizSet[] = [
     questions: [
       {
         category: "Kunst",
-        question: "Wer malte die Mona Lisa?",
-        options: ["Michelangelo", "Leonardo da Vinci", "Raffael", "Botticelli"],
-        correctIndex: 1,
-        explanation: "Leonardo da Vinci malte die Mona Lisa Anfang des 16. Jahrhunderts.",
+        question: "Welcher US-amerikanische Maler schuf das bekannte Gemälde „Nighthawks“ (Nachtschwärmer)?",
+        options: ["Edward Hopper", "Norman Rockwell", "Grant Wood", "Andrew Wyeth"],
+        correctIndex: 0,
+        explanation: "Edward Hopper malte „Nighthawks“ 1942 — eine nächtliche Szene in einem amerikanischen Diner.",
       },
       {
         category: "Alltag",
