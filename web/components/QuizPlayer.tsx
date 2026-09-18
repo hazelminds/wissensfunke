@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor, sampleQuestions } from "@/content/quizzes";
+import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { logGameEventAction } from "@/lib/actions/analytics";
+import { sampleUnseenQuestions } from "@/lib/seenQuestions";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
@@ -26,10 +27,11 @@ export function QuizPlayer({
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [unlocked, setUnlocked] = useState(initiallyUnlocked);
   const [revealed, setRevealed] = useState(initiallyUnlocked);
-  // Frische Zufallsauswahl aus dem Pool bei jedem Rundenstart (auch "Nochmal") --
-  // sonst würde ein Pool von 150 Fragen sich anfühlen wie einer von 8.
+  // Frische Auswahl aus dem Pool bei jedem Rundenstart (auch "Nochmal") --
+  // bevorzugt noch nicht gezeigte Fragen, damit sich ein 150er-Pool nicht wie
+  // einer von 8 anfühlt und niemand dieselbe Frage zweimal hintereinander sieht.
   const [roundQuestions, setRoundQuestions] = useState<QuizQuestion[]>(() =>
-    sampleQuestions(quiz.questions, quiz.roundSize),
+    sampleUnseenQuestions(quiz.slug, quiz.questions, quiz.roundSize),
   );
 
   // Rücksprung von der Zahlungsseite (Erfolg oder Fehler): der Client-State
@@ -76,7 +78,7 @@ export function QuizPlayer({
   const answered = selected !== null;
 
   function startQuiz() {
-    setRoundQuestions(sampleQuestions(quiz.questions, quiz.roundSize));
+    setRoundQuestions(sampleUnseenQuestions(quiz.slug, quiz.questions, quiz.roundSize));
     setCurrent(0);
     setSelected(null);
     setAnswers([]);
