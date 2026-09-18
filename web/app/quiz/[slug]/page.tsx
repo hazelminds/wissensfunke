@@ -120,9 +120,9 @@ async function QuizContent({
   friendCode?: string;
   friendName?: string;
 }) {
-  if (slug === "tages-mini-quiz") {
-    return <DailyMiniQuiz quizSet={getDailyQuizSet()} />;
-  }
+  // Einziger wirklich unbegrenzter Anker: das Tagesrätsel. Alles andere,
+  // inklusive Tages-Mini-Quiz und "Wer bin ich? · Leicht", zählt zu den
+  // 2 Gratis-Runden/Tag für Gäste und eingeloggte Nicht-Plus-Nutzer:innen.
   if (slug === "tages-raetsel") {
     return <DailyRiddle riddle={getDailyRiddle()} />;
   }
@@ -131,6 +131,14 @@ async function QuizContent({
   // AUSSER für echte Plus-Mitglieder (Admin-Geschenk oder später echtes Abo).
   const user = await getCurrentUser();
   const plusActive = previewUnlocked || (user ? (await getPlusStatus(user.id)).active : false);
+
+  if (slug === "tages-mini-quiz") {
+    return (
+      <DailyCapGate plusActive={plusActive}>
+        <DailyMiniQuiz quizSet={getDailyQuizSet()} />
+      </DailyCapGate>
+    );
+  }
 
   if (game.variant === "sliding") {
     return (
@@ -170,7 +178,9 @@ async function QuizContent({
         pendingSeenKeys={pendingSeenKeys}
       />
     );
-    return game.level === "daily-free" ? player : <DailyCapGate plusActive={plusActive}>{player}</DailyCapGate>;
+    // "Leicht" zeigt zwar das immer gleiche Tagesrätsel (siehe oben), zählt
+    // aber -- anders als das Tagesrätsel selbst -- zu den 2 Gratis-Runden/Tag.
+    return <DailyCapGate plusActive={plusActive}>{player}</DailyCapGate>;
   }
 
   if (game.variant === "psych-generic") {

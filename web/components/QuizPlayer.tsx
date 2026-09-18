@@ -6,6 +6,7 @@ import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
 import { pickUnseen, questionKey, readSeenLocal, writeSeenLocal } from "@/lib/seenQuestions";
+import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
@@ -135,6 +136,7 @@ export function QuizPlayer({
   function nextQuestion() {
     if (current + 1 >= roundQuestions.length) {
       setScreen("result");
+      incrementTodayPlayCount();
       logGameEventAction(quiz.slug, "completed").catch(() => null);
       return;
     }

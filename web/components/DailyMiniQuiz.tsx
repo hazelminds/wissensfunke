@@ -5,6 +5,7 @@ import { dailyCategoryIcons, type DailyQuizSet } from "@/content/daily";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { logGameEventAction } from "@/lib/actions/analytics";
+import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Answer = { correct: boolean };
@@ -39,6 +40,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
       const server = await recordServerStreakCompletion().catch(() => null);
       setStreakCount(server?.count ?? local.count);
       setDone(true);
+      incrementTodayPlayCount();
       logGameEventAction("tages-mini-quiz", "completed").catch(() => null);
       return;
     }
