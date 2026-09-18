@@ -4,6 +4,7 @@ import { isAdminEmail } from "@/lib/admin";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { getAllPlusStatuses, getPlusStatus } from "@/lib/plus";
 import { isUserBanned } from "@/lib/userStatus";
+import { rollupOldPageViews } from "@/lib/pageViews";
 
 export interface AdminUserRow {
   id: string;
@@ -220,6 +221,8 @@ export interface AdminStats {
   newSignupsYesterday: number;
   newSignupsThisMonth: number;
   newSignupsLastMonth: number;
+  pageViewsToday: number;
+  pageViewsYesterday: number;
 }
 
 function isSameUtcDay(iso: string, ref: Date): boolean {
@@ -244,13 +247,21 @@ export async function getAdminStats(): Promise<AdminStats> {
       newSignupsYesterday: 0,
       newSignupsThisMonth: 0,
       newSignupsLastMonth: 0,
+      pageViewsToday: 0,
+      pageViewsYesterday: 0,
     };
   }
   const supabase = getSupabaseAdmin();
 
-  const [{ data: usersPage }, { data: purchases }] = await Promise.all([
+  // Aufräumen nebenbei: bei jedem Admin-Dashboard-Aufruf altes Rohdaten-
+  // Batch verdichten (siehe rollupOldPageViews), statt einen eigenen Cron
+  // dafür zu brauchen. Blockiert die Stats nie -- Fehler werden verschluckt.
+  void rollupOldPageViews().catch(() => null);
+
+  const [{ data: usersPage }, { data: purchases }, { data: pageViews }] = await Promise.all([
     supabase.auth.admin.listUsers({ perPage: 1000 }),
     supabase.from("purchases").select("quiz_slug, amount_cents").eq("status", "paid"),
+    supabase.from("page_views").select("created_at").gte("created_at", new Date(Date.now() - 2 * 86400000).toISOString()),
   ]);
 
   const paid = purchases ?? [];
@@ -285,5 +296,7 @@ export async function getAdminStats(): Promise<AdminStats> {
       const d = new Date(u.created_at);
       return d >= lastMonthStart && d < thisMonthStart;
     }).length,
+    pageViewsToday: (pageViews ?? []).filter((v) => isSameUtcDay(v.created_at, now)).length,
+    pageViewsYesterday: (pageViews ?? []).filter((v) => isSameUtcDay(v.created_at, yesterday)).length,
   };
 }

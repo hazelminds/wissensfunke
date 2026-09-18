@@ -250,6 +250,57 @@ export interface Database {
         };
         Relationships: [];
       };
+      page_views: {
+        Row: {
+          id: number;
+          path: string;
+          referrer: string | null;
+          country: string;
+          device: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          path: string;
+          referrer?: string | null;
+          country?: string;
+          device?: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          path?: string;
+          referrer?: string | null;
+          country?: string;
+          device?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      page_view_daily: {
+        Row: {
+          day: string;
+          path: string;
+          country: string;
+          device: string;
+          views: number;
+        };
+        Insert: {
+          day: string;
+          path: string;
+          country?: string;
+          device?: string;
+          views?: number;
+        };
+        Update: {
+          day?: string;
+          path?: string;
+          country?: string;
+          device?: string;
+          views?: number;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

@@ -1,6 +1,7 @@
-import { Users, ShoppingBag, Coins, Flame, UserPlus } from "lucide-react";
+import { Users, ShoppingBag, Coins, Flame, UserPlus, Eye } from "lucide-react";
 import type { AdminStats } from "@/lib/adminData";
 import { AdminGameStatsChart } from "@/components/admin/AdminGameStatsChart";
+import { AdminPageViewsChart } from "@/components/admin/AdminPageViewsChart";
 
 function formatEuro(cents: number): string {
   return (cents / 100).toLocaleString("de-DE", { style: "currency", currency: "EUR" });
@@ -31,7 +32,16 @@ export function AdminDashboardStats({ stats }: { stats: AdminStats }) {
         <Kpi icon={<UserPlus className="h-5 w-5" />} label="Letzter Monat" value={stats.newSignupsLastMonth} />
       </div>
 
+      <p className="mt-6 mb-3 flex items-center gap-2 text-[11px] font-bold text-muted uppercase">
+        <Eye className="h-3.5 w-3.5" /> Seitenaufrufe
+      </p>
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <Kpi icon={<Eye className="h-5 w-5" />} label="Heute" value={stats.pageViewsToday} />
+        <Kpi icon={<Eye className="h-5 w-5" />} label="Gestern" value={stats.pageViewsYesterday} />
+      </div>
+
       <AdminGameStatsChart />
+      <AdminPageViewsChart />
     </div>
   );
 }

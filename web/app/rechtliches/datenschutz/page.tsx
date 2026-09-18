@@ -52,6 +52,15 @@ export default function DatenschutzPage() {
           Daten laufen nicht über unsere eigenen Systeme. Rechtsgrundlage: Art. 6 Abs. 1 lit. b
           DSGVO.
         </p>
+        <h3>e) Anonyme Seitenaufruf-Statistik</h3>
+        <p>
+          Zur Verbesserung des Angebots erfassen wir anonyme Seitenaufruf-Statistiken (aufgerufene
+          Seite, verlinkende Domain, Land, grober Gerätetyp). Dabei werden weder Cookies noch ein
+          über mehrere Seitenaufrufe hinweg wiedererkennbarer Identifier eingesetzt, und es wird
+          keine IP-Adresse gespeichert — das Land wird ausschließlich aus einem technischen
+          Edge-Header unseres Hosting-Anbieters abgeleitet. Rechtsgrundlage: Art. 6 Abs. 1 lit. f
+          DSGVO (berechtigtes Interesse an der Reichweitenmessung ohne Personenbezug).
+        </p>
       </section>
 
       <section>
@@ -88,12 +97,15 @@ export default function DatenschutzPage() {
         <h2>4. Cookies &amp; lokaler Speicher</h2>
         <p>
           Wir setzen technisch notwendige Cookies zur Anmeldeverwaltung (Session) sowie
-          localStorage für den geräte-lokalen Streak-Fallback ohne Konto ein. Aktuell werden keine
+          localStorage für den geräte-lokalen Streak-Fallback ohne Konto ein. Für die anonyme
+          Seitenaufruf-Statistik (siehe 2e) werden keine Cookies gesetzt und kein lokaler Speicher
+          verwendet — eine Einwilligung nach § 25 TTDSG ist dafür nicht erforderlich, da kein
+          Zugriff auf Endgeräte-Informationen stattfindet. Darüber hinaus werden aktuell keine
           Analyse- oder Marketing-Cookies verwendet.{" "}
           <Placeholder>
-            ZU AKTUALISIEREN, sobald Analyse-/Marketing-Tools hinzukommen (dann i. d. R.
-            Einwilligung nach § 25 TTDSG/TDDDG bzw. Art. 6 Abs. 1 lit. a DSGVO nötig, inkl.
-            Cookie-Consent-Banner).
+            ZU AKTUALISIEREN, sobald zusätzliche Analyse-/Marketing-Tools mit Cookies hinzukommen
+            (dann i. d. R. Einwilligung nach § 25 TTDSG/TDDDG bzw. Art. 6 Abs. 1 lit. a DSGVO
+            nötig, inkl. Cookie-Consent-Banner).
           </Placeholder>
         </p>
       </section>

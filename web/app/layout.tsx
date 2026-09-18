@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { PlusModalProvider } from "@/components/PlusModalProvider";
+import { PageViewTracker } from "@/components/PageViewTracker";
 import "./globals.css";
 
 /** Base44-Vorbild nutzt exakt diese beiden Google Fonts -- 1:1 übernommen. */
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="de" className={`${plusJakarta.variable} ${inter.variable}`}>
       <body className="min-h-screen font-body antialiased">
         <PlusModalProvider>
+          <PageViewTracker />
           {children}
           <SiteFooter />
         </PlusModalProvider>
