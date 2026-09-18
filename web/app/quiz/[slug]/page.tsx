@@ -6,6 +6,7 @@ import { getDailyWhoAmIRound, getRandomWhoAmIRound, type WhoAmIDifficulty } from
 import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
 import { getCurrentUser } from "@/lib/auth";
 import { getPlusStatus } from "@/lib/plus";
+import { getSeenQuestions } from "@/lib/seenQuestionsServer";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -156,12 +157,16 @@ async function QuizContent({
   if (quiz) {
     const fromPayment = provider && paymentRef ? await verifyUnlock(provider, paymentRef, slug) : false;
     const unlocked = previewUnlocked || fromPayment || (user ? await hasUserPurchased(user.id, slug) : false);
+    // Kontogebundenes "schon gesehen" nur für eingeloggte Nutzer:innen laden --
+    // Gäste (undefined) fallen in QuizPlayer auf localStorage zurück.
+    const initialSeenKeys = user ? await getSeenQuestions(user.id, slug) : undefined;
     return (
       <DailyCapGate plusActive={plusActive}>
         <QuizPlayer
           quiz={quiz}
           initiallyUnlocked={unlocked}
           checkoutError={checkoutError === "not_configured"}
+          initialSeenKeys={initialSeenKeys}
         />
       </DailyCapGate>
     );

@@ -229,6 +229,27 @@ export interface Database {
         };
         Relationships: [];
       };
+      seen_questions: {
+        Row: {
+          user_id: string;
+          quiz_slug: string;
+          keys: string[];
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          quiz_slug: string;
+          keys?: string[];
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          quiz_slug?: string;
+          keys?: string[];
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

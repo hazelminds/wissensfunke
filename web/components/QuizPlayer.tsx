@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { logGameEventAction } from "@/lib/actions/analytics";
-import { sampleUnseenQuestions } from "@/lib/seenQuestions";
+import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
+import { pickUnseen, readSeenLocal, writeSeenLocal } from "@/lib/seenQuestions";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
@@ -16,10 +17,15 @@ export function QuizPlayer({
   quiz,
   initiallyUnlocked,
   checkoutError = false,
+  initialSeenKeys,
 }: {
   quiz: QuizDefinition;
   initiallyUnlocked: boolean;
   checkoutError?: boolean;
+  /** Kontogebundener "schon gesehen"-Stand, serverseitig geladen -- nur für
+   * eingeloggte Nutzer:innen gesetzt. Gäste (undefined) laufen über
+   * localStorage (siehe pickRound unten). */
+  initialSeenKeys?: string[];
 }) {
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
@@ -27,12 +33,43 @@ export function QuizPlayer({
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [unlocked, setUnlocked] = useState(initiallyUnlocked);
   const [revealed, setRevealed] = useState(initiallyUnlocked);
+
+  // Hält den aktuellen "schon gesehen"-Stand über mehrere Runden/"Nochmal"
+  // hinweg -- kein React-State, weil eine Änderung hier nie einen Re-Render
+  // auslösen soll (Ref statt State). Lazy befüllt beim ersten pickRound().
+  const seenRef = useRef<Set<string> | null>(null);
+
   // Frische Auswahl aus dem Pool bei jedem Rundenstart (auch "Nochmal") --
   // bevorzugt noch nicht gezeigte Fragen, damit sich ein 150er-Pool nicht wie
-  // einer von 8 anfühlt und niemand dieselbe Frage zweimal hintereinander sieht.
-  const [roundQuestions, setRoundQuestions] = useState<QuizQuestion[]>(() =>
-    sampleUnseenQuestions(quiz.slug, quiz.questions, quiz.roundSize),
-  );
+  // einer von 8 anfühlt und niemand dieselbe Frage zweimal hintereinander
+  // sieht. Eingeloggt: kontogebunden über den Server. Gast: geräte-lokal.
+  function pickRound(): QuizQuestion[] {
+    const seen = seenRef.current ?? new Set(initialSeenKeys ?? readSeenLocal(quiz.slug));
+    const { picked, nextSeen } = pickUnseen(quiz.questions, quiz.roundSize, seen);
+    seenRef.current = nextSeen;
+    if (initialSeenKeys !== undefined) {
+      saveSeenQuestionsAction(quiz.slug, [...nextSeen]).catch(() => null);
+    } else {
+      writeSeenLocal(quiz.slug, nextSeen);
+    }
+    return picked;
+  }
+
+  // Leer statt sofort per Lazy-Initializer befüllt: pickRound() liest/schreibt
+  // seenRef, und Refs dürfen laut React-Regel nicht während des Renderns
+  // angefasst werden -- die erste Runde kommt daher aus dem Effekt direkt
+  // darunter (StartScreen zeigt die Rundengröße ohnehin über quiz.roundSize,
+  // nicht über roundQuestions.length, also kein Flackern währenddessen).
+  const [roundQuestions, setRoundQuestions] = useState<QuizQuestion[]>([]);
+
+  useEffect(() => {
+    // Bewusste Ausnahme wie beim Zahlungs-Rücksprung unten: seenRef/localStorage
+    // sind erst nach dem Mount verfügbar, die erste Runde kann also nicht
+    // synchron im Lazy-Initializer stehen (siehe Kommentar oben an roundQuestions).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setRoundQuestions(pickRound());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Rücksprung von der Zahlungsseite (Erfolg oder Fehler): der Client-State
   // (answers) ging bei der Navigation weg verloren — hier aus localStorage
@@ -78,7 +115,7 @@ export function QuizPlayer({
   const answered = selected !== null;
 
   function startQuiz() {
-    setRoundQuestions(sampleUnseenQuestions(quiz.slug, quiz.questions, quiz.roundSize));
+    setRoundQuestions(pickRound());
     setCurrent(0);
     setSelected(null);
     setAnswers([]);
@@ -106,7 +143,7 @@ export function QuizPlayer({
   }
 
   if (screen === "start") {
-    return <StartScreen quiz={quiz} roundSize={roundQuestions.length} onStart={startQuiz} />;
+    return <StartScreen quiz={quiz} roundSize={quiz.roundSize} onStart={startQuiz} />;
   }
 
   if (screen === "quiz") {

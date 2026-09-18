@@ -1,11 +1,10 @@
 /**
- * "Nicht wiederholen, bis der Pool erschöpft ist" -- geräte-lokal
- * (localStorage) pro Quiz-Slug. Reicht der Rest an unverbrauchten Fragen für
- * eine Runde nicht mehr aus, gilt der Zyklus als durch: die Runde wird aus
- * dem vollen Pool aufgefüllt und ein neuer Zyklus beginnt direkt danach.
+ * "Nicht wiederholen, bis der Pool erschöpft ist" für die Wissens-Quiz.
  *
- * Bewusst nur geräte-/browserlokal, kein Server-Abgleich über Konten hinweg --
- * gleiches Prinzip wie lib/dailyCap.ts.
+ * Reine Sampling-Logik hier drin, ohne Wissen darüber, WOHER der "schon
+ * gesehen"-Stand kommt -- QuizPlayer entscheidet das: eingeloggt via
+ * lib/actions/seenQuestions.ts (Konto, geräteübergreifend), sonst über die
+ * localStorage-Fallbacks hier unten (Gast, nur dieses Gerät).
  */
 
 const STORAGE_PREFIX = "nog_seen_";
@@ -14,11 +13,12 @@ function storageKey(slug: string): string {
   return `${STORAGE_PREFIX}${slug}`;
 }
 
-function questionKey(q: { question: string }): string {
+export function questionKey(q: { question: string }): string {
   return q.question;
 }
 
-function readSeen(slug: string): Set<string> {
+/** Gast-Fallback: kein Konto zum Dran-binden, bleibt geräte-lokal. */
+export function readSeenLocal(slug: string): Set<string> {
   if (typeof window === "undefined") return new Set();
   try {
     const raw = localStorage.getItem(storageKey(slug));
@@ -29,7 +29,7 @@ function readSeen(slug: string): Set<string> {
   }
 }
 
-function writeSeen(slug: string, seen: Set<string>): void {
+export function writeSeenLocal(slug: string, seen: Set<string>): void {
   try {
     localStorage.setItem(storageKey(slug), JSON.stringify([...seen]));
   } catch {
@@ -46,27 +46,30 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-/** Zieht `size` Fragen aus `pool`, bevorzugt noch nicht gesehene. */
-export function sampleUnseenQuestions<T extends { question: string }>(
-  slug: string,
+/** Zieht `size` Fragen aus `pool`, bevorzugt noch nicht in `seen` enthaltene.
+ * Reicht der unverbrauchte Rest nicht, wird aus dem vollen Pool aufgefüllt
+ * und der Zyklus (durch `nextSeen`) zurückgesetzt. Reine Funktion -- der
+ * Aufrufer entscheidet, wo `seen` herkommt und wo `nextSeen` landet. */
+export function pickUnseen<T extends { question: string }>(
   pool: T[],
   size: number,
-): T[] {
+  seen: Set<string>,
+): { picked: T[]; nextSeen: Set<string> } {
   const n = Math.min(size, pool.length);
-  const seen = readSeen(slug);
   const unseen = shuffle(pool.filter((q) => !seen.has(questionKey(q))));
 
   let picked: T[];
+  let nextSeen: Set<string>;
   if (unseen.length >= n) {
     picked = unseen.slice(0, n);
+    nextSeen = new Set(seen);
   } else {
     const usedKeys = new Set(unseen.map(questionKey));
     const refill = shuffle(pool.filter((q) => !usedKeys.has(questionKey(q))));
     picked = [...unseen, ...refill].slice(0, n);
-    seen.clear(); // Zyklus erschöpft -- neuer Durchlauf beginnt mit dieser Runde.
+    nextSeen = new Set(); // Zyklus erschöpft -- neuer Durchlauf beginnt mit dieser Runde.
   }
 
-  picked.forEach((q) => seen.add(questionKey(q)));
-  writeSeen(slug, seen);
-  return picked;
+  picked.forEach((q) => nextSeen.add(questionKey(q)));
+  return { picked, nextSeen };
 }
