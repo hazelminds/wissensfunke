@@ -1,10 +1,14 @@
 /**
- * "Nicht wiederholen, bis der Pool erschöpft ist" für die Wissens-Quiz.
+ * "Nicht wiederholen, bis der Pool erschöpft ist" -- für die Wissens-Quiz
+ * (einzelne Fragen aus einem Pool) UND "Wer bin ich?" Mittel/Schwer (ganze
+ * Runden aus einem Pool), daher generisch über einen `keyOf`-Extractor statt
+ * fest auf `.question` verdrahtet.
  *
  * Reine Sampling-Logik hier drin, ohne Wissen darüber, WOHER der "schon
- * gesehen"-Stand kommt -- QuizPlayer entscheidet das: eingeloggt via
- * lib/actions/seenQuestions.ts (Konto, geräteübergreifend), sonst über die
- * localStorage-Fallbacks hier unten (Gast, nur dieses Gerät).
+ * gesehen"-Stand kommt -- Aufrufer entscheiden das: eingeloggt via
+ * lib/actions/seenQuestions.ts (Konto, geräteübergreifend) bzw. serverseitig
+ * direkt via lib/seenQuestionsServer.ts, sonst über die localStorage-
+ * Fallbacks hier unten (Gast, nur dieses Gerät).
  */
 
 const STORAGE_PREFIX = "nog_seen_";
@@ -46,17 +50,19 @@ function shuffle<T>(arr: T[]): T[] {
   return out;
 }
 
-/** Zieht `size` Fragen aus `pool`, bevorzugt noch nicht in `seen` enthaltene.
- * Reicht der unverbrauchte Rest nicht, wird aus dem vollen Pool aufgefüllt
- * und der Zyklus (durch `nextSeen`) zurückgesetzt. Reine Funktion -- der
- * Aufrufer entscheidet, wo `seen` herkommt und wo `nextSeen` landet. */
-export function pickUnseen<T extends { question: string }>(
+/** Zieht `size` Elemente aus `pool`, bevorzugt noch nicht in `seen`
+ * enthaltene (per `keyOf` identifiziert). Reicht der unverbrauchte Rest
+ * nicht, wird aus dem vollen Pool aufgefüllt und der Zyklus (durch
+ * `nextSeen`) zurückgesetzt. Reine Funktion -- der Aufrufer entscheidet, wo
+ * `seen` herkommt und wo `nextSeen` landet. */
+export function pickUnseen<T>(
   pool: T[],
   size: number,
   seen: Set<string>,
+  keyOf: (item: T) => string,
 ): { picked: T[]; nextSeen: Set<string> } {
   const n = Math.min(size, pool.length);
-  const unseen = shuffle(pool.filter((q) => !seen.has(questionKey(q))));
+  const unseen = shuffle(pool.filter((item) => !seen.has(keyOf(item))));
 
   let picked: T[];
   let nextSeen: Set<string>;
@@ -64,12 +70,12 @@ export function pickUnseen<T extends { question: string }>(
     picked = unseen.slice(0, n);
     nextSeen = new Set(seen);
   } else {
-    const usedKeys = new Set(unseen.map(questionKey));
-    const refill = shuffle(pool.filter((q) => !usedKeys.has(questionKey(q))));
+    const usedKeys = new Set(unseen.map(keyOf));
+    const refill = shuffle(pool.filter((item) => !usedKeys.has(keyOf(item))));
     picked = [...unseen, ...refill].slice(0, n);
     nextSeen = new Set(); // Zyklus erschöpft -- neuer Durchlauf beginnt mit dieser Runde.
   }
 
-  picked.forEach((q) => nextSeen.add(questionKey(q)));
+  picked.forEach((item) => nextSeen.add(keyOf(item)));
   return { picked, nextSeen };
 }

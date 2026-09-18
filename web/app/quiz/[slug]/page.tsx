@@ -2,11 +2,17 @@ import { notFound } from "next/navigation";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
-import { getDailyWhoAmIRound, getRandomWhoAmIRound, type WhoAmIDifficulty } from "@/content/whoami";
+import {
+  getDailyWhoAmIRound,
+  getRandomWhoAmIRound,
+  getWhoAmIRoundsByDifficulty,
+  type WhoAmIDifficulty,
+} from "@/content/whoami";
 import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
 import { getCurrentUser } from "@/lib/auth";
 import { getPlusStatus } from "@/lib/plus";
 import { getSeenQuestions } from "@/lib/seenQuestionsServer";
+import { pickUnseen } from "@/lib/seenQuestions";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -117,10 +123,32 @@ async function QuizContent({
     const difficulty = (game.difficulty ?? "easy") as WhoAmIDifficulty;
     // Leicht ist der tägliche Gratis-Anker (ein Rätsel/Tag, wie Tagesrätsel) --
     // Mittel/Schwer sind Plus-exklusiv mit beliebig vielen Runden/Tag.
-    const round =
-      game.level === "daily-free" ? getDailyWhoAmIRound(difficulty) : getRandomWhoAmIRound(difficulty);
+    let round;
+    let pendingSeenKeys: string[] | undefined;
+    if (game.level === "daily-free") {
+      round = getDailyWhoAmIRound(difficulty);
+    } else if (user) {
+      // Kontogebundenes "schon gesehen" wie bei den Wissens-Quiz -- dieselbe
+      // Tabelle, hier nur pro ganzer Runde (Rätsel-Slug) statt pro Frage.
+      // Persistiert wird clientseitig in WhoAmI (nie während des Renderns).
+      const pool = getWhoAmIRoundsByDifficulty(difficulty);
+      const seenKeys = await getSeenQuestions(user.id, slug);
+      const { picked, nextSeen } = pickUnseen(pool, 1, new Set(seenKeys), (r) => r.slug);
+      round = picked[0];
+      pendingSeenKeys = [...nextSeen];
+    } else {
+      round = getRandomWhoAmIRound(difficulty);
+    }
     if (!round) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
-    const player = <WhoAmI slug={slug} title={game.title} color={game.type} round={round} />;
+    const player = (
+      <WhoAmI
+        slug={slug}
+        title={game.title}
+        color={game.type}
+        round={round}
+        pendingSeenKeys={pendingSeenKeys}
+      />
+    );
     return game.level === "daily-free" ? player : <DailyCapGate plusActive={plusActive}>{player}</DailyCapGate>;
   }
 

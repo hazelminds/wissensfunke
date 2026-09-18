@@ -5,7 +5,7 @@ import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor } from "@/
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
-import { pickUnseen, readSeenLocal, writeSeenLocal } from "@/lib/seenQuestions";
+import { pickUnseen, questionKey, readSeenLocal, writeSeenLocal } from "@/lib/seenQuestions";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
@@ -45,7 +45,7 @@ export function QuizPlayer({
   // sieht. Eingeloggt: kontogebunden über den Server. Gast: geräte-lokal.
   function pickRound(): QuizQuestion[] {
     const seen = seenRef.current ?? new Set(initialSeenKeys ?? readSeenLocal(quiz.slug));
-    const { picked, nextSeen } = pickUnseen(quiz.questions, quiz.roundSize, seen);
+    const { picked, nextSeen } = pickUnseen(quiz.questions, quiz.roundSize, seen, questionKey);
     seenRef.current = nextSeen;
     if (initialSeenKeys !== undefined) {
       saveSeenQuestionsAction(quiz.slug, [...nextSeen]).catch(() => null);

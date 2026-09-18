@@ -7,6 +7,7 @@ import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { logGameEventAction } from "@/lib/actions/analytics";
+import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 function normalize(s: string): string {
@@ -30,11 +31,16 @@ export function WhoAmI({
   title,
   color,
   round,
+  pendingSeenKeys,
 }: {
   slug: string;
   title: string;
   color: string;
   round: WhoAmIRound;
+  /** Serverseitig bereits aktualisierter "schon gesehen"-Stand (inkl. dieser
+   * Runde) für eingeloggte Nutzer:innen -- wird hier nur noch persistiert,
+   * nie während des Renderns geschrieben (siehe app/quiz/[slug]/page.tsx). */
+  pendingSeenKeys?: string[];
 }) {
   const { hints, solution, aliases } = round;
   const total = hints.length;
@@ -50,6 +56,7 @@ export function WhoAmI({
   // unten loggt jede weitere Runde separat.
   useEffect(() => {
     logGameEventAction(slug, "started").catch(() => null);
+    if (pendingSeenKeys) saveSeenQuestionsAction(slug, pendingSeenKeys).catch(() => null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
