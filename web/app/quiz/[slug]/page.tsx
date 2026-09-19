@@ -157,10 +157,10 @@ async function QuizContent({
     const difficulty: CrosswordDifficulty =
       game.difficulty === "hard" ? "schwer" : game.difficulty === "medium" ? "mittel" : "leicht";
 
-    // "Schwer" ist echt Plus-exklusiv -- kein Gratis-Anteil wie sonst überall
-    // (DailyCapGate), sondern ein harter Wall ganz ohne Vorschau-Runden.
+    // Mittel/Schwer sind echt Plus-exklusiv -- kein Gratis-Anteil wie sonst
+    // überall (DailyCapGate), sondern ein harter Wall ganz ohne Vorschau-Runden.
     if (game.level === "subscriber-only" && !plusActive) {
-      return <PlusOnlyLock title={game.title} />;
+      return <PlusOnlyLock title={game.title} description={game.teaser} />;
     }
 
     const pool = getCrosswordPool(difficulty);
@@ -178,9 +178,9 @@ async function QuizContent({
       puzzle = getRandomCrossword(difficulty);
     }
     if (!puzzle) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
-    // Leicht/Mittel zählen zu den 2 Gratis-Runden/Tag wie alle anderen
-    // Weekly-Freemium-Spiele. "Schwer" ist oben schon abgefangen -- hier
-    // unten sind wir für Schwer also immer schon plusActive.
+    // Nur noch "Leicht" zählt zu den 2 Gratis-Runden/Tag wie alle anderen
+    // Weekly-Freemium-Spiele. Mittel/Schwer sind oben schon abgefangen -- hier
+    // unten sind wir für die also immer schon plusActive.
     return (
       <DailyCapGate plusActive={plusActive}>
         <Crossword slug={slug} title={game.title} puzzle={puzzle} pendingSeenKeys={pendingSeenKeys} />
@@ -289,7 +289,7 @@ async function QuizContent({
  * gratis, danach Paywall) läuft hier serverseitig `plusActive` direkt in die
  * Blockade, kein Client-State/useEffect nötig.
  */
-function PlusOnlyLock({ title }: { title: string }) {
+function PlusOnlyLock({ title, description }: { title: string; description: string }) {
   return (
     <div className="mx-auto max-w-md px-5 py-20 text-center">
       <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15">
@@ -298,8 +298,7 @@ function PlusOnlyLock({ title }: { title: string }) {
       <p className="text-sm text-muted">Exklusiv für Plus</p>
       <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-ink">{title}</h1>
       <p className="mt-3 text-ink-soft">
-        Das große Rätsel mit mindestens 25 Begriffen ist Plus-Mitgliedern vorbehalten — ganz ohne
-        Gratis-Runde. Hol dir Plus und leg direkt los.
+        {description} Ganz ohne Gratis-Runde — hol dir Plus und leg direkt los.
       </p>
 
       <div className="mt-6 flex flex-col gap-3">

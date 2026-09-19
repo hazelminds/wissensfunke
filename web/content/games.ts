@@ -157,15 +157,15 @@ export const games: GameModule[] = [
   {
     slug: "kreuzwortraetsel-mittel",
     title: "Kreuzworträtsel Mittel",
-    teaser: "Größeres Gitter, rund 15 Begriffe -- etwas mehr Knobelei.",
+    teaser: "Größeres Gitter, rund 15 Begriffe -- exklusiv für Plus-Mitglieder.",
     emoji: "📝",
     category: "Wörter",
-    level: "weekly-freemium",
+    level: "subscriber-only",
     estMinutes: 9,
     type: "puzzle",
     variant: "crossword",
     difficulty: "medium",
-    isPremium: false,
+    isPremium: true,
     sortOrder: 16,
   },
   {
