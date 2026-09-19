@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ArrowRight, Crown, Flame, LifeBuoy, Lock, LogOut, User as UserIcon } from "lucide-react";
+import { ArrowRight, Crown, Flame, LifeBuoy, Lock, LogOut, Snowflake, User as UserIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
 import { PlusButton } from "@/components/PlusButton";
 import { UsernameForm } from "@/components/konto/UsernameForm";
 import { getCurrentUser, isSupabaseConfigured } from "@/lib/auth";
-import { getServerStreak } from "@/lib/streak-server";
+import { getServerStreak, MAX_STREAK_FREEZES } from "@/lib/streak-server";
 import { getPlusStatus } from "@/lib/plus";
 import { getUnreadSupportCountForUser } from "@/lib/support";
 import { signOut } from "@/lib/actions/auth";
@@ -129,6 +129,32 @@ export default async function KontoPage() {
                     {streak?.bestCount ?? 0} {streak?.bestCount === 1 ? "Tag" : "Tage"}
                   </span>
                 </p>
+              </div>
+
+              <div
+                className={`hairline mb-4 flex items-center gap-3 rounded-2xl px-4 py-3.5 ${
+                  plusActive ? "bg-bg" : "bg-bg opacity-70"
+                }`}
+              >
+                <div
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+                    plusActive ? "bg-primary/15" : "bg-line"
+                  }`}
+                >
+                  <Snowflake className={`h-4.5 w-4.5 ${plusActive ? "text-primary" : "text-muted"}`} />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-ink">
+                    {plusActive
+                      ? `${streak?.freezesAvailable ?? 0}/${MAX_STREAK_FREEZES} Streak-Schutz`
+                      : "Streak-Schutz"}
+                  </p>
+                  <p className="text-xs text-muted">
+                    {plusActive
+                      ? "Rettet automatisch einen verpassten Tag, statt die Serie zu reißen. +1 pro Monat."
+                      : "Nur mit Plus: rettet automatisch einen verpassten Tag."}
+                  </p>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">

@@ -58,6 +58,8 @@ export interface Database {
           count: number;
           best_count: number;
           last_completed_date: string | null;
+          freezes_available: number;
+          freezes_granted_month: string | null;
           updated_at: string;
         };
         Insert: {
@@ -65,6 +67,8 @@ export interface Database {
           count?: number;
           best_count?: number;
           last_completed_date?: string | null;
+          freezes_available?: number;
+          freezes_granted_month?: string | null;
           updated_at?: string;
         };
         Update: {
@@ -72,6 +76,8 @@ export interface Database {
           count?: number;
           best_count?: number;
           last_completed_date?: string | null;
+          freezes_available?: number;
+          freezes_granted_month?: string | null;
           updated_at?: string;
         };
         Relationships: [];
