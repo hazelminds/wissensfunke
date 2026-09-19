@@ -42,11 +42,15 @@ function key(r, c) {
 function canPlace(word, row, col, dir, cells) {
   const len = word.length;
   // Zelle direkt vor/nach dem Wort muss leer sein (kein Anhängen an ein
-  // längeres Wort).
+  // längeres Wort). Für "down" ist die Zelle NACH dem Wort bei row + len
+  // (der Zeile nach dem LETZTEN Buchstaben), nicht bei row + 1 -- das war
+  // ein Bug: row + 1 prüfte nur die Zeile nach dem ERSTEN Buchstaben und
+  // ließ Wörter direkt in ein anderes, bereits platziertes Wort hineinlaufen
+  // (z. B. "TROMMEL" + das "S" von "KRANKENHAUS" wurde als "TROMMELS" sichtbar).
   if (dir === "across") {
     if (cells.has(key(row, col - 1)) || cells.has(key(row, col + len))) return false;
   } else {
-    if (cells.has(key(row - 1, col)) || cells.has(key(row + 1, col))) return false;
+    if (cells.has(key(row - 1, col)) || cells.has(key(row + len, col))) return false;
   }
 
   let hasIntersection = false;
@@ -208,6 +212,61 @@ function generateOnePuzzle(pool) {
   return { rows, cols, grid, entries: numberedEntries };
 }
 
+/**
+ * Letzte, unabhängige Prüfung vor dem Ausliefern eines Rätsels: für jede
+ * maximale waagerechte/senkrechte Buchstabenfolge im fertigen Gitter muss es
+ * genau einen registrierten Eintrag mit exakt passendem Wort geben. Das ist
+ * die einzige Prüfung, die wirklich garantiert, dass keine zwei Wörter
+ * ungewollt ineinanderlaufen (siehe der Bug, der "TROMMEL" + das "S" von
+ * "KRANKENHAUS" zu "TROMMELS" verschmelzen ließ) -- unabhängig von den
+ * Platzierungs-Regeln in canPlace, die genau diesen Fehler hatten.
+ */
+function validatePuzzle(puzzle) {
+  const { rows, cols, grid, entries } = puzzle;
+  const acrossAt = new Map(entries.filter((e) => e.dir === "across").map((e) => [key(e.row, e.col), e]));
+  const downAt = new Map(entries.filter((e) => e.dir === "down").map((e) => [key(e.row, e.col), e]));
+
+  for (let r = 0; r < rows; r++) {
+    let c = 0;
+    while (c < cols) {
+      if (grid[r][c] === null) {
+        c++;
+        continue;
+      }
+      const start = c;
+      let word = "";
+      while (c < cols && grid[r][c] !== null) {
+        word += grid[r][c];
+        c++;
+      }
+      if (word.length < 2) continue;
+      const entry = acrossAt.get(key(r, start));
+      if (!entry || entry.answer !== word) return false;
+    }
+  }
+
+  for (let c = 0; c < cols; c++) {
+    let r = 0;
+    while (r < rows) {
+      if (grid[r][c] === null) {
+        r++;
+        continue;
+      }
+      const start = r;
+      let word = "";
+      while (r < rows && grid[r][c] !== null) {
+        word += grid[r][c];
+        r++;
+      }
+      if (word.length < 2) continue;
+      const entry = downAt.get(key(start, c));
+      if (!entry || entry.answer !== word) return false;
+    }
+  }
+
+  return true;
+}
+
 function generatePuzzles() {
   const puzzles = [];
   const seenSignatures = new Set();
@@ -216,6 +275,10 @@ function generatePuzzles() {
     guard++;
     const puzzle = generateOnePuzzle(wordBank);
     if (!puzzle) continue;
+    if (!validatePuzzle(puzzle)) {
+      console.warn("Rejected an invalid puzzle (failed final validation) -- retrying.");
+      continue;
+    }
     const signature = puzzle.entries
       .map((e) => e.answer)
       .sort()
