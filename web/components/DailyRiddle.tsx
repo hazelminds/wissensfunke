@@ -13,11 +13,13 @@ export function DailyRiddle({ riddle }: { riddle: DailyRiddleData }) {
 
   const [revealed, setRevealed] = useState(false);
   const [streakCount, setStreakCount] = useState(0);
+  const [freezesUsed, setFreezesUsed] = useState(0);
 
   async function reveal() {
     const local = recordDailyCompletion();
     const server = await recordServerStreakCompletion().catch(() => null);
     setStreakCount(server?.count ?? local.count);
+    setFreezesUsed(server?.freezesUsed ?? 0);
     setRevealed(true);
     logGameEventAction("tages-raetsel", "completed").catch(() => null);
   }
@@ -47,6 +49,15 @@ export function DailyRiddle({ riddle }: { riddle: DailyRiddleData }) {
           </button>
         )}
       </div>
+
+      {revealed && freezesUsed > 0 && (
+        <div className="flex items-center gap-2.5 rounded-2xl bg-primary-soft px-4 py-3.5 text-sm text-primary-dark">
+          <span className="text-xl leading-none">🧊</span>
+          <p>
+            <strong>Streak-Schutz eingesetzt!</strong> {freezesUsed === 1 ? "Ein verpasster Tag wurde" : `${freezesUsed} verpasste Tage wurden`} automatisch ausgeglichen — deine Serie läuft weiter.
+          </p>
+        </div>
+      )}
 
       {revealed && (
         <p className="text-center text-sm text-ink-soft">

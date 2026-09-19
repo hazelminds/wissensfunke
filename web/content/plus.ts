@@ -17,6 +17,11 @@ export const plusFeatures: PlusFeature[] = [
     description: "Keine Tageslimits mehr — so viele Runden wie du willst, im gebuchten Zeitraum.",
   },
   {
+    emoji: "🧊",
+    title: "Streak-Schutz",
+    description: "Mal einen Tag verpasst? Pro Monat rettet dich automatisch ein Streak-Schutz, statt dass deine Serie abreißt.",
+  },
+  {
     emoji: "📊",
     title: "Ausführliche Auswertungen",
     description: "Lösung, Erklärung und Themen-Analyse zu jeder Runde — nicht nur das Endergebnis.",

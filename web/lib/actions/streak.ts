@@ -58,6 +58,7 @@ export async function recordServerStreakCompletion() {
       bestCount: existing.best_count,
       lastCompletedDate: today,
       freezesAvailable: existing.freezes_available,
+      freezesUsed: 0,
     };
   }
 
@@ -71,11 +72,13 @@ export async function recordServerStreakCompletion() {
   const missedDays = existing?.last_completed_date ? daysBetween(existing.last_completed_date, today) - 1 : null;
 
   let nextCount: number;
+  let freezesUsed = 0;
   if (existing?.last_completed_date === yesterdayKey()) {
     nextCount = existing.count + 1;
   } else if (plus.active && missedDays !== null && missedDays >= 1 && missedDays <= freezesAvailable) {
     // Lücke durch Streak-Schutz überbrückt -- entsprechend viele Freezes weg, Serie bleibt.
-    freezesAvailable -= missedDays;
+    freezesUsed = missedDays;
+    freezesAvailable -= freezesUsed;
     nextCount = existing!.count + 1;
   } else {
     nextCount = 1;
@@ -95,5 +98,5 @@ export async function recordServerStreakCompletion() {
     { onConflict: "user_id" },
   );
 
-  return { count: nextCount, bestCount: nextBest, lastCompletedDate: today, freezesAvailable };
+  return { count: nextCount, bestCount: nextBest, lastCompletedDate: today, freezesAvailable, freezesUsed };
 }

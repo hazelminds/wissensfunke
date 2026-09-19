@@ -20,6 +20,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [done, setDone] = useState(false);
   const [streakCount, setStreakCount] = useState(0);
+  const [freezesUsed, setFreezesUsed] = useState(0);
 
   const question = quizSet.questions[current];
   const answered = selected !== null;
@@ -39,6 +40,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
       // Login/Supabase-Setup liefert die Action null, dann zählt localStorage.
       const server = await recordServerStreakCompletion().catch(() => null);
       setStreakCount(server?.count ?? local.count);
+      setFreezesUsed(server?.freezesUsed ?? 0);
       setDone(true);
       incrementTodayPlayCount();
       logGameEventAction("tages-mini-quiz", "completed").catch(() => null);
@@ -49,7 +51,14 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
   }
 
   if (done) {
-    return <DoneCard score={score} total={quizSet.questions.length} streakCount={streakCount} />;
+    return (
+      <DoneCard
+        score={score}
+        total={quizSet.questions.length}
+        streakCount={streakCount}
+        freezesUsed={freezesUsed}
+      />
+    );
   }
 
   const letters = ["A", "B", "C", "D"];
@@ -147,13 +156,33 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
   );
 }
 
-function DoneCard({ score, total, streakCount }: { score: number; total: number; streakCount: number }) {
+function DoneCard({
+  score,
+  total,
+  streakCount,
+  freezesUsed,
+}: {
+  score: number;
+  total: number;
+  streakCount: number;
+  freezesUsed: number;
+}) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-2xl border-2 border-line bg-surface p-6 text-center">
       <span className="text-4xl">⚡</span>
       <h1 className="font-display text-xl font-bold text-ink">
         {score}/{total} richtig — bis morgen!
       </h1>
+      {freezesUsed > 0 && (
+        <div className="flex w-full items-center gap-2.5 rounded-2xl bg-primary-soft px-4 py-3.5 text-left text-sm text-primary-dark">
+          <span className="text-xl leading-none">🧊</span>
+          <p>
+            <strong>Streak-Schutz eingesetzt!</strong>{" "}
+            {freezesUsed === 1 ? "Ein verpasster Tag wurde" : `${freezesUsed} verpasste Tage wurden`}{" "}
+            automatisch ausgeglichen — deine Serie läuft weiter.
+          </p>
+        </div>
+      )}
       <p className="text-sm text-ink-soft">
         Neues Tages-Mini-Quiz gibt es um Mitternacht. {streakCount > 0 && (
           <>Dein Streak steht jetzt bei <strong>{streakCount} {streakCount === 1 ? "Tag" : "Tagen"}</strong>.</>
