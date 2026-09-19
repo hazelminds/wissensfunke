@@ -137,6 +137,14 @@ async function QuizContent({
   const user = await getCurrentUser();
   const plusActive = previewUnlocked || (user ? (await getPlusStatus(user.id)).active : false);
 
+  // Alles, was auf der Kachel sichtbar das "Plus"-Abzeichen trägt (isPremium/
+  // level: "subscriber-only"), ist echt Plus-exklusiv: kein Gratis-Anteil wie
+  // beim weichen DailyCapGate (2 Runden/Tag), sondern ein harter Wall ganz
+  // ohne Vorschau-Runde für Gäste und Nicht-Plus-Nutzer:innen.
+  if (game.level === "subscriber-only" && !plusActive) {
+    return <PlusOnlyLock title={game.title} description={game.teaser} />;
+  }
+
   if (slug === "tages-mini-quiz") {
     return (
       <DailyCapGate plusActive={plusActive}>
@@ -156,12 +164,6 @@ async function QuizContent({
   if (game.variant === "crossword") {
     const difficulty: CrosswordDifficulty =
       game.difficulty === "hard" ? "schwer" : game.difficulty === "medium" ? "mittel" : "leicht";
-
-    // Mittel/Schwer sind echt Plus-exklusiv -- kein Gratis-Anteil wie sonst
-    // überall (DailyCapGate), sondern ein harter Wall ganz ohne Vorschau-Runden.
-    if (game.level === "subscriber-only" && !plusActive) {
-      return <PlusOnlyLock title={game.title} description={game.teaser} />;
-    }
 
     const pool = getCrosswordPool(difficulty);
     let puzzle;
