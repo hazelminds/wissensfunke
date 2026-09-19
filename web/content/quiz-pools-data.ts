@@ -2360,10 +2360,10 @@ export const gemischtQuestions: QuizQuestion[] = [
   },
   {
     category: "Technik",
-    question: "Wer gilt als Erfinder des World Wide Web?",
-    options: ["Tim Berners-Lee", "Vint Cerf", "Steve Jobs", "Bill Gates"],
-    correctIndex: 0,
-    explanation: "Tim Berners-Lee entwickelte 1989 am CERN das World Wide Web.",
+    question: "Der Name welches Suchmaschinen-Unternehmens leitet sich von der Zahl \"Googol\" ab?",
+    options: ["Yahoo", "Bing", "Google", "Ask.com"],
+    correctIndex: 2,
+    explanation: "Der Name Google ist eine bewusst falsch geschriebene Anlehnung an \"Googol\", die Bezeichnung für die Zahl 10 hoch 100.",
   },
   {
     category: "Technik",
@@ -2542,10 +2542,10 @@ export const gemischtQuestions: QuizQuestion[] = [
   },
   {
     category: "Geografie",
-    question: "In welchem Land liegt die Atacamawüste, eine der trockensten Regionen der Erde?",
-    options: ["Argentinien", "Bolivien", "Chile", "Peru"],
+    question: "Welcher Fluss gilt als der längste Fluss Europas?",
+    options: ["Donau", "Rhein", "Wolga", "Dnepr"],
     correctIndex: 2,
-    explanation: "Die Atacamawüste erstreckt sich im Norden Chiles und gilt als eine der trockensten Regionen der Welt.",
+    explanation: "Die Wolga ist mit rund 3.530 Kilometern der längste Fluss Europas und fließt vollständig durch Russland.",
   },
   {
     category: "Geografie",

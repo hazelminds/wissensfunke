@@ -368,7 +368,7 @@ export const games: GameModule[] = [
   {
     slug: "gemischt",
     title: "Gemischt",
-    teaser: "Ein bunter Mix aus 20 Fragen über alle Themen — für echte Allrounder. Plus-Runde.",
+    teaser: "Ein bunter Mix aus 30 Fragen über alle Themen — für echte Allrounder. Plus-Runde.",
     emoji: "🧠",
     category: "Wissen",
     level: "subscriber-only",

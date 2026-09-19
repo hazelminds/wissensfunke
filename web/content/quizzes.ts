@@ -137,7 +137,7 @@ export const quizzes: QuizDefinition[] = [
     title: "Gemischt",
     categoryIcons: dailyCategoryIcons,
     questions: gemischtQuestions,
-    roundSize: 20,
+    roundSize: 30,
     revealTiming: "end",
     ranks: STANDARD_RANKS,
     // Plus-exklusives Quiz: die Themen-Analyse ist bereits mit dem Abo
