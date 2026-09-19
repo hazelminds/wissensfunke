@@ -277,6 +277,39 @@ export interface Database {
         };
         Relationships: [];
       };
+      scores: {
+        Row: {
+          id: number;
+          user_id: string;
+          category: "quiz" | "puzzle";
+          slug: string;
+          points: number;
+          time_seconds: number;
+          moves: number | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          user_id: string;
+          category: "quiz" | "puzzle";
+          slug: string;
+          points: number;
+          time_seconds: number;
+          moves?: number | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          user_id?: string;
+          category?: "quiz" | "puzzle";
+          slug?: string;
+          points?: number;
+          time_seconds?: number;
+          moves?: number | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       page_view_daily: {
         Row: {
           day: string;

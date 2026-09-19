@@ -1,13 +1,36 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Trophy, Crown, ArrowRight } from "lucide-react";
-import { leaderboards } from "@/content/leaderboard";
 import { PlusButton } from "@/components/PlusButton";
+import { getLeaderboardAction } from "@/lib/actions/scores";
+import type { LeaderboardEntry } from "@/lib/scores";
 
 const AVATAR_COLORS = ["bg-quiz", "bg-puzzle"];
 
 /** Kompakte, verschwommene Bestenlisten-Vorschau -- Base44-Vorbild: am Ende
- * jeder Runde ein Plus-Teaser, statt die Bestenliste nur separat zu zeigen. */
+ * jeder Runde ein Plus-Teaser, statt die Bestenliste nur separat zu zeigen.
+ * Lädt die echten Top-2 client-seitig nach (die umgebenden Spiel-Komponenten
+ * sind selbst schon Client-Components ohne Server-Daten zur Hand) -- zeigt
+ * sich erst, sobald es tatsächlich Einträge gibt. */
 export function LeaderboardTeaser({ board }: { board: "quiz" | "puzzle" }) {
-  const top = leaderboards[board].slice(0, 2);
+  const [top, setTop] = useState<LeaderboardEntry[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    getLeaderboardAction(board)
+      .then((entries) => {
+        if (!cancelled) setTop(entries.slice(0, 2));
+      })
+      .catch(() => {
+        if (!cancelled) setTop([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [board]);
+
+  if (!top || top.length === 0) return null;
 
   return (
     <div className="hairline mt-6 w-full overflow-hidden rounded-2xl bg-surface p-4 text-left">

@@ -7,6 +7,7 @@ import { logGameEventAction } from "@/lib/actions/analytics";
 import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
 import { pickUnseen, questionKey, readSeenLocal, writeSeenLocal } from "@/lib/seenQuestions";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Screen = "start" | "quiz" | "result";
@@ -39,6 +40,12 @@ export function QuizPlayer({
   // hinweg -- kein React-State, weil eine Änderung hier nie einen Re-Render
   // auslösen soll (Ref statt State). Lazy befüllt beim ersten pickRound().
   const seenRef = useRef<Set<string> | null>(null);
+
+  // Für die Bestenliste: Startzeitpunkt der laufenden Runde -- Ref statt
+  // State, weil eine Änderung hier nie einen Re-Render auslösen soll. Echter
+  // Wert kommt erst aus startQuiz() (Event-Handler, nie während des Renderns) --
+  // 0 ist hier nur ein reiner Platzhalter, bevor die erste Runde beginnt.
+  const startTimeRef = useRef(0);
 
   // Frische Auswahl aus dem Pool bei jedem Rundenstart (auch "Nochmal") --
   // bevorzugt noch nicht gezeigte Fragen, damit sich ein 150er-Pool nicht wie
@@ -121,6 +128,7 @@ export function QuizPlayer({
     setSelected(null);
     setAnswers([]);
     setScreen("quiz");
+    startTimeRef.current = Date.now();
     logGameEventAction(quiz.slug, "started").catch(() => null);
   }
 
@@ -137,6 +145,10 @@ export function QuizPlayer({
     if (current + 1 >= roundQuestions.length) {
       setScreen("result");
       incrementTodayPlayCount();
+      const finalScore = answers.filter((a) => a.correct).length;
+      const timeSeconds = Math.round((Date.now() - startTimeRef.current) / 1000);
+      const points = Math.round((finalScore / roundQuestions.length) * 500);
+      submitScoreAction("quiz", quiz.slug, points, timeSeconds, null).catch(() => null);
       logGameEventAction(quiz.slug, "completed").catch(() => null);
       return;
     }

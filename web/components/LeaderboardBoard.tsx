@@ -2,15 +2,27 @@
 
 import { useState } from "react";
 import { Crown, Lock } from "lucide-react";
-import { leaderboards } from "@/content/leaderboard";
 import { PlusButton } from "@/components/PlusButton";
+import type { LeaderboardEntry } from "@/lib/scores";
 
 const MEDALS = ["🥇", "🥈", "🥉"];
 const AVATAR_COLORS = ["bg-quiz", "bg-puzzle", "bg-psych", "bg-primary"];
 
-export function LeaderboardBoard() {
+/** `plusActive` steuert, ob DIESE (betrachtende) Person die vollen Ränge
+ * jenseits der Top 3 sieht -- eine Voraussetzung, um überhaupt als Eintrag
+ * zu erscheinen (Plus + Spielername), ist das für die Einträge selbst nicht,
+ * siehe lib/scores.ts. */
+export function LeaderboardBoard({
+  quizEntries,
+  puzzleEntries,
+  plusActive,
+}: {
+  quizEntries: LeaderboardEntry[];
+  puzzleEntries: LeaderboardEntry[];
+  plusActive: boolean;
+}) {
   const [tab, setTab] = useState<"quiz" | "puzzle">("quiz");
-  const entries = leaderboards[tab];
+  const entries = tab === "quiz" ? quizEntries : puzzleEntries;
 
   return (
     <div>
@@ -28,12 +40,18 @@ export function LeaderboardBoard() {
         ))}
       </div>
 
+      {entries.length === 0 && (
+        <p className="hairline rounded-2xl bg-surface px-4 py-6 text-center text-sm text-muted">
+          Noch keine Einträge in dieser Bestenliste — sei die/der Erste!
+        </p>
+      )}
+
       <div className="flex flex-col gap-2.5">
         {entries.map((entry, i) => {
-          const locked = i >= 3;
+          const locked = i >= 3 && !plusActive;
           return (
             <div
-              key={entry.username}
+              key={`${entry.username}-${i}`}
               className={`hairline flex items-center gap-4 rounded-2xl bg-surface p-4 ${
                 locked ? "relative overflow-hidden" : ""
               }`}
@@ -71,9 +89,11 @@ export function LeaderboardBoard() {
         })}
       </div>
 
-      <PlusButton className="glow-primary mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90">
-        <Crown className="h-4 w-4" /> Plus freischalten für die volle Bestenliste
-      </PlusButton>
+      {!plusActive && (
+        <PlusButton className="glow-primary mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90">
+          <Crown className="h-4 w-4" /> Plus freischalten für die volle Bestenliste
+        </PlusButton>
+      )}
     </div>
   );
 }

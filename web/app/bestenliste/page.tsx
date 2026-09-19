@@ -1,8 +1,19 @@
 import { Trophy } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LeaderboardBoard } from "@/components/LeaderboardBoard";
+import { getCurrentUser } from "@/lib/auth";
+import { getPlusStatus } from "@/lib/plus";
+import { getLeaderboard } from "@/lib/scores";
 
-export default function BestenlistePage() {
+export default async function BestenlistePage() {
+  const user = await getCurrentUser();
+  const [quizEntries, puzzleEntries, plus] = await Promise.all([
+    getLeaderboard("quiz"),
+    getLeaderboard("puzzle"),
+    user ? getPlusStatus(user.id) : null,
+  ]);
+  const plusActive = plus?.active ?? false;
+
   return (
     <div className="min-h-screen bg-bg">
       <SiteHeader backHref="/" />
@@ -19,12 +30,8 @@ export default function BestenlistePage() {
         </p>
 
         <div className="mt-8">
-          <LeaderboardBoard />
+          <LeaderboardBoard quizEntries={quizEntries} puzzleEntries={puzzleEntries} plusActive={plusActive} />
         </div>
-
-        <p className="mt-6 text-xs text-muted">
-          Beispieldaten -- echte Werte erscheinen hier, sobald Runden gespielt werden.
-        </p>
       </main>
     </div>
   );

@@ -6,6 +6,7 @@ import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { logGameEventAction } from "@/lib/actions/analytics";
+import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Difficulty = "easy" | "medium" | "hard";
@@ -149,12 +150,22 @@ export function SlidingPuzzle({
   }, []);
 
   const tileSize = boardSize / n || 0;
+  const solveScore = Math.max(80, 2500 - moves * 6 - Math.round(elapsed) * 3);
 
   useEffect(() => {
     if (solved) return;
     const t = setInterval(() => setElapsed((Date.now() - startTime) / 1000), 250);
     return () => clearInterval(t);
   }, [startTime, solved]);
+
+  // Für die Bestenliste: einmal pro gelöster Runde, mit dem final erreichten
+  // Punktestand (moves/elapsed sind zu diesem Zeitpunkt schon final, siehe
+  // tryMove -- setSolved und setMoves committen zusammen vor diesem Effekt).
+  useEffect(() => {
+    if (!solved) return;
+    submitScoreAction("puzzle", slug, solveScore, Math.round(elapsed), moves).catch(() => null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [solved]);
 
   const reset = useCallback(() => {
     setState({ ...initBoard(n), imageUrl: pickImage(difficulty) });
@@ -221,8 +232,6 @@ export function SlidingPuzzle({
     if (Math.abs(drag.offset) > threshold) tryMove(drag.pos);
     setDrag(null);
   };
-
-  const solveScore = Math.max(80, 2500 - moves * 6 - Math.round(elapsed) * 3);
 
   return (
     <div>
