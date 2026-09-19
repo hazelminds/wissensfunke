@@ -151,7 +151,14 @@ export function Crossword({
   function handleKeyDown(row: number, col: number, e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Backspace" && !userGrid[row][col]) {
       const dest = nextCell(row, col, activeDir, -1);
-      if (dest) focusCell(dest.row, dest.col);
+      if (dest) {
+        // Ohne preventDefault greift die native Backspace-Löschung nach dem
+        // synchronen Fokus-Wechsel auf die NEU fokussierte (vorherige) Zelle
+        // durch und löscht dort versehentlich den schon getippten Buchstaben
+        // -- das war der Bug, der mehrfaches Hin-und-Her-Klicken nötig machte.
+        e.preventDefault();
+        focusCell(dest.row, dest.col);
+      }
       return;
     }
     if (e.key === "ArrowRight") {
@@ -278,8 +285,19 @@ export function Crossword({
                     value={value}
                     maxLength={1}
                     disabled={revealed}
-                    onFocus={() => selectCell(r, c)}
-                    onClick={() => selectCell(r, c)}
+                    onFocus={(e) => {
+                      selectCell(r, c);
+                      // Bestehenden Buchstaben markieren, damit ein neuer
+                      // Tastendruck ihn direkt ersetzt -- ohne das blockiert
+                      // maxLength=1 jede weitere Eingabe in eine schon
+                      // gefüllte Zelle (nichts zum Ersetzen markiert), man
+                      // müsste erst per Backspace/Pfeiltasten manuell leeren.
+                      e.target.select();
+                    }}
+                    onClick={(e) => {
+                      selectCell(r, c);
+                      e.currentTarget.select();
+                    }}
                     onChange={(e) => handleInput(r, c, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(r, c, e)}
                     className={`h-[22px] w-[22px] bg-surface text-center text-[13px] font-bold text-ink uppercase outline-none ${
