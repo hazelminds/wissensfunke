@@ -16,6 +16,7 @@ import { getPlusStatus } from "@/lib/plus";
 import { getSeenQuestions } from "@/lib/seenQuestionsServer";
 import { pickUnseen } from "@/lib/seenQuestions";
 import { getPsychTest } from "@/content/psychTests";
+import { getCrosswordPool, getRandomCrossword } from "@/content/crossword";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -23,6 +24,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { DailyCapGate } from "@/components/DailyCapGate";
 import { SlidingPuzzle } from "@/components/game/SlidingPuzzle";
 import { WhoAmI } from "@/components/game/WhoAmI";
+import { Crossword } from "@/components/game/Crossword";
 import { RelationshipTest } from "@/components/game/RelationshipTest";
 import { FriendCompatibility } from "@/components/game/FriendCompatibility";
 import { PsychResultTest } from "@/components/game/PsychResultTest";
@@ -144,6 +146,29 @@ async function QuizContent({
     return (
       <DailyCapGate plusActive={plusActive}>
         <SlidingPuzzle slug={slug} title={game.title} color={game.type} difficulty={game.difficulty} />
+      </DailyCapGate>
+    );
+  }
+
+  if (game.variant === "crossword") {
+    const pool = getCrosswordPool();
+    let puzzle;
+    let pendingSeenKeys: string[] | undefined;
+    if (user) {
+      // Kontogebundenes "schon gesehen" wie bei Wissens-Quiz/Wer-bin-ich --
+      // dieselbe Tabelle, hier pro ganzem Rätsel (Puzzle-ID) statt pro Frage.
+      const seenKeys = await getSeenQuestions(user.id, slug);
+      const { picked, nextSeen } = pickUnseen(pool, 1, new Set(seenKeys), (p) => p.id);
+      puzzle = picked[0];
+      pendingSeenKeys = [...nextSeen];
+    } else {
+      // Gäste: rein zufällig, wie bei "Wer bin ich?" -- kein Tracking ohne Konto.
+      puzzle = getRandomCrossword();
+    }
+    if (!puzzle) return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
+    return (
+      <DailyCapGate plusActive={plusActive}>
+        <Crossword slug={slug} title={game.title} puzzle={puzzle} pendingSeenKeys={pendingSeenKeys} />
       </DailyCapGate>
     );
   }

@@ -19,6 +19,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Standalone Node-Tooling (z. B. Content-Generatoren), läuft nie über
+    // den App-Bundle/TS-Build -- CommonJS require()/module.exports ist hier
+    // bewusst, nicht die App-Konvention.
+    "scripts/**",
   ]),
 ]);
 

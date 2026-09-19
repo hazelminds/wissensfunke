@@ -28,7 +28,7 @@ export interface GameModule {
    * "psych-result"/"psych-compat" sind die beiden handgeschriebenen
    * Ur-Tests (Einzelkauf); "psych-generic" sind die content-getriebenen
    * Tests aus content/psychTests.ts (Plus-Freischaltung statt Einzelkauf). */
-  variant?: "sliding" | "whoami" | "psych-result" | "psych-compat" | "psych-generic";
+  variant?: "sliding" | "whoami" | "crossword" | "psych-result" | "psych-compat" | "psych-generic";
   /** Nur für die Sliding-Puzzle-Variante: Rastergröße. */
   difficulty?: "easy" | "medium" | "hard";
   /** false = taucht nicht in /kategorie/[type] auf (z.B. der tägliche Anker,
@@ -139,6 +139,19 @@ export const games: GameModule[] = [
     difficulty: "hard",
     isPremium: true,
     sortOrder: 14,
+  },
+  {
+    slug: "kreuzwortraetsel",
+    title: "Kreuzworträtsel",
+    teaser: "Klassisches Kreuzworträtsel -- waagerecht und senkrecht, ganz digital.",
+    emoji: "📝",
+    category: "Wörter",
+    level: "weekly-freemium",
+    estMinutes: 6,
+    type: "puzzle",
+    variant: "crossword",
+    isPremium: false,
+    sortOrder: 15,
   },
   // "Wer bin ich?" -- drei Schwierigkeitsstufen. Eigene, unsichtbare
   // GameModule-Einträge (inCategoryBrowser: false, hoher sortOrder), damit
