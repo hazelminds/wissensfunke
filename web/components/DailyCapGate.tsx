@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Lock, Zap, Crown, ArrowRight } from "lucide-react";
 import { hasReachedDailyCap } from "@/lib/dailyCap";
 import { PlusButton } from "@/components/PlusButton";
+import { usePlusModal } from "@/components/PlusModalProvider";
 import { plusTiers } from "@/content/plus";
 import { formatPrice } from "@/content/quizzes";
 
@@ -26,14 +27,20 @@ export function DailyCapGate({
 }) {
   const [blocked, setBlocked] = useState(false);
   const [checked, setChecked] = useState(false);
+  const { openPlusModal } = usePlusModal();
 
   useEffect(() => {
     if (plusActive) return;
     // SSR kennt localStorage nicht -- Cap-Status erst nach dem Mount lesen
     // (gleiches Muster wie StreakBadge).
+    const isBlocked = hasReachedDailyCap();
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setBlocked(hasReachedDailyCap());
+    setBlocked(isBlocked);
     setChecked(true);
+    // Plus-Übersicht (Features + die 2 Varianten) direkt aufploppen, statt
+    // erst einen Klick auf einen der Buttons unten abzuwarten.
+    if (isBlocked) openPlusModal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plusActive]);
 
   if (plusActive) return <>{children}</>;

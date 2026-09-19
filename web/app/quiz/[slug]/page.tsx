@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Crown, Lock, ArrowRight, Zap } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
@@ -22,15 +22,13 @@ import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DailyCapGate } from "@/components/DailyCapGate";
-import { PlusButton } from "@/components/PlusButton";
+import { PlusOnlyLock } from "@/components/PlusOnlyLock";
 import { SlidingPuzzle } from "@/components/game/SlidingPuzzle";
 import { WhoAmI } from "@/components/game/WhoAmI";
 import { Crossword } from "@/components/game/Crossword";
 import { RelationshipTest } from "@/components/game/RelationshipTest";
 import { FriendCompatibility } from "@/components/game/FriendCompatibility";
 import { PsychResultTest } from "@/components/game/PsychResultTest";
-import { formatPrice } from "@/content/quizzes";
-import { plusTiers } from "@/content/plus";
 
 export default async function QuizPage({
   params,
@@ -284,58 +282,6 @@ async function QuizContent({
   }
 
   return <ComingSoon title={game.title} emoji={game.emoji} teaser={game.teaser} />;
-}
-
-/**
- * Echter Plus-Wall ohne Gratis-Runden -- anders als DailyCapGate (2 Runden
- * gratis, danach Paywall) läuft hier serverseitig `plusActive` direkt in die
- * Blockade, kein Client-State/useEffect nötig.
- */
-function PlusOnlyLock({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="mx-auto max-w-md px-5 py-20 text-center">
-      <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/15">
-        <Lock className="h-8 w-8 text-primary" />
-      </div>
-      <p className="text-sm text-muted">Exklusiv für Plus</p>
-      <h1 className="mt-1 font-display text-3xl font-extrabold tracking-tight text-ink">{title}</h1>
-      <p className="mt-3 text-ink-soft">
-        {description} Ganz ohne Gratis-Runde — hol dir Plus und leg direkt los.
-      </p>
-
-      <div className="mt-6 flex flex-col gap-3">
-        <PlusButton className="hairline flex w-full items-center justify-between gap-3 rounded-2xl bg-surface p-4 text-left transition hover:border-primary/50">
-          <span className="flex items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15">
-              <Zap className="h-5 w-5 text-primary" />
-            </span>
-            <span>
-              <span className="block font-display font-bold text-ink">Heute freischalten</span>
-              <span className="block text-xs text-muted">
-                {formatPrice(plusTiers[0].priceCents)} · einmalig, nur für heute
-              </span>
-            </span>
-          </span>
-          <ArrowRight className="h-4 w-4 shrink-0 text-muted" />
-        </PlusButton>
-
-        <PlusButton className="glow-primary flex w-full items-center justify-between gap-3 rounded-2xl bg-primary p-4 text-left text-white transition hover:opacity-90">
-          <span className="flex items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15">
-              <Crown className="h-5 w-5" />
-            </span>
-            <span>
-              <span className="block font-display font-bold">Plus-Abo</span>
-              <span className="block text-xs text-white/80">
-                {formatPrice(plusTiers[1].priceCents)}/Monat · dauerhaft unbegrenzt + volle Bestenliste
-              </span>
-            </span>
-          </span>
-          <ArrowRight className="h-4 w-4 shrink-0" />
-        </PlusButton>
-      </div>
-    </div>
-  );
 }
 
 function ComingSoon({ title, emoji, teaser }: { title: string; emoji: string; teaser: string }) {
