@@ -13,15 +13,38 @@ const fs = require("fs");
 const path = require("path");
 const wordBank = require("./crossword-wordbank.js");
 
-const TARGET_PUZZLES = 32;
-const MIN_WORDS_PER_PUZZLE = 9;
-const TARGET_WORDS_PER_PUZZLE = 14;
-const WORDS_PER_ATTEMPT_POOL = 45; // Teilmenge der Wortbank pro Versuch, für Abwechslung zwischen Rätseln
-const ATTEMPTS_PER_PUZZLE = 40;
-// Ohne Kompaktheits-Zwang wächst das Gitter unkontrolliert (Wörter landen
-// weit auseinander, sobald irgendeine Kreuzung passt) -- harte Obergrenze
-// pro Achse, damit das Rätsel auf einem Handy-Bildschirm noch gut spielbar bleibt.
-const MAX_DIMENSION = 13;
+// Drei Schwierigkeitsstufen -- wie bei Schiebepuzzle/Wer-bin-ich. Jede hat
+// ihre eigene Ziel-Wortzahl und ihr eigenes Gitter-Limit; MAX_DIMENSION
+// steigt mit der Wortzahl, damit sich mehr Wörter noch sauber kreuzen können.
+const TIERS = [
+  {
+    key: "leicht",
+    targetPuzzles: 32,
+    minWords: 9,
+    targetWords: 14,
+    wordsPerAttempt: 45,
+    attemptsPerPuzzle: 40,
+    maxDimension: 13,
+  },
+  {
+    key: "mittel",
+    targetPuzzles: 24,
+    minWords: 15,
+    targetWords: 17,
+    wordsPerAttempt: 55,
+    attemptsPerPuzzle: 60,
+    maxDimension: 15,
+  },
+  {
+    key: "schwer",
+    targetPuzzles: 16,
+    minWords: 25,
+    targetWords: 29,
+    wordsPerAttempt: 100,
+    attemptsPerPuzzle: 150,
+    maxDimension: 19,
+  },
+];
 
 function shuffle(arr) {
   const a = arr.slice();
@@ -85,9 +108,9 @@ function place(word, row, col, dir, cells) {
 
 /** Findet alle gültigen Kreuzungs-Platzierungen für `word` gegen den
  * aktuellen Gitterstand -- gibt nur Platzierungen zurück, deren resultierende
- * Bounding-Box innerhalb von MAX_DIMENSION bleibt, und annotiert jede mit der
+ * Bounding-Box innerhalb von maxDimension bleibt, und annotiert jede mit der
  * resultierenden Fläche, damit der Aufrufer die kompakteste wählen kann. */
-function findPlacements(word, cells, bounds) {
+function findPlacements(word, cells, bounds, maxDimension) {
   const placements = [];
   for (let i = 0; i < word.length; i++) {
     const letter = word[i];
@@ -99,12 +122,12 @@ function findPlacements(word, cells, bounds) {
       const acrossRow = r;
       const acrossCol = c - i;
       if (canPlace(word, acrossRow, acrossCol, "across", cells)) {
-        addIfCompact(placements, word, acrossRow, acrossCol, "across", bounds);
+        addIfCompact(placements, word, acrossRow, acrossCol, "across", bounds, maxDimension);
       }
       const downRow = r - i;
       const downCol = c;
       if (canPlace(word, downRow, downCol, "down", cells)) {
-        addIfCompact(placements, word, downRow, downCol, "down", bounds);
+        addIfCompact(placements, word, downRow, downCol, "down", bounds, maxDimension);
       }
     }
   }
@@ -112,7 +135,7 @@ function findPlacements(word, cells, bounds) {
   return placements;
 }
 
-function addIfCompact(placements, word, row, col, dir, bounds) {
+function addIfCompact(placements, word, row, col, dir, bounds, maxDimension) {
   const endRow = dir === "across" ? row : row + word.length - 1;
   const endCol = dir === "across" ? col + word.length - 1 : col;
   const newMinRow = Math.min(bounds.minRow, row);
@@ -121,12 +144,12 @@ function addIfCompact(placements, word, row, col, dir, bounds) {
   const newMaxCol = Math.max(bounds.maxCol, endCol);
   const height = newMaxRow - newMinRow + 1;
   const width = newMaxCol - newMinCol + 1;
-  if (height > MAX_DIMENSION || width > MAX_DIMENSION) return;
+  if (height > maxDimension || width > maxDimension) return;
   placements.push({ row, col, dir, area: height * width });
 }
 
-function generateOnePuzzle(pool) {
-  const words = shuffle(pool).slice(0, WORDS_PER_ATTEMPT_POOL);
+function generateOnePuzzle(pool, tier) {
+  const words = shuffle(pool).slice(0, tier.wordsPerAttempt);
   words.sort((a, b) => b.answer.length - a.answer.length);
 
   const cells = new Map();
@@ -138,10 +161,10 @@ function generateOnePuzzle(pool) {
   placedWords.push({ ...first, row: 0, col: 0, dir: "across" });
   const bounds = { minRow: 0, maxRow: 0, minCol: 0, maxCol: first.answer.length - 1 };
 
-  for (let i = 1; i < words.length && placedWords.length < TARGET_WORDS_PER_PUZZLE; i++) {
+  for (let i = 1; i < words.length && placedWords.length < tier.targetWords; i++) {
     const w = words[i];
     if (placedWords.some((p) => p.answer === w.answer)) continue;
-    const placements = findPlacements(w.answer, cells, bounds);
+    const placements = findPlacements(w.answer, cells, bounds, tier.maxDimension);
     if (placements.length === 0) continue;
     // Unter den kompaktesten Kandidaten (kleinste resultierende Fläche)
     // zufällig wählen -- hält das Gitter dicht, ohne jedes Mal exakt
@@ -159,7 +182,7 @@ function generateOnePuzzle(pool) {
     bounds.maxCol = Math.max(bounds.maxCol, endCol);
   }
 
-  if (placedWords.length < MIN_WORDS_PER_PUZZLE) return null;
+  if (placedWords.length < tier.minWords) return null;
 
   // Gitter auf die tatsächlich belegte Fläche zuschneiden.
   let minRow = Infinity,
@@ -267,16 +290,17 @@ function validatePuzzle(puzzle) {
   return true;
 }
 
-function generatePuzzles() {
+function generatePuzzlesForTier(tier) {
   const puzzles = [];
   const seenSignatures = new Set();
   let guard = 0;
-  while (puzzles.length < TARGET_PUZZLES && guard < TARGET_PUZZLES * ATTEMPTS_PER_PUZZLE) {
+  let rejected = 0;
+  while (puzzles.length < tier.targetPuzzles && guard < tier.targetPuzzles * tier.attemptsPerPuzzle) {
     guard++;
-    const puzzle = generateOnePuzzle(wordBank);
+    const puzzle = generateOnePuzzle(wordBank, tier);
     if (!puzzle) continue;
     if (!validatePuzzle(puzzle)) {
-      console.warn("Rejected an invalid puzzle (failed final validation) -- retrying.");
+      rejected++;
       continue;
     }
     const signature = puzzle.entries
@@ -285,9 +309,10 @@ function generatePuzzles() {
       .join("|");
     if (seenSignatures.has(signature)) continue; // zu ähnlich zu einem schon erzeugten Rätsel
     seenSignatures.add(signature);
-    puzzle.id = `cw-${String(puzzles.length + 1).padStart(2, "0")}`;
+    puzzle.id = `cw-${tier.key}-${String(puzzles.length + 1).padStart(2, "0")}`;
     puzzles.push(puzzle);
   }
+  if (rejected > 0) console.warn(`[${tier.key}] Rejected ${rejected} invalid puzzle(s) during generation (retried).`);
   return puzzles;
 }
 
@@ -320,17 +345,29 @@ ${entriesLiteral},
   }`;
 }
 
-const puzzles = generatePuzzles();
-console.log(`Generated ${puzzles.length} puzzles.`);
+const puzzlesByTier = {};
+for (const tier of TIERS) {
+  const puzzles = generatePuzzlesForTier(tier);
+  puzzlesByTier[tier.key] = puzzles;
+  const wordCounts = puzzles.map((p) => p.entries.length);
+  const sizes = puzzles.map((p) => `${p.rows}x${p.cols}`);
+  console.log(
+    `[${tier.key}] Generated ${puzzles.length}/${tier.targetPuzzles} puzzles -- words min/max/avg: ` +
+      `${Math.min(...wordCounts)}/${Math.max(...wordCounts)}/${(wordCounts.reduce((a, b) => a + b, 0) / wordCounts.length).toFixed(1)}, sizes: ${sizes.join(", ")}`,
+  );
+}
+
+const exportName = { leicht: "crosswordPuzzlesLeicht", mittel: "crosswordPuzzlesMittel", schwer: "crosswordPuzzlesSchwer" };
 
 const header = `/**
  * Vorgenerierte Kreuzworträtsel-Gitter -- erzeugt von scripts/generate-crosswords.js
  * aus scripts/crossword-wordbank.js. Nicht von Hand bearbeiten; bei Bedarf
  * das Skript erneut laufen lassen (überschreibt diese Datei komplett).
  *
- * Auswahl pro Runde läuft wie beim Wissens-Quiz über pickUnseen() (siehe
- * content/crossword.ts) -- kein Wiederholen, solange der Pool nicht
- * ausgeschöpft ist, kontogebunden bzw. geräte-lokal für Gäste.
+ * Drei Schwierigkeitsstufen (Leicht/Mittel/Schwer), analog Schiebepuzzle/
+ * Wer-bin-ich. Auswahl pro Runde läuft wie beim Wissens-Quiz über
+ * pickUnseen() (siehe content/crossword.ts) -- kein Wiederholen, solange der
+ * jeweilige Pool nicht ausgeschöpft ist, kontogebunden bzw. geräte-lokal für Gäste.
  */
 
 export interface CrosswordEntry {
@@ -351,10 +388,12 @@ export interface CrosswordPuzzle {
   entries: CrosswordEntry[];
 }
 
-export const crosswordPuzzles: CrosswordPuzzle[] = [
-${puzzles.map(renderPuzzle).join(",\n")},
+${TIERS.map(
+  (tier) => `export const ${exportName[tier.key]}: CrosswordPuzzle[] = [
+${puzzlesByTier[tier.key].map(renderPuzzle).join(",\n")},
 ];
-`;
+`,
+).join("\n")}`;
 
 const outPath = path.join(__dirname, "..", "content", "crossword-data.ts");
 fs.writeFileSync(outPath, header);

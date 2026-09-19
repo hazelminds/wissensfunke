@@ -45,6 +45,18 @@ export function Crossword({
   pendingSeenKeys?: string[];
 }) {
   const index = useMemo(() => buildIndex(puzzle), [puzzle]);
+  // Feste 22px passen fürs 13x13-Leicht-Raster auf ein Mobil-Display, aber
+  // Mittel (15x15) und vor allem Schwer (19x19) würden damit über den
+  // Viewport hinausragen -- Zellgröße daher an die Spaltenzahl anpassen
+  // (Zielbreite ~350px, wie sie nach den seitlichen Paddings bleibt), nach
+  // unten auf 14px begrenzt, damit Zellen noch gut tippbar bleiben.
+  const cellSize = useMemo(() => {
+    const gapsAndPadding = (puzzle.cols - 1) * 2 + 4;
+    const ideal = Math.floor((350 - gapsAndPadding) / puzzle.cols);
+    return Math.max(14, Math.min(22, ideal));
+  }, [puzzle.cols]);
+  const fontSize = Math.max(10, Math.round(cellSize * 0.6));
+  const numberFontSize = Math.max(6, Math.round(cellSize * 0.32));
   const [userGrid, setUserGrid] = useState<(string | null)[][]>(() =>
     puzzle.grid.map((row) => row.map((cell) => (cell === null ? null : ""))),
   );
@@ -250,11 +262,18 @@ export function Crossword({
       <div className="overflow-x-auto pb-1">
         <div
           className="mx-auto grid w-fit gap-[2px] rounded-lg bg-line p-[2px]"
-          style={{ gridTemplateColumns: `repeat(${puzzle.cols}, 22px)` }}
+          style={{ gridTemplateColumns: `repeat(${puzzle.cols}, ${cellSize}px)` }}
         >
           {puzzle.grid.map((row, r) =>
             row.map((cell, c) => {
-              if (cell === null) return <div key={cellKey(r, c)} className="h-[22px] w-[22px] bg-line" />;
+              if (cell === null)
+                return (
+                  <div
+                    key={cellKey(r, c)}
+                    className="bg-line"
+                    style={{ height: cellSize, width: cellSize }}
+                  />
+                );
               const isActive = active?.row === r && active?.col === c;
               const inActiveEntry =
                 activeEntry &&
@@ -271,9 +290,12 @@ export function Crossword({
               const isCorrect = checked && value && value === cell;
               const isWrong = checked && value && value !== cell;
               return (
-                <div key={cellKey(r, c)} className="relative h-[22px] w-[22px]">
+                <div key={cellKey(r, c)} className="relative" style={{ height: cellSize, width: cellSize }}>
                   {number !== undefined && (
-                    <span className="pointer-events-none absolute top-[1px] left-[2px] z-10 text-[7px] font-bold text-muted">
+                    <span
+                      className="pointer-events-none absolute top-[1px] left-[2px] z-10 font-bold text-muted"
+                      style={{ fontSize: numberFontSize }}
+                    >
                       {number}
                     </span>
                   )}
@@ -300,7 +322,8 @@ export function Crossword({
                     }}
                     onChange={(e) => handleInput(r, c, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(r, c, e)}
-                    className={`h-[22px] w-[22px] bg-surface text-center text-[13px] font-bold text-ink uppercase outline-none ${
+                    style={{ height: cellSize, width: cellSize, fontSize }}
+                    className={`bg-surface text-center font-bold text-ink uppercase outline-none ${
                       isActive
                         ? "bg-primary-soft ring-2 ring-primary"
                         : inActiveEntry
