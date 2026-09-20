@@ -291,6 +291,7 @@ async function QuizContent({
             title={game.title}
             initiallyUnlocked={unlocked}
             checkoutError={checkoutError === "not_configured"}
+            plusActive={plusActive}
           />
         </DailyCapGate>
       );

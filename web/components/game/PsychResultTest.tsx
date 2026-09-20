@@ -6,6 +6,7 @@ import { resultTypeFor, type PsychResultType, type PsychTestDefinition } from "@
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { PlusButton } from "@/components/PlusButton";
+import { ResultShareCard } from "@/components/ResultShareCard";
 
 type Screen = "start" | "quiz" | "result";
 
@@ -223,12 +224,23 @@ export function PsychResultTest({ test, plusActive }: { test: PsychTestDefinitio
         Nur zur Unterhaltung, keine psychologische Diagnose oder Beratung.
       </p>
 
-      <button
-        onClick={start}
-        className="glow-primary inline-flex items-center justify-center gap-1.5 self-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-      >
-        <RefreshCw className="h-4 w-4" /> Nochmal machen
-      </button>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={start}
+          className="glow-primary inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+        >
+          <RefreshCw className="h-4 w-4" /> Nochmal machen
+        </button>
+        {plusActive && (
+          <ResultShareCard
+            testTitle={test.title}
+            resultTitle={result.title}
+            resultEmoji={result.emoji}
+            description={result.description}
+            gradientClass={result.gradientClass}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -15,6 +15,7 @@ import { formatPrice } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { logGameEventAction } from "@/lib/actions/analytics";
+import { ResultShareCard } from "@/components/ResultShareCard";
 
 type Screen = "start" | "quiz" | "result";
 
@@ -26,10 +27,12 @@ export function RelationshipTest({
   title,
   initiallyUnlocked,
   checkoutError = false,
+  plusActive = false,
 }: {
   title: string;
   initiallyUnlocked: boolean;
   checkoutError?: boolean;
+  plusActive?: boolean;
 }) {
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
@@ -287,12 +290,23 @@ export function RelationshipTest({
         Nur zur Unterhaltung, keine psychologische Diagnose oder Beratung.
       </p>
 
-      <button
-        onClick={start}
-        className="glow-primary inline-flex items-center justify-center gap-1.5 self-center rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
-      >
-        <RefreshCw className="h-4 w-4" /> Nochmal machen
-      </button>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={start}
+          className="glow-primary inline-flex items-center justify-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition hover:opacity-90"
+        >
+          <RefreshCw className="h-4 w-4" /> Nochmal machen
+        </button>
+        {plusActive && (
+          <ResultShareCard
+            testTitle={title}
+            resultTitle={result.title}
+            resultEmoji={result.emoji}
+            description={result.description}
+            gradientClass={result.gradientClass}
+          />
+        )}
+      </div>
     </div>
   );
 }
