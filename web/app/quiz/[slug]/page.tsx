@@ -16,7 +16,12 @@ import { getPlusStatus } from "@/lib/plus";
 import { getSeenQuestions } from "@/lib/seenQuestionsServer";
 import { pickUnseen } from "@/lib/seenQuestions";
 import { getPsychTest } from "@/content/psychTests";
-import { getCrosswordPool, getRandomCrossword, type CrosswordDifficulty } from "@/content/crossword";
+import {
+  getCrosswordPool,
+  getRandomCrossword,
+  getCrosswordById,
+  type CrosswordDifficulty,
+} from "@/content/crossword";
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
@@ -42,6 +47,9 @@ export default async function QuizPage({
     preview?: string;
     von?: string;
     name?: string;
+    challenge?: string;
+    pts?: string;
+    zeit?: string;
   }>;
 }) {
   const { slug } = await params;
@@ -51,7 +59,10 @@ export default async function QuizPage({
     checkout_error: checkoutError,
     preview,
     von: friendCode,
-    name: friendName,
+    name: sharedName,
+    challenge,
+    pts,
+    zeit,
   } = await searchParams;
 
   const game = games.find((g) => g.slug === slug);
@@ -97,7 +108,10 @@ export default async function QuizPage({
           checkoutError={checkoutError}
           previewUnlocked={previewUnlocked}
           friendCode={friendCode}
-          friendName={friendName}
+          sharedName={sharedName}
+          challenge={challenge}
+          challengePts={pts}
+          challengeZeit={zeit}
         />
       </main>
     </div>
@@ -112,7 +126,10 @@ async function QuizContent({
   checkoutError,
   previewUnlocked,
   friendCode,
-  friendName,
+  sharedName,
+  challenge,
+  challengePts,
+  challengeZeit,
 }: {
   slug: string;
   game: (typeof games)[number];
@@ -121,7 +138,10 @@ async function QuizContent({
   checkoutError?: string;
   previewUnlocked: boolean;
   friendCode?: string;
-  friendName?: string;
+  sharedName?: string;
+  challenge?: string;
+  challengePts?: string;
+  challengeZeit?: string;
 }) {
   // Einziger wirklich unbegrenzter Anker: das Tagesrätsel. Alles andere,
   // inklusive Tages-Mini-Quiz und "Wer bin ich? · Leicht", zählt zu den
@@ -151,10 +171,25 @@ async function QuizContent({
     );
   }
 
+  // Challenge-Link: "?challenge=...&name=Alex&pts=850&zeit=192" -- fürs
+  // Vergleichs-Banner in Crossword/SlidingPuzzle. Ohne DB-Tabelle, alles
+  // steckt im Link selbst (gleiches Prinzip wie sharedCode/sharedName oben
+  // beim Freundeskompatibilitäts-Test).
+  const challengeInfo =
+    sharedName && challengePts && challengeZeit && Number.isFinite(Number(challengePts)) && Number.isFinite(Number(challengeZeit))
+      ? { name: sharedName, points: Number(challengePts), seconds: Number(challengeZeit) }
+      : null;
+
   if (game.variant === "sliding") {
     return (
       <DailyCapGate plusActive={plusActive}>
-        <SlidingPuzzle slug={slug} title={game.title} color={game.type} difficulty={game.difficulty} />
+        <SlidingPuzzle
+          slug={slug}
+          title={game.title}
+          color={game.type}
+          difficulty={game.difficulty}
+          challenge={challengeInfo}
+        />
       </DailyCapGate>
     );
   }
@@ -163,10 +198,16 @@ async function QuizContent({
     const difficulty: CrosswordDifficulty =
       game.difficulty === "hard" ? "schwer" : game.difficulty === "medium" ? "mittel" : "leicht";
 
+    const challengedPuzzle = challenge ? getCrosswordById(challenge) : null;
+
     const pool = getCrosswordPool(difficulty);
     let puzzle;
     let pendingSeenKeys: string[] | undefined;
-    if (user) {
+    if (challengedPuzzle) {
+      // Challenge-Link: exakt dasselbe Rätsel wie die Person, die
+      // herausgefordert hat -- sonst wäre der Vergleich nicht fair.
+      puzzle = challengedPuzzle;
+    } else if (user) {
       // Kontogebundenes "schon gesehen" wie bei Wissens-Quiz/Wer-bin-ich --
       // dieselbe Tabelle, hier pro ganzem Rätsel (Puzzle-ID) statt pro Frage.
       const seenKeys = await getSeenQuestions(user.id, slug);
@@ -183,7 +224,13 @@ async function QuizContent({
     // unten sind wir für die also immer schon plusActive.
     return (
       <DailyCapGate plusActive={plusActive}>
-        <Crossword slug={slug} title={game.title} puzzle={puzzle} pendingSeenKeys={pendingSeenKeys} />
+        <Crossword
+          slug={slug}
+          title={game.title}
+          puzzle={puzzle}
+          pendingSeenKeys={pendingSeenKeys}
+          challenge={challengedPuzzle ? challengeInfo : null}
+        />
       </DailyCapGate>
     );
   }
@@ -254,7 +301,7 @@ async function QuizContent({
         <FriendCompatibility
           title={game.title}
           sharedCode={friendCode}
-          sharedName={friendName}
+          sharedName={sharedName}
           initiallyUnlocked={unlocked}
           checkoutError={checkoutError === "not_configured"}
         />

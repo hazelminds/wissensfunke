@@ -24,3 +24,13 @@ export function getRandomCrossword(difficulty: CrosswordDifficulty): CrosswordPu
   const pool = poolsByDifficulty[difficulty];
   return pool[Math.floor(Math.random() * pool.length)];
 }
+
+/** Für Challenge-Links: dasselbe Rätsel wie die Person, die den Link
+ * verschickt hat, statt eins neu zu ziehen -- nur so ist der Vergleich fair. */
+export function getCrosswordById(id: string): CrosswordPuzzle | null {
+  for (const pool of Object.values(poolsByDifficulty)) {
+    const found = pool.find((p) => p.id === id);
+    if (found) return found;
+  }
+  return null;
+}

@@ -8,6 +8,14 @@ import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
+import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
+import { ChallengeButton } from "@/components/ChallengeButton";
+
+export interface ChallengeInfo {
+  name: string;
+  points: number;
+  seconds: number;
+}
 
 type Difficulty = "easy" | "medium" | "hard";
 
@@ -111,11 +119,13 @@ export function SlidingPuzzle({
   title,
   color,
   difficulty = "easy",
+  challenge,
 }: {
   slug: string;
   title: string;
   color: string;
   difficulty?: Difficulty;
+  challenge?: ChallengeInfo | null;
 }) {
   const n = gridFor(difficulty);
 
@@ -128,6 +138,7 @@ export function SlidingPuzzle({
   const [elapsed, setElapsed] = useState(0);
   const [solved, setSolved] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [finalResult, setFinalResult] = useState<{ points: number; seconds: number } | null>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const [boardSize, setBoardSize] = useState(0);
@@ -163,6 +174,8 @@ export function SlidingPuzzle({
   // tryMove -- setSolved und setMoves committen zusammen vor diesem Effekt).
   useEffect(() => {
     if (!solved) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFinalResult({ points: solveScore, seconds: Math.round(elapsed) });
     submitScoreAction("puzzle", slug, solveScore, Math.round(elapsed), moves).catch(() => null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solved]);
@@ -173,6 +186,7 @@ export function SlidingPuzzle({
     setStartTime(Date.now());
     setElapsed(0);
     setSolved(false);
+    setFinalResult(null);
     setDrag(null);
     logGameEventAction(slug, "started").catch(() => null);
   }, [n, difficulty, slug]);
@@ -252,6 +266,12 @@ export function SlidingPuzzle({
           <span className="hairline rounded-full px-3 py-1.5 tabular-nums">{moves} Züge</span>
         </div>
       </div>
+
+      {challenge && !solved && (
+        <div className="mb-4">
+          <ChallengeBanner name={challenge.name} points={challenge.points} seconds={challenge.seconds} />
+        </div>
+      )}
 
       <div className="mb-4 flex items-center gap-2">
         <button
@@ -349,6 +369,38 @@ export function SlidingPuzzle({
       <p className="mt-5 text-center text-sm text-muted">
         Ziehe eine Kachel neben der Lücke in die freie Stelle — oder tippe sie an. {n}×{n} Felder.
       </p>
+
+      {solved && finalResult && challenge && (
+        <div className="mt-5">
+          <ChallengeCompare
+            myPoints={finalResult.points}
+            mySeconds={finalResult.seconds}
+            opponentName={challenge.name}
+            opponentPoints={challenge.points}
+            opponentSeconds={challenge.seconds}
+          />
+        </div>
+      )}
+
+      {solved && finalResult && (
+        <div className="mt-5">
+          <ChallengeButton
+            shareTitle={title}
+            buildUrl={(name) => {
+              const url = new URL(window.location.origin + `/quiz/${slug}`);
+              if (name) url.searchParams.set("name", name);
+              url.searchParams.set("pts", String(finalResult.points));
+              url.searchParams.set("zeit", String(finalResult.seconds));
+              return url.toString();
+            }}
+            buildShareText={(name) =>
+              name
+                ? `${name} hat "${title}" mit ${finalResult.points} Punkten gelöst -- schlägst du das?`
+                : `Ich hab "${title}" mit ${finalResult.points} Punkten gelöst -- schlägst du das?`
+            }
+          />
+        </div>
+      )}
 
       {solved && <LeaderboardTeaser board="puzzle" />}
     </div>

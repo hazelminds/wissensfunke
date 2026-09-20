@@ -7,6 +7,14 @@ import { logGameEventAction } from "@/lib/actions/analytics";
 import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
 import { submitScoreAction } from "@/lib/actions/scores";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
+import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
+import { ChallengeButton } from "@/components/ChallengeButton";
+
+export interface ChallengeInfo {
+  name: string;
+  points: number;
+  seconds: number;
+}
 
 type Dir = "across" | "down";
 
@@ -38,11 +46,13 @@ export function Crossword({
   title,
   puzzle,
   pendingSeenKeys,
+  challenge,
 }: {
   slug: string;
   title: string;
   puzzle: CrosswordPuzzle;
   pendingSeenKeys?: string[];
+  challenge?: ChallengeInfo | null;
 }) {
   const index = useMemo(() => buildIndex(puzzle), [puzzle]);
   // Feste 22px passen fürs 13x13-Leicht-Raster auf ein Mobil-Display, aber
@@ -65,6 +75,7 @@ export function Crossword({
   const [checked, setChecked] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [solved, setSolved] = useState(false);
+  const [result, setResult] = useState<{ points: number; seconds: number } | null>(null);
 
   const inputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
   const startTimeRef = useRef(0);
@@ -143,6 +154,7 @@ export function Crossword({
     // eslint-disable-next-line react-hooks/purity
     const elapsedSeconds = Math.round((Date.now() - startTimeRef.current) / 1000);
     const points = Math.max(100, 1000 - elapsedSeconds * 2);
+    setResult({ points, seconds: elapsedSeconds });
     submitScoreAction("puzzle", slug, points, elapsedSeconds, null).catch(() => null);
   }
 
@@ -224,6 +236,7 @@ export function Crossword({
     setChecked(false);
     setRevealed(false);
     setSolved(false);
+    setResult(null);
     startTimeRef.current = Date.now();
     logGameEventAction(slug, "started").catch(() => null);
   }
@@ -248,6 +261,10 @@ export function Crossword({
         </div>
       </div>
 
+      {challenge && !solved && (
+        <ChallengeBanner name={challenge.name} points={challenge.points} seconds={challenge.seconds} />
+      )}
+
       {solved && (
         <div
           className={`flex items-center gap-2 rounded-2xl px-4 py-3 text-sm font-bold ${
@@ -257,6 +274,16 @@ export function Crossword({
           <CheckCircle2 className="h-4 w-4 shrink-0" />
           {revealed ? "Lösung aufgedeckt." : "Gelöst! Stark gemacht."}
         </div>
+      )}
+
+      {solved && result && challenge && (
+        <ChallengeCompare
+          myPoints={result.points}
+          mySeconds={result.seconds}
+          opponentName={challenge.name}
+          opponentPoints={challenge.points}
+          opponentSeconds={challenge.seconds}
+        />
       )}
 
       <div className="overflow-x-auto pb-1">
@@ -361,6 +388,25 @@ export function Crossword({
           </button>
         )}
       </div>
+
+      {solved && result && (
+        <ChallengeButton
+          shareTitle={title}
+          buildUrl={(name) => {
+            const url = new URL(window.location.origin + `/quiz/${slug}`);
+            url.searchParams.set("challenge", puzzle.id);
+            if (name) url.searchParams.set("name", name);
+            url.searchParams.set("pts", String(result.points));
+            url.searchParams.set("zeit", String(result.seconds));
+            return url.toString();
+          }}
+          buildShareText={(name) =>
+            name
+              ? `${name} hat "${title}" mit ${result.points} Punkten gelöst -- schlägst du das?`
+              : `Ich hab "${title}" mit ${result.points} Punkten gelöst -- schlägst du das?`
+          }
+        />
+      )}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <ClueList title="Waagerecht" entries={acrossEntries} activeEntry={activeEntry} onSelect={selectEntry} />

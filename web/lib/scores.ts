@@ -3,6 +3,9 @@ import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/auth";
 import { getAllPlusStatuses } from "@/lib/plus";
 import { games } from "@/content/games";
+import { formatTimeLabel } from "@/lib/formatTime";
+
+export { formatTimeLabel };
 
 export type ScoreCategory = "quiz" | "puzzle";
 
@@ -36,12 +39,6 @@ export interface LeaderboardEntry {
   subtitle: string;
   timeLabel: string;
   points: number;
-}
-
-export function formatTimeLabel(totalSeconds: number): string {
-  const m = Math.floor(totalSeconds / 60);
-  const s = Math.max(0, Math.round(totalSeconds % 60));
-  return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
 export function titleForSlug(slug: string): string {
