@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Crown, Flame, LifeBuoy, Lock, LogOut, Snowflake, User as UserIcon } from "lucide-react";
+import { ArrowRight, BarChart3, Crown, Flame, LifeBuoy, Lock, LogOut, Snowflake, User as UserIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
 import { PlusButton } from "@/components/PlusButton";
@@ -188,6 +188,22 @@ export default async function KontoPage() {
                 })}
               </div>
             </div>
+
+            <Link
+              href="/konto/statistik"
+              className="hairline flex items-center justify-between gap-3 rounded-2xl bg-surface p-4 text-left transition hover:border-primary/50"
+            >
+              <span className="flex items-center gap-3">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15">
+                  <BarChart3 className="h-5 w-5 text-primary" />
+                </span>
+                <span>
+                  <span className="block font-display font-bold text-ink">Deine Statistik</span>
+                  <span className="block text-xs text-muted">Lieblingsspiel, Bestzeiten und mehr</span>
+                </span>
+              </span>
+              <ArrowRight className="h-4 w-4 shrink-0 text-muted" />
+            </Link>
 
             <div className="hairline rounded-3xl bg-surface p-5">
               <p className="font-display font-bold text-ink">Spielername</p>

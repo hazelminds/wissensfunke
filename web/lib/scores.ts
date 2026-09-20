@@ -38,13 +38,13 @@ export interface LeaderboardEntry {
   points: number;
 }
 
-function formatTimeLabel(totalSeconds: number): string {
+export function formatTimeLabel(totalSeconds: number): string {
   const m = Math.floor(totalSeconds / 60);
   const s = Math.max(0, Math.round(totalSeconds % 60));
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-function titleForSlug(slug: string): string {
+export function titleForSlug(slug: string): string {
   return games.find((g) => g.slug === slug)?.title ?? slug;
 }
 
