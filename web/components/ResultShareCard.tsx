@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Share2 } from "lucide-react";
+import { Crown, Loader2, Share2 } from "lucide-react";
+import { usePlusModal } from "@/components/PlusModalProvider";
 
 /** Erste(r) Satz als Kurzfassung fürs Bild -- die App-Beschreibungen sind oft
  * ein ganzer Absatz, auf einer Story-Karte muss ein knapper Ausschnitt reichen. */
@@ -186,10 +187,13 @@ async function renderCardImage({
 }
 
 /**
- * Plus-Perk: Ergebnis als Bild-Karte teilen statt als Text. Baut die Karte
- * per Canvas (kein Screenshot-Tool, volle Kontrolle über Layout/Schrift),
- * teilt sie bevorzugt nativ als Bilddatei -- fällt ohne Datei-Teilen (v. a.
- * Desktop) auf einen direkten Download zurück.
+ * Ergebnis als Bild-Karte teilen statt als Text -- echte Funktion nur mit
+ * Plus, aber der Button ist für alle sichtbar: ohne Plus poppt beim Klick
+ * direkt die Plus-Übersicht auf statt die Karte zu bauen, zusätzlicher
+ * Verkaufshebel an einem Punkt, wo gerade echtes Ergebnis-Interesse da ist.
+ * Baut die Karte per Canvas (kein Screenshot-Tool, volle Kontrolle über
+ * Layout/Schrift), teilt sie bevorzugt nativ als Bilddatei -- fällt ohne
+ * Datei-Teilen (v. a. Desktop) auf einen direkten Download zurück.
  */
 export function ResultShareCard({
   testTitle,
@@ -197,16 +201,23 @@ export function ResultShareCard({
   resultEmoji,
   description,
   gradientClass,
+  plusActive,
 }: {
   testTitle: string;
   resultTitle: string;
   resultEmoji: string;
   description: string;
   gradientClass: string;
+  plusActive: boolean;
 }) {
   const [busy, setBusy] = useState(false);
+  const { openPlusModal } = usePlusModal();
 
   async function handleClick() {
+    if (!plusActive) {
+      openPlusModal();
+      return;
+    }
     setBusy(true);
     try {
       const blob = await renderCardImage({ testTitle, resultTitle, resultEmoji, description, gradientClass });
@@ -245,7 +256,13 @@ export function ResultShareCard({
       disabled={busy}
       className="hairline inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-surface disabled:opacity-60"
     >
-      {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Share2 className="h-4 w-4" />}
+      {busy ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : plusActive ? (
+        <Share2 className="h-4 w-4" />
+      ) : (
+        <Crown className="h-4 w-4 text-gold" />
+      )}
       {busy ? "Erstelle Bild…" : "Ergebnis als Bild teilen"}
     </button>
   );

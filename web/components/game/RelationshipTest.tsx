@@ -297,15 +297,14 @@ export function RelationshipTest({
         >
           <RefreshCw className="h-4 w-4" /> Nochmal machen
         </button>
-        {plusActive && (
-          <ResultShareCard
-            testTitle={title}
-            resultTitle={result.title}
-            resultEmoji={result.emoji}
-            description={result.description}
-            gradientClass={result.gradientClass}
-          />
-        )}
+        <ResultShareCard
+          testTitle={title}
+          resultTitle={result.title}
+          resultEmoji={result.emoji}
+          description={result.description}
+          gradientClass={result.gradientClass}
+          plusActive={plusActive}
+        />
       </div>
     </div>
   );

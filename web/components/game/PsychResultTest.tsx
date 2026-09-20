@@ -231,15 +231,14 @@ export function PsychResultTest({ test, plusActive }: { test: PsychTestDefinitio
         >
           <RefreshCw className="h-4 w-4" /> Nochmal machen
         </button>
-        {plusActive && (
-          <ResultShareCard
-            testTitle={test.title}
-            resultTitle={result.title}
-            resultEmoji={result.emoji}
-            description={result.description}
-            gradientClass={result.gradientClass}
-          />
-        )}
+        <ResultShareCard
+          testTitle={test.title}
+          resultTitle={result.title}
+          resultEmoji={result.emoji}
+          description={result.description}
+          gradientClass={result.gradientClass}
+          plusActive={plusActive}
+        />
       </div>
     </div>
   );
