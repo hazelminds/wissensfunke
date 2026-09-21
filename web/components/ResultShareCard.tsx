@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Crown, Loader2, Share2 } from "lucide-react";
 import { usePlusModal } from "@/components/PlusModalProvider";
+import { wrapLines, safeFileSlug, primaryAppFonts, drawBrandMark, drawFooter, shareOrDownloadImage } from "@/lib/shareCard";
 
 /** Erste(r) Satz als Kurzfassung fürs Bild -- die App-Beschreibungen sind oft
  * ein ganzer Absatz, auf einer Story-Karte muss ein knapper Ausschnitt reichen. */
@@ -20,56 +21,11 @@ function parseGradientColors(gradientClass: string): [string, string] {
   return matches && matches.length >= 2 ? [matches[0], matches[1]] : ["hsl(12,90%,60%)", "hsl(28,95%,55%)"];
 }
 
-function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
-}
-
-function wrapLines(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-  const words = text.split(" ");
-  const lines: string[] = [];
-  let line = "";
-  for (const word of words) {
-    const attempt = line ? `${line} ${word}` : word;
-    if (line && ctx.measureText(attempt).width > maxWidth) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = attempt;
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
-function safeFileSlug(text: string): string {
-  return (
-    text
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "") || "ergebnis"
-  );
-}
-
 /**
  * Zeichnet die im Entwurf abgestimmte Karte direkt per Canvas (kein DOM-
  * Screenshot-Tool nötig) -- Marke, Farb-Badge mit Emoji, Titel, Kurztext,
  * Fußzeile. Nutzt dieselben next/font-Familien wie der Rest der App, damit
  * das Bild exakt zur echten Typografie passt statt einem Systemfont.
- *
- * Wichtig: nur Schriftschnitte verwenden, die auf der Ergebnis-Seite selbst
- * schon sichtbar gerendert werden (hier: font-bold/700 für Überschriften,
- * 400/500/600 für Fließtext) -- next/font lädt seine @font-face-Schnitte
- * lazy und pro Unicode-Bereich, ein Gewicht wie 800, das nirgends auf der
- * Seite vorkommt, ist beim Klick auf den Button oft noch gar nicht geladen.
- * `document.fonts.ready` wartet nur auf bereits angestoßene Ladevorgänge.
  */
 async function renderCardImage({
   testTitle,
@@ -84,14 +40,7 @@ async function renderCardImage({
   description: string;
   gradientClass: string;
 }): Promise<Blob | null> {
-  await document.fonts.ready;
-  const root = getComputedStyle(document.documentElement);
-  // Nur den primären next/font-Namen nehmen (nicht die mitgelieferte, synthetische
-  // "... Fallback"-Metrikschrift) -- mit beiden zusammen im selben Font-String
-  // lehnt Canvas den Font-Face-Abgleich ab und rendert lautlos einen System-
-  // Font, obwohl exakt dieselbe Familie im DOM daneben sichtbar korrekt greift.
-  const displayFont = `${root.getPropertyValue("--font-plus-jakarta").split(",")[0]?.trim() || "sans-serif"}, sans-serif`;
-  const bodyFont = `${root.getPropertyValue("--font-inter").split(",")[0]?.trim() || "sans-serif"}, sans-serif`;
+  const { displayFont, bodyFont } = await primaryAppFonts();
 
   const W = 1080;
   const H = 1920;
@@ -115,26 +64,7 @@ async function renderCardImage({
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, W, H);
 
-  // Noggl-Marke oben links
-  const markSize = 60;
-  const markX = 84;
-  const markY = 84;
-  const markGrad = ctx.createLinearGradient(markX, markY, markX + markSize, markY + markSize);
-  markGrad.addColorStop(0, "#F5623D");
-  markGrad.addColorStop(1, "#FA9238");
-  roundRectPath(ctx, markX, markY, markSize, markSize, 17);
-  ctx.fillStyle = markGrad;
-  ctx.fill();
-  ctx.fillStyle = "#ffffff";
-  ctx.font = `700 34px ${displayFont}`;
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.fillText("N", markX + markSize / 2, markY + markSize / 2 + 3);
-
-  ctx.font = `700 36px ${displayFont}`;
-  ctx.fillStyle = "#F3F0EA";
-  ctx.textAlign = "left";
-  ctx.fillText("Noggl", markX + markSize + 18, markY + markSize / 2 + 2);
+  drawBrandMark(ctx, displayFont);
 
   // Farb-Badge mit Emoji
   const badgeGrad = ctx.createLinearGradient(cx - badgeR, badgeCy - badgeR, cx + badgeR, badgeCy + badgeR);
@@ -171,17 +101,7 @@ async function renderCardImage({
     y += 50;
   }
 
-  const footerY = H - 130;
-  const ruleGrad = ctx.createLinearGradient(cx - 40, 0, cx + 40, 0);
-  ruleGrad.addColorStop(0, from);
-  ruleGrad.addColorStop(1, to);
-  ctx.fillStyle = ruleGrad;
-  roundRectPath(ctx, cx - 40, footerY, 80, 5, 3);
-  ctx.fill();
-
-  ctx.font = `500 28px ${bodyFont}`;
-  ctx.fillStyle = "#8B85A0";
-  ctx.fillText("Mach den Test auf Noggl", cx, footerY + 50);
+  drawFooter(ctx, bodyFont, cx, H - 130, from, to, "Mach den Test auf Noggl");
 
   return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png", 0.95));
 }
@@ -191,9 +111,6 @@ async function renderCardImage({
  * Plus, aber der Button ist für alle sichtbar: ohne Plus poppt beim Klick
  * direkt die Plus-Übersicht auf statt die Karte zu bauen, zusätzlicher
  * Verkaufshebel an einem Punkt, wo gerade echtes Ergebnis-Interesse da ist.
- * Baut die Karte per Canvas (kein Screenshot-Tool, volle Kontrolle über
- * Layout/Schrift), teilt sie bevorzugt nativ als Bilddatei -- fällt ohne
- * Datei-Teilen (v. a. Desktop) auf einen direkten Download zurück.
  */
 export function ResultShareCard({
   testTitle,
@@ -222,29 +139,12 @@ export function ResultShareCard({
     try {
       const blob = await renderCardImage({ testTitle, resultTitle, resultEmoji, description, gradientClass });
       if (!blob) return;
-      const fileName = `noggl-${safeFileSlug(resultTitle)}.png`;
-      const file = new File([blob], fileName, { type: "image/png" });
-
-      if (typeof navigator !== "undefined" && navigator.share && navigator.canShare?.({ files: [file] })) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: "Noggl",
-            text: `Mein Ergebnis bei "${testTitle}": ${resultTitle}`,
-          });
-        } catch {
-          // Dialog abgebrochen -- kein Fehlerzustand nötig.
-        }
-        return;
-      }
-
-      // Kein natives Datei-Teilen (v. a. Desktop) -- direkt als Bild herunterladen.
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
-      a.click();
-      URL.revokeObjectURL(url);
+      await shareOrDownloadImage(
+        blob,
+        `noggl-${safeFileSlug(resultTitle)}.png`,
+        "Noggl",
+        `Mein Ergebnis bei "${testTitle}": ${resultTitle}`,
+      );
     } finally {
       setBusy(false);
     }

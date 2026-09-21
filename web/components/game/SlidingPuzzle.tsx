@@ -10,6 +10,8 @@ import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
 import { ChallengeButton } from "@/components/ChallengeButton";
+import { HighscoreBanner } from "@/components/HighscoreBanner";
+import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 
 export interface ChallengeInfo {
   name: string;
@@ -120,12 +122,14 @@ export function SlidingPuzzle({
   color,
   difficulty = "easy",
   challenge,
+  plusActive = false,
 }: {
   slug: string;
   title: string;
   color: string;
   difficulty?: Difficulty;
   challenge?: ChallengeInfo | null;
+  plusActive?: boolean;
 }) {
   const n = gridFor(difficulty);
 
@@ -139,6 +143,7 @@ export function SlidingPuzzle({
   const [solved, setSolved] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [finalResult, setFinalResult] = useState<{ points: number; seconds: number } | null>(null);
+  const [newBest, setNewBest] = useState<{ points: number; seconds: number } | null>(null);
   const [drag, setDrag] = useState<DragState | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const [boardSize, setBoardSize] = useState(0);
@@ -176,7 +181,11 @@ export function SlidingPuzzle({
     if (!solved) return;
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setFinalResult({ points: solveScore, seconds: Math.round(elapsed) });
-    submitScoreAction("puzzle", slug, solveScore, Math.round(elapsed), moves).catch(() => null);
+    submitScoreAction("puzzle", slug, solveScore, Math.round(elapsed), moves)
+      .then((res) => {
+        if (res.isNewBest) setNewBest({ points: solveScore, seconds: Math.round(elapsed) });
+      })
+      .catch(() => null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solved]);
 
@@ -187,6 +196,7 @@ export function SlidingPuzzle({
     setElapsed(0);
     setSolved(false);
     setFinalResult(null);
+    setNewBest(null);
     setDrag(null);
     logGameEventAction(slug, "started").catch(() => null);
   }, [n, difficulty, slug]);
@@ -398,6 +408,19 @@ export function SlidingPuzzle({
                 ? `${name} hat "${title}" mit ${finalResult.points} Punkten gelöst -- schlägst du das?`
                 : `Ich hab "${title}" mit ${finalResult.points} Punkten gelöst -- schlägst du das?`
             }
+          />
+        </div>
+      )}
+
+      {newBest && (
+        <div className="mt-5 flex flex-col items-center gap-3">
+          <HighscoreBanner />
+          <HighscoreShareCard
+            gameTitle={title}
+            category="puzzle"
+            points={newBest.points}
+            timeSeconds={newBest.seconds}
+            plusActive={plusActive}
           />
         </div>
       )}

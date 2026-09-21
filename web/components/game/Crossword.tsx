@@ -9,6 +9,8 @@ import { submitScoreAction } from "@/lib/actions/scores";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
 import { ChallengeButton } from "@/components/ChallengeButton";
+import { HighscoreBanner } from "@/components/HighscoreBanner";
+import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 
 export interface ChallengeInfo {
   name: string;
@@ -47,12 +49,14 @@ export function Crossword({
   puzzle,
   pendingSeenKeys,
   challenge,
+  plusActive = false,
 }: {
   slug: string;
   title: string;
   puzzle: CrosswordPuzzle;
   pendingSeenKeys?: string[];
   challenge?: ChallengeInfo | null;
+  plusActive?: boolean;
 }) {
   const index = useMemo(() => buildIndex(puzzle), [puzzle]);
   // Feste 22px passen fürs 13x13-Leicht-Raster auf ein Mobil-Display, aber
@@ -76,6 +80,7 @@ export function Crossword({
   const [revealed, setRevealed] = useState(false);
   const [solved, setSolved] = useState(false);
   const [result, setResult] = useState<{ points: number; seconds: number } | null>(null);
+  const [newBest, setNewBest] = useState<{ points: number; seconds: number } | null>(null);
 
   const inputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
   const startTimeRef = useRef(0);
@@ -155,7 +160,11 @@ export function Crossword({
     const elapsedSeconds = Math.round((Date.now() - startTimeRef.current) / 1000);
     const points = Math.max(100, 1000 - elapsedSeconds * 2);
     setResult({ points, seconds: elapsedSeconds });
-    submitScoreAction("puzzle", slug, points, elapsedSeconds, null).catch(() => null);
+    submitScoreAction("puzzle", slug, points, elapsedSeconds, null)
+      .then((res) => {
+        if (res.isNewBest) setNewBest({ points, seconds: elapsedSeconds });
+      })
+      .catch(() => null);
   }
 
   function handleInput(row: number, col: number, raw: string) {
@@ -237,6 +246,7 @@ export function Crossword({
     setRevealed(false);
     setSolved(false);
     setResult(null);
+    setNewBest(null);
     startTimeRef.current = Date.now();
     logGameEventAction(slug, "started").catch(() => null);
   }
@@ -406,6 +416,19 @@ export function Crossword({
               : `Ich hab "${title}" mit ${result.points} Punkten gelöst -- schlägst du das?`
           }
         />
+      )}
+
+      {newBest && (
+        <div className="flex flex-col items-center gap-3">
+          <HighscoreBanner />
+          <HighscoreShareCard
+            gameTitle={title}
+            category="puzzle"
+            points={newBest.points}
+            timeSeconds={newBest.seconds}
+            plusActive={plusActive}
+          />
+        </div>
       )}
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">

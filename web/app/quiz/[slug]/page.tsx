@@ -189,6 +189,7 @@ async function QuizContent({
           color={game.type}
           difficulty={game.difficulty}
           challenge={challengeInfo}
+          plusActive={plusActive}
         />
       </DailyCapGate>
     );
@@ -230,6 +231,7 @@ async function QuizContent({
           puzzle={puzzle}
           pendingSeenKeys={pendingSeenKeys}
           challenge={challengedPuzzle ? challengeInfo : null}
+          plusActive={plusActive}
         />
       </DailyCapGate>
     );
@@ -324,6 +326,7 @@ async function QuizContent({
           initiallyUnlocked={unlocked}
           checkoutError={checkoutError === "not_configured"}
           initialSeenKeys={initialSeenKeys}
+          plusActive={plusActive}
         />
       </DailyCapGate>
     );

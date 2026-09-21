@@ -9,6 +9,8 @@ import { pickUnseen, questionKey, readSeenLocal, writeSeenLocal } from "@/lib/se
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
+import { HighscoreBanner } from "@/components/HighscoreBanner";
+import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean; selectedIndex: number };
@@ -20,6 +22,7 @@ export function QuizPlayer({
   initiallyUnlocked,
   checkoutError = false,
   initialSeenKeys,
+  plusActive = false,
 }: {
   quiz: QuizDefinition;
   initiallyUnlocked: boolean;
@@ -28,6 +31,7 @@ export function QuizPlayer({
    * eingeloggte Nutzer:innen gesetzt. Gäste (undefined) laufen über
    * localStorage (siehe pickRound unten). */
   initialSeenKeys?: string[];
+  plusActive?: boolean;
 }) {
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
@@ -35,6 +39,7 @@ export function QuizPlayer({
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [unlocked, setUnlocked] = useState(initiallyUnlocked);
   const [revealed, setRevealed] = useState(initiallyUnlocked);
+  const [newBest, setNewBest] = useState<{ points: number; timeSeconds: number } | null>(null);
 
   // Hält den aktuellen "schon gesehen"-Stand über mehrere Runden/"Nochmal"
   // hinweg -- kein React-State, weil eine Änderung hier nie einen Re-Render
@@ -128,6 +133,7 @@ export function QuizPlayer({
     setSelected(null);
     setAnswers([]);
     setScreen("quiz");
+    setNewBest(null);
     startTimeRef.current = Date.now();
     logGameEventAction(quiz.slug, "started").catch(() => null);
   }
@@ -141,14 +147,18 @@ export function QuizPlayer({
     ]);
   }
 
-  function nextQuestion() {
+  async function nextQuestion() {
     if (current + 1 >= roundQuestions.length) {
       setScreen("result");
       incrementTodayPlayCount();
       const finalScore = answers.filter((a) => a.correct).length;
       const timeSeconds = Math.round((Date.now() - startTimeRef.current) / 1000);
       const points = Math.round((finalScore / roundQuestions.length) * 500);
-      submitScoreAction("quiz", quiz.slug, points, timeSeconds, null).catch(() => null);
+      submitScoreAction("quiz", quiz.slug, points, timeSeconds, null)
+        .then((result) => {
+          if (result.isNewBest) setNewBest({ points, timeSeconds });
+        })
+        .catch(() => null);
       logGameEventAction(quiz.slug, "completed").catch(() => null);
       return;
     }
@@ -190,6 +200,8 @@ export function QuizPlayer({
         setRevealed(true);
       }}
       onRestart={startQuiz}
+      newBest={newBest}
+      plusActive={plusActive}
     />
   );
 }
@@ -394,6 +406,8 @@ function ResultScreen({
   checkoutError,
   onUnlockedByOwner,
   onRestart,
+  newBest,
+  plusActive,
 }: {
   quiz: QuizDefinition;
   score: number;
@@ -405,6 +419,8 @@ function ResultScreen({
   checkoutError: boolean;
   onUnlockedByOwner: () => void;
   onRestart: () => void;
+  newBest: { points: number; timeSeconds: number } | null;
+  plusActive: boolean;
 }) {
   const rank = rankFor(quiz, score, roundLength);
   const deferredReveal = quiz.revealTiming === "end";
@@ -544,6 +560,19 @@ function ResultScreen({
           🔁 Nochmal
         </button>
       </div>
+
+      {newBest && (
+        <div className="flex flex-col items-center gap-3">
+          <HighscoreBanner />
+          <HighscoreShareCard
+            gameTitle={quiz.title}
+            category="quiz"
+            points={newBest.points}
+            timeSeconds={newBest.timeSeconds}
+            plusActive={plusActive}
+          />
+        </div>
+      )}
 
       <LeaderboardTeaser board="quiz" />
     </div>

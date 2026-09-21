@@ -9,11 +9,21 @@ export { formatTimeLabel };
 
 export type ScoreCategory = "quiz" | "puzzle";
 
+export interface SubmitScoreResult {
+  isNewBest: boolean;
+  previousBest: number | null;
+}
+
 /** Eine Zeile pro abgeschlossener Runde -- nur für eingeloggte Nutzer:innen
  * (Gäste haben keine dauerhafte Identität, die auf einer Bestenliste Sinn
  * ergäbe). Wird für jede Runde geschrieben, unabhängig vom Plus-Status --
  * sichtbar in der Bestenliste ist ein Score erst mit Plus + Spielername
- * (siehe getLeaderboard), die Rohdaten bleiben aber erhalten. */
+ * (siehe getLeaderboard), die Rohdaten bleiben aber erhalten.
+ *
+ * Ermittelt nebenbei, ob die Runde eine echte neue persönliche Bestleistung
+ * für genau dieses Spiel (Slug) ist -- serverseitig anhand der bisherigen
+ * Zeilen dieser Person, nicht anhand von irgendwas, das der Client behauptet
+ * (Grundlage fürs "Neue Bestleistung teilen"-Feature). */
 export async function submitScore(
   userId: string,
   category: ScoreCategory,
@@ -21,9 +31,19 @@ export async function submitScore(
   points: number,
   timeSeconds: number,
   moves: number | null,
-): Promise<void> {
-  if (!isSupabaseConfigured()) return;
+): Promise<SubmitScoreResult> {
+  if (!isSupabaseConfigured()) return { isNewBest: false, previousBest: null };
   const supabase = getSupabaseAdmin();
+
+  const { data: priorRows } = await supabase
+    .from("scores")
+    .select("points")
+    .eq("user_id", userId)
+    .eq("slug", slug)
+    .order("points", { ascending: false })
+    .limit(1);
+  const previousBest = priorRows?.[0]?.points ?? null;
+
   await supabase.from("scores").insert({
     user_id: userId,
     category,
@@ -32,6 +52,8 @@ export async function submitScore(
     time_seconds: timeSeconds,
     moves,
   });
+
+  return { isNewBest: previousBest === null ? false : points > previousBest, previousBest };
 }
 
 export interface LeaderboardEntry {
