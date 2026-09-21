@@ -12,6 +12,7 @@ import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare
 import { ChallengeButton } from "@/components/ChallengeButton";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
+import { Confetti } from "@/components/Confetti";
 
 export interface ChallengeInfo {
   name: string;
@@ -414,6 +415,7 @@ export function SlidingPuzzle({
 
       {newBest && (
         <div className="mt-5 flex flex-col items-center gap-3">
+          <Confetti />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}

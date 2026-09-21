@@ -11,6 +11,7 @@ import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
+import { Confetti } from "@/components/Confetti";
 
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean; selectedIndex: number };
@@ -563,6 +564,7 @@ function ResultScreen({
 
       {newBest && (
         <div className="flex flex-col items-center gap-3">
+          <Confetti />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={quiz.title}

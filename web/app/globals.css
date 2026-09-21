@@ -145,6 +145,17 @@ body {
   }
 }
 
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) translateX(var(--confetti-drift)) rotate(var(--confetti-spin));
+    opacity: 0.9;
+  }
+}
+
 /* Rechtstexte (Impressum/Datenschutz/AGB/Widerruf) — schlichte Lauftext-Typografie. */
 .legal-prose h2 {
   font-family: var(--font-display), sans-serif;
