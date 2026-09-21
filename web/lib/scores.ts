@@ -63,8 +63,23 @@ export interface LeaderboardEntry {
   points: number;
 }
 
+/** Slugs, die es mal gab, bevor Spiele umbenannt/in Schwierigkeitsstufen
+ * aufgeteilt wurden -- alte Zeilen in game_events/scores tragen sie noch.
+ * Ohne diese Zuordnung würde z. B. "Lieblingsspiel" in der Statistik-Seite
+ * den rohen Slug statt eines Titels anzeigen (siehe titleForSlug unten). */
+const LEGACY_SLUG_TITLES: Record<string, string> = {
+  kreuzwortraetsel: "Kreuzworträtsel",
+  "bilder-puzzle": "Schiebepuzzle",
+  "wer-bin-ich-einstein": "Wer bin ich?",
+  "wer-bin-ich-genie": "Wer bin ich?",
+  "wer-bin-ich-king-of-pop": "Wer bin ich?",
+  "wer-bin-ich-meisterdetektiv": "Wer bin ich?",
+  "wer-bin-ich-meisterwerk": "Wer bin ich?",
+  "wer-bin-ich-wahrzeichen": "Wer bin ich?",
+};
+
 export function titleForSlug(slug: string): string {
-  return games.find((g) => g.slug === slug)?.title ?? slug;
+  return games.find((g) => g.slug === slug)?.title ?? LEGACY_SLUG_TITLES[slug] ?? slug;
 }
 
 /**
