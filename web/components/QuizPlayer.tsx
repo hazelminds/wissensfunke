@@ -5,16 +5,30 @@ import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor } from "@/
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
-import { pickUnseen, questionKey, readSeenLocal, writeSeenLocal } from "@/lib/seenQuestions";
+import {
+  pickUnseen,
+  questionKey,
+  readSeenLocal,
+  writeSeenLocal,
+  encodeQuestionIndices,
+} from "@/lib/seenQuestions";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { submitScoreAction } from "@/lib/actions/scores";
 import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
+import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
+import { ChallengeButton } from "@/components/ChallengeButton";
 
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean; selectedIndex: number };
+
+export interface ChallengeInfo {
+  name: string;
+  points: number;
+  seconds: number;
+}
 
 const attemptStorageKey = (slug: string) => `wf_attempt_${slug}`;
 
@@ -24,6 +38,8 @@ export function QuizPlayer({
   checkoutError = false,
   initialSeenKeys,
   plusActive = false,
+  challenge,
+  challengeQuestionIndices,
 }: {
   quiz: QuizDefinition;
   initiallyUnlocked: boolean;
@@ -33,6 +49,11 @@ export function QuizPlayer({
    * localStorage (siehe pickRound unten). */
   initialSeenKeys?: string[];
   plusActive?: boolean;
+  challenge?: ChallengeInfo | null;
+  /** Pool-Indizes der Fragen, die die herausfordernde Person gespielt hat --
+   * gesetzt und schon serverseitig validiert (siehe decodeQuestionIndices),
+   * nur für die allererste Runde nach dem Landen über den Link relevant. */
+  challengeQuestionIndices?: number[] | null;
 }) {
   const [screen, setScreen] = useState<Screen>("start");
   const [current, setCurrent] = useState(0);
@@ -41,6 +62,7 @@ export function QuizPlayer({
   const [unlocked, setUnlocked] = useState(initiallyUnlocked);
   const [revealed, setRevealed] = useState(initiallyUnlocked);
   const [newBest, setNewBest] = useState<{ points: number; timeSeconds: number } | null>(null);
+  const [finalResult, setFinalResult] = useState<{ points: number; timeSeconds: number } | null>(null);
 
   // Hält den aktuellen "schon gesehen"-Stand über mehrere Runden/"Nochmal"
   // hinweg -- kein React-State, weil eine Änderung hier nie einen Re-Render
@@ -69,6 +91,31 @@ export function QuizPlayer({
     return picked;
   }
 
+  // Für einen Challenge-Link: exakt dieselben Fragen wie die herausfordernde
+  // Person (Indizes schon serverseitig geprüft), statt einer neuen zufälligen
+  // Auswahl -- sonst wäre der Punktevergleich nicht fair. Zählt trotzdem als
+  // "gesehen", damit dieselben Fragen nicht gleich in der nächsten eigenen
+  // Runde nochmal auftauchen.
+  function pickChallengeRound(indices: number[]): QuizQuestion[] {
+    const picked = indices.map((i) => quiz.questions[i]);
+    const seen = seenRef.current ?? new Set(initialSeenKeys ?? readSeenLocal(quiz.slug));
+    const nextSeen = new Set(seen);
+    picked.forEach((q) => nextSeen.add(questionKey(q)));
+    seenRef.current = nextSeen;
+    if (initialSeenKeys !== undefined) {
+      saveSeenQuestionsAction(quiz.slug, [...nextSeen]).catch(() => null);
+    } else {
+      writeSeenLocal(quiz.slug, nextSeen);
+    }
+    return picked;
+  }
+
+  // Nur die allererste Runde nach dem Landen über einen Challenge-Link soll
+  // die exakte Fragen-Auswahl der herausfordernden Person übernehmen -- jedes
+  // "Nochmal" danach (gleiche Funktion, startQuiz() unten) zieht wieder eine
+  // normale frische Runde.
+  const challengeConsumedRef = useRef(false);
+
   // Leer statt sofort per Lazy-Initializer befüllt: pickRound() liest/schreibt
   // seenRef, und Refs dürfen laut React-Regel nicht während des Renderns
   // angefasst werden -- die erste Runde kommt daher aus dem Effekt direkt
@@ -77,6 +124,10 @@ export function QuizPlayer({
   const [roundQuestions, setRoundQuestions] = useState<QuizQuestion[]>([]);
 
   useEffect(() => {
+    // Bei einem Challenge-Link steht die erste Runde schon fest (siehe
+    // startQuiz()) -- kein Vorab-Pick nötig, der sonst unnötig andere Fragen
+    // aus dem Pool als "gesehen" markieren würde, bevor überhaupt gespielt wurde.
+    if (challengeQuestionIndices) return;
     // Bewusste Ausnahme wie beim Zahlungs-Rücksprung unten: seenRef/localStorage
     // sind erst nach dem Mount verfügbar, die erste Runde kann also nicht
     // synchron im Lazy-Initializer stehen (siehe Kommentar oben an roundQuestions).
@@ -129,12 +180,15 @@ export function QuizPlayer({
   const answered = selected !== null;
 
   function startQuiz() {
-    setRoundQuestions(pickRound());
+    const useChallenge = !!challengeQuestionIndices && !challengeConsumedRef.current;
+    challengeConsumedRef.current = true;
+    setRoundQuestions(useChallenge ? pickChallengeRound(challengeQuestionIndices!) : pickRound());
     setCurrent(0);
     setSelected(null);
     setAnswers([]);
     setScreen("quiz");
     setNewBest(null);
+    setFinalResult(null);
     startTimeRef.current = Date.now();
     logGameEventAction(quiz.slug, "started").catch(() => null);
   }
@@ -155,6 +209,7 @@ export function QuizPlayer({
       const finalScore = answers.filter((a) => a.correct).length;
       const timeSeconds = Math.round((Date.now() - startTimeRef.current) / 1000);
       const points = Math.round((finalScore / roundQuestions.length) * 500);
+      setFinalResult({ points, timeSeconds });
       submitScoreAction("quiz", quiz.slug, points, timeSeconds, null)
         .then((result) => {
           if (result.isNewBest) setNewBest({ points, timeSeconds });
@@ -168,7 +223,7 @@ export function QuizPlayer({
   }
 
   if (screen === "start") {
-    return <StartScreen quiz={quiz} roundSize={quiz.roundSize} onStart={startQuiz} />;
+    return <StartScreen quiz={quiz} roundSize={quiz.roundSize} onStart={startQuiz} challenge={challenge} />;
   }
 
   if (screen === "quiz") {
@@ -203,6 +258,8 @@ export function QuizPlayer({
       onRestart={startQuiz}
       newBest={newBest}
       plusActive={plusActive}
+      challenge={challenge}
+      finalResult={finalResult}
     />
   );
 }
@@ -211,14 +268,19 @@ function StartScreen({
   quiz,
   roundSize,
   onStart,
+  challenge,
 }: {
   quiz: QuizDefinition;
   roundSize: number;
   onStart: () => void;
+  challenge?: ChallengeInfo | null;
 }) {
   const icons = Object.values(quiz.categoryIcons);
   return (
     <div className="flex flex-col gap-6">
+      {challenge && (
+        <ChallengeBanner name={challenge.name} points={challenge.points} seconds={challenge.seconds} />
+      )}
       <div className="flex flex-col gap-3">
         <h1 className="font-display text-[28px] leading-tight font-bold text-ink text-balance">
           {quiz.title}
@@ -409,6 +471,8 @@ function ResultScreen({
   onRestart,
   newBest,
   plusActive,
+  challenge,
+  finalResult,
 }: {
   quiz: QuizDefinition;
   score: number;
@@ -422,6 +486,8 @@ function ResultScreen({
   onRestart: () => void;
   newBest: { points: number; timeSeconds: number } | null;
   plusActive: boolean;
+  challenge?: ChallengeInfo | null;
+  finalResult: { points: number; timeSeconds: number } | null;
 }) {
   const rank = rankFor(quiz, score, roundLength);
   const deferredReveal = quiz.revealTiming === "end";
@@ -561,6 +627,36 @@ function ResultScreen({
           🔁 Nochmal
         </button>
       </div>
+
+      {challenge && finalResult && (
+        <ChallengeCompare
+          myPoints={finalResult.points}
+          mySeconds={finalResult.timeSeconds}
+          opponentName={challenge.name}
+          opponentPoints={challenge.points}
+          opponentSeconds={challenge.seconds}
+        />
+      )}
+
+      {finalResult && (
+        <ChallengeButton
+          shareTitle={quiz.title}
+          buildUrl={(name) => {
+            const url = new URL(window.location.origin + `/quiz/${quiz.slug}`);
+            const indices = roundQuestions.map((q) => quiz.questions.indexOf(q));
+            url.searchParams.set("challenge", encodeQuestionIndices(indices));
+            if (name) url.searchParams.set("name", name);
+            url.searchParams.set("pts", String(finalResult.points));
+            url.searchParams.set("zeit", String(finalResult.timeSeconds));
+            return url.toString();
+          }}
+          buildShareText={(name) =>
+            name
+              ? `${name} hat "${quiz.title}" mit ${finalResult.points} Punkten gespielt -- schlägst du das?`
+              : `Ich hab "${quiz.title}" mit ${finalResult.points} Punkten gespielt -- schlägst du das?`
+          }
+        />
+      )}
 
       {newBest && (
         <div className="flex flex-col items-center gap-3">

@@ -14,7 +14,7 @@ import { verifyUnlock, hasUserPurchased } from "@/lib/purchases";
 import { getCurrentUser } from "@/lib/auth";
 import { getPlusStatus } from "@/lib/plus";
 import { getSeenQuestions } from "@/lib/seenQuestionsServer";
-import { pickUnseen } from "@/lib/seenQuestions";
+import { pickUnseen, decodeQuestionIndices } from "@/lib/seenQuestions";
 import { getPsychTest } from "@/content/psychTests";
 import {
   getCrosswordPool,
@@ -319,6 +319,13 @@ async function QuizContent({
     // Kontogebundenes "schon gesehen" nur für eingeloggte Nutzer:innen laden --
     // Gäste (undefined) fallen in QuizPlayer auf localStorage zurück.
     const initialSeenKeys = user ? await getSeenQuestions(user.id, slug) : undefined;
+    // Challenge-Link: "challenge" trägt hier (anders als beim Kreuzworträtsel,
+    // wo es eine Rätsel-ID ist) die Pool-Indizes der exakt gleichen Fragen-
+    // Runde -- sonst würde jede Person eine andere zufällige Auswahl bekommen
+    // und der Punktevergleich wäre nicht fair.
+    const challengeQuestionIndices = challenge
+      ? decodeQuestionIndices(challenge, quiz.questions.length, quiz.roundSize)
+      : null;
     return (
       <DailyCapGate plusActive={plusActive}>
         <QuizPlayer
@@ -327,6 +334,8 @@ async function QuizContent({
           checkoutError={checkoutError === "not_configured"}
           initialSeenKeys={initialSeenKeys}
           plusActive={plusActive}
+          challenge={challengeQuestionIndices ? challengeInfo : null}
+          challengeQuestionIndices={challengeQuestionIndices}
         />
       </DailyCapGate>
     );

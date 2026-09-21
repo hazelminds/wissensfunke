@@ -79,3 +79,22 @@ export function pickUnseen<T>(
   picked.forEach((item) => nextSeen.add(keyOf(item)));
   return { picked, nextSeen };
 }
+
+/** Für einen fairen Quiz-Challenge-Link: die exakten Pool-Indizes einer
+ * gespielten Runde, damit die herausgeforderte Person dieselben Fragen in
+ * derselben Reihenfolge bekommt statt einer neuen zufälligen Auswahl (gleiches
+ * Prinzip wie die geteilte Rätsel-ID bei Kreuzworträtsel/Schiebepuzzle). */
+export function encodeQuestionIndices(indices: number[]): string {
+  return indices.join("-");
+}
+
+/** Lehnt alles ab, was nicht mehr zum aktuellen Pool passt -- falsche Länge
+ * (roundSize kann sich seit dem Teilen geändert haben), Indizes außerhalb
+ * des Pools, oder Duplikate (Coding-Fehler oder manipulierter Link). */
+export function decodeQuestionIndices(code: string, poolLength: number, expectedCount: number): number[] | null {
+  const parts = code.split("-").map((p) => Number.parseInt(p, 10));
+  if (parts.length !== expectedCount) return null;
+  if (parts.some((n) => Number.isNaN(n) || n < 0 || n >= poolLength)) return null;
+  if (new Set(parts).size !== parts.length) return null;
+  return parts;
+}
