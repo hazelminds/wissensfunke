@@ -1,26 +1,36 @@
 import Link from "next/link";
-import { ArrowRight, BarChart3, Crown, Flame, LifeBuoy, Lock, LogOut, Snowflake, User as UserIcon } from "lucide-react";
+import { ArrowRight, BarChart3, Crown, Flame, LifeBuoy, LogOut, Snowflake, Sparkles, User as UserIcon } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
 import { PlusButton } from "@/components/PlusButton";
 import { UsernameForm } from "@/components/konto/UsernameForm";
+import { BadgeGrid } from "@/components/konto/BadgeGrid";
+import { StreakProgressBar } from "@/components/konto/StreakProgressBar";
 import { getCurrentUser, isSupabaseConfigured } from "@/lib/auth";
 import { getServerStreak, MAX_STREAK_FREEZES } from "@/lib/streak-server";
 import { getPlusStatus } from "@/lib/plus";
 import { getUnreadSupportCountForUser } from "@/lib/support";
+import { getAchievementsSummary } from "@/lib/achievements";
 import { signOut } from "@/lib/actions/auth";
 import { updateUsernameAction } from "@/lib/actions/profile";
 import { streakBadges } from "@/content/streakBadges";
+import { roundBadges } from "@/content/roundBadges";
 
 export default async function KontoPage() {
   const user = await getCurrentUser();
-  const [streak, plus, unreadSupport] = await Promise.all([
+  const [streak, plus, unreadSupport, achievements] = await Promise.all([
     user ? getServerStreak(user.id) : null,
     user ? getPlusStatus(user.id) : null,
     user ? getUnreadSupportCountForUser(user.id) : 0,
+    user ? getAchievementsSummary(user.id) : null,
   ]);
   const plusActive = plus?.active ?? false;
   const username = (user?.user_metadata?.username as string | undefined) ?? "";
+
+  // Nächste noch nicht erreichte Streak-Stufe -- der Fortschrittsbalken
+  // motiviert weiterzuspielen, unabhängig von Plus (die Medaille selbst
+  // bleibt trotzdem Plus-exklusiv, siehe BadgeGrid unten).
+  const nextStreakBadge = streakBadges.find((b) => (streak?.count ?? 0) < b.threshold) ?? null;
 
   return (
     <div className="min-h-screen bg-bg">
@@ -131,6 +141,8 @@ export default async function KontoPage() {
                 </p>
               </div>
 
+              {nextStreakBadge && <StreakProgressBar streakCount={streak?.count ?? 0} nextBadge={nextStreakBadge} />}
+
               <div
                 className={`hairline mb-4 flex items-center gap-3 rounded-2xl px-4 py-3.5 ${
                   plusActive ? "bg-bg" : "bg-bg opacity-70"
@@ -157,36 +169,79 @@ export default async function KontoPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {streakBadges.map((badge) => {
+              <BadgeGrid
+                icon={Flame}
+                plusActive={plusActive}
+                badges={streakBadges.map((badge) => {
                   const reached = (streak?.count ?? 0) >= badge.threshold;
-                  const unlocked = plusActive && reached;
-                  return (
-                    <div
-                      key={badge.id}
-                      className={`hairline flex flex-col items-center gap-1.5 rounded-2xl p-3.5 text-center ${
-                        unlocked ? "bg-primary/15" : "bg-bg"
-                      }`}
-                    >
-                      <div
-                        className={`flex h-9 w-9 items-center justify-center rounded-xl ${
-                          unlocked ? "bg-primary text-white" : "bg-line text-muted"
-                        }`}
-                      >
-                        {unlocked ? <Flame className="h-4.5 w-4.5" /> : <Lock className="h-4 w-4" />}
-                      </div>
-                      <p className="text-[12.5px] leading-tight font-bold text-ink">{badge.title}</p>
-                      <p className="text-[11px] text-muted">
-                        {plusActive
-                          ? reached
-                            ? "Freigeschaltet"
-                            : `${badge.threshold} Tage übrig`
-                          : "Nur mit Plus"}
-                      </p>
-                    </div>
-                  );
+                  return {
+                    id: badge.id,
+                    title: badge.title,
+                    reached,
+                    subtitle: plusActive ? (reached ? "Freigeschaltet" : `${badge.threshold} Tage übrig`) : "Nur mit Plus",
+                  };
                 })}
+              />
+            </div>
+
+            <div className="hairline rounded-3xl bg-surface p-5">
+              <div className="mb-1 flex items-center justify-between gap-3">
+                <p className="flex items-center gap-2 font-display font-bold text-ink">
+                  <Sparkles className="h-4 w-4 text-primary" /> Weitere Medaillen
+                </p>
+                <span className="text-xs font-bold text-muted">
+                  {plusActive
+                    ? `${roundBadges.filter((b) => (achievements?.totalRounds ?? 0) >= b.threshold).length}/${roundBadges.length} Badges`
+                    : `0/${roundBadges.length} Badges`}
+                </span>
               </div>
+              <p className="mb-4 text-sm text-ink-soft">
+                Für jede gespielte Runde und für deine erste geknackte Bestleistung.
+              </p>
+
+              <div
+                className={`hairline mb-4 flex items-center gap-3 rounded-2xl px-4 py-3.5 ${
+                  plusActive ? "bg-bg" : "bg-bg opacity-70"
+                }`}
+              >
+                <div
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
+                    plusActive && achievements?.hasFirstCrown ? "bg-primary/15" : "bg-line"
+                  }`}
+                >
+                  <Crown
+                    className={`h-4.5 w-4.5 ${plusActive && achievements?.hasFirstCrown ? "text-primary" : "text-muted"}`}
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-ink">Erste Krone</p>
+                  <p className="text-xs text-muted">
+                    {!plusActive
+                      ? "Nur mit Plus: deine erste geknackte Bestleistung."
+                      : achievements?.hasFirstCrown
+                        ? "Freigeschaltet — du hast schon eine eigene Bestleistung übertroffen."
+                        : "Schlag deine eigene Bestleistung in einem Spiel, um sie freizuschalten."}
+                  </p>
+                </div>
+              </div>
+
+              <BadgeGrid
+                icon={Sparkles}
+                plusActive={plusActive}
+                badges={roundBadges.map((badge) => {
+                  const reached = (achievements?.totalRounds ?? 0) >= badge.threshold;
+                  return {
+                    id: badge.id,
+                    title: badge.title,
+                    reached,
+                    subtitle: plusActive
+                      ? reached
+                        ? "Freigeschaltet"
+                        : `${badge.threshold - (achievements?.totalRounds ?? 0)} Runden übrig`
+                      : "Nur mit Plus",
+                  };
+                })}
+              />
             </div>
 
             <Link
