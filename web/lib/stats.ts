@@ -113,9 +113,16 @@ export interface WeeklyRecap {
   favoriteGame: (GameRef & { count: number }) | null;
   bestWeekday: string | null;
   streakCount: number;
+  /** Runden pro Wochentag, Montag zuerst (7 Einträge) -- fürs kleine
+   * Aktivitäts-Balkendiagramm auf der geteilten Karte. */
+  dailyCounts: number[];
 }
 
 const WEEKDAY_NAMES = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+// JS Date.getDay() zählt Sonntag als 0 -- fürs Balkendiagramm wird Montag
+// zuerst gebraucht, daher diese Umsortierung von Index (0=So..6=Sa) zu
+// Montag-zuerst-Reihenfolge.
+const MONDAY_FIRST_ORDER = [1, 2, 3, 4, 5, 6, 0];
 
 /**
  * Kurzer "Deine Woche"-Rückblick fürs Teilen (letzte 7 Tage, rollierend --
@@ -164,5 +171,7 @@ export async function getWeeklyRecap(userId: string): Promise<WeeklyRecap | null
     }
   }
 
-  return { rounds: rows.length, favoriteGame, bestWeekday, streakCount: streak.count };
+  const dailyCounts = MONDAY_FIRST_ORDER.map((weekday) => countsByWeekday.get(weekday) ?? 0);
+
+  return { rounds: rows.length, favoriteGame, bestWeekday, streakCount: streak.count, dailyCounts };
 }

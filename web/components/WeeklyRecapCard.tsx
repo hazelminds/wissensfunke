@@ -182,6 +182,71 @@ function drawMiniTile(
   ctx.fillText(label, cx, badgeCy + badgeR + 86);
 }
 
+const DAY_LABELS = ["MO", "DI", "MI", "DO", "FR", "SA", "SO"];
+
+/** Kleines Balkendiagramm "Runden pro Tag" -- füllt den sonst leeren unteren
+ * Kartenbereich mit echtem Inhalt statt nur Dekoration, und zeigt auf einen
+ * Blick, wie sich die Woche verteilt hat (nicht nur den einzelnen Bestwert). */
+function drawActivityChart(
+  ctx: CanvasRenderingContext2D,
+  bodyFont: string,
+  displayFont: string,
+  cx: number,
+  y: number,
+  width: number,
+  dailyCounts: number[],
+): number {
+  const left = cx - width / 2;
+  const cardHeight = 380;
+  const maxBarHeight = 200;
+
+  ctx.fillStyle = "rgba(255,255,255,0.05)";
+  roundRectPath(ctx, left, y, width, cardHeight, 28);
+  ctx.fill();
+
+  ctx.textAlign = "left";
+  ctx.textBaseline = "alphabetic";
+  ctx.font = `700 24px ${bodyFont}`;
+  ctx.fillStyle = "#B9B4C4";
+  ctx.fillText("AKTIVITÄT DIESE WOCHE", left + 44, y + 56);
+
+  const maxCount = Math.max(1, ...dailyCounts);
+  const chartLeft = left + 44;
+  const chartRight = left + width - 44;
+  const chartWidth = chartRight - chartLeft;
+  const barGap = 20;
+  const barWidth = (chartWidth - barGap * (dailyCounts.length - 1)) / dailyCounts.length;
+  const baseline = y + 96 + maxBarHeight;
+
+  const activeGrad = ctx.createLinearGradient(0, baseline - maxBarHeight, 0, baseline);
+  activeGrad.addColorStop(0, HERO_TO);
+  activeGrad.addColorStop(1, HERO_FROM);
+
+  dailyCounts.forEach((count, i) => {
+    const barX = chartLeft + i * (barWidth + barGap);
+    const barHeight = count === 0 ? 8 : Math.max(16, (count / maxCount) * maxBarHeight);
+    const isMax = count === maxCount && count > 0;
+
+    if (count > 0) {
+      ctx.textAlign = "center";
+      ctx.font = `700 24px ${displayFont}`;
+      ctx.fillStyle = isMax ? "#FAF8F4" : "#8B85A0";
+      ctx.fillText(String(count), barX + barWidth / 2, baseline - barHeight - 16);
+    }
+
+    ctx.fillStyle = isMax ? activeGrad : "rgba(255,255,255,0.14)";
+    roundRectPath(ctx, barX, baseline - barHeight, barWidth, barHeight, 10);
+    ctx.fill();
+
+    ctx.textAlign = "center";
+    ctx.font = `600 22px ${bodyFont}`;
+    ctx.fillStyle = "#8B85A0";
+    ctx.fillText(DAY_LABELS[i], barX + barWidth / 2, baseline + 38);
+  });
+
+  return cardHeight;
+}
+
 async function renderCardImage(recap: WeeklyRecap): Promise<Blob | null> {
   const { displayFont, bodyFont } = await primaryAppFonts();
 
@@ -305,6 +370,7 @@ async function renderCardImage(recap: WeeklyRecap): Promise<Blob | null> {
         tile.to,
       );
     });
+    blockY += miniTileHeight + gap;
   } else if (miniTiles.length === 1) {
     const tile = miniTiles[0];
     const tileWidth = blockWidth * 0.55;
@@ -322,6 +388,11 @@ async function renderCardImage(recap: WeeklyRecap): Promise<Blob | null> {
       tile.from,
       tile.to,
     );
+    blockY += miniTileHeight + gap;
+  }
+
+  if (recap.dailyCounts.some((c) => c > 0)) {
+    drawActivityChart(ctx, bodyFont, displayFont, cx, blockY, blockWidth, recap.dailyCounts);
   }
 
   drawFooter(ctx, bodyFont, cx, footerY, HERO_FROM, HERO_TO, "Spiel auch auf Noggl");
