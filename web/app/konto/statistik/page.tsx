@@ -2,13 +2,17 @@ import Link from "next/link";
 import { BarChart3, Crown, HelpCircle, Puzzle, ScrollText, Sparkles, Trophy } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { LoginForm } from "@/components/LoginForm";
+import { WeeklyRecapCard } from "@/components/WeeklyRecapCard";
 import { getCurrentUser, isSupabaseConfigured } from "@/lib/auth";
-import { getUserStats } from "@/lib/stats";
+import { getPlusStatus } from "@/lib/plus";
+import { getUserStats, getWeeklyRecap } from "@/lib/stats";
 import { formatTimeLabel } from "@/lib/scores";
 
 export default async function StatistikPage() {
   const user = await getCurrentUser();
   const stats = user ? await getUserStats(user.id) : null;
+  const weeklyRecap = user ? await getWeeklyRecap(user.id) : null;
+  const plusActive = user ? (await getPlusStatus(user.id)).active : false;
 
   return (
     <div className="min-h-screen bg-bg">
@@ -84,6 +88,8 @@ export default async function StatistikPage() {
                 }
               />
             </div>
+
+            {weeklyRecap && <WeeklyRecapCard recap={weeklyRecap} plusActive={plusActive} />}
 
             <div className="flex flex-col gap-3">
               <p className="text-xs font-bold tracking-wide text-muted uppercase">Nach Spielart</p>

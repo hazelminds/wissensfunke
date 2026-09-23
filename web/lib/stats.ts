@@ -2,6 +2,7 @@ import "server-only";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/auth";
 import { titleForSlug } from "@/lib/scores";
+import { getServerStreak } from "@/lib/streak-server";
 
 export interface GameRef {
   slug: string;
@@ -105,4 +106,63 @@ export async function getUserStats(userId: string): Promise<UserStats> {
   const whoami = { count: eventRows.filter((e) => e.slug.startsWith("wer-bin-ich-")).length };
 
   return { totalRounds, favoriteGame, bestScore, roundsThisWeek, roundsLastWeek, quiz, crossword, sliding, whoami };
+}
+
+export interface WeeklyRecap {
+  rounds: number;
+  favoriteGame: (GameRef & { count: number }) | null;
+  bestWeekday: string | null;
+  streakCount: number;
+}
+
+const WEEKDAY_NAMES = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+
+/**
+ * Kurzer "Deine Woche"-Rückblick fürs Teilen (letzte 7 Tage, rollierend --
+ * dieselbe Definition wie roundsThisWeek oben). Eigene, schlanke Abfrage
+ * statt getUserStats() wiederzuverwenden, weil hier nur auf diesen Zeitraum
+ * eingegrenzte Daten gebraucht werden, keine Gesamt-Historie. `null`, wenn
+ * diese Woche noch gar nichts gespielt wurde -- dann gibt's nichts zu teilen.
+ */
+export async function getWeeklyRecap(userId: string): Promise<WeeklyRecap | null> {
+  if (!isSupabaseConfigured()) return null;
+  const supabase = getSupabaseAdmin();
+
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const [{ data: events }, streak] = await Promise.all([
+    supabase
+      .from("game_events")
+      .select("slug, created_at")
+      .eq("user_id", userId)
+      .eq("event", "completed")
+      .gte("created_at", sevenDaysAgo),
+    getServerStreak(userId),
+  ]);
+
+  const rows = events ?? [];
+  if (rows.length === 0) return null;
+
+  const countsBySlug = new Map<string, number>();
+  const countsByWeekday = new Map<number, number>();
+  for (const e of rows) {
+    countsBySlug.set(e.slug, (countsBySlug.get(e.slug) ?? 0) + 1);
+    const weekday = new Date(e.created_at).getDay();
+    countsByWeekday.set(weekday, (countsByWeekday.get(weekday) ?? 0) + 1);
+  }
+
+  let favoriteGame: WeeklyRecap["favoriteGame"] = null;
+  for (const [slug, count] of countsBySlug) {
+    if (!favoriteGame || count > favoriteGame.count) favoriteGame = { slug, title: titleForSlug(slug), count };
+  }
+
+  let bestWeekday: WeeklyRecap["bestWeekday"] = null;
+  let bestWeekdayCount = 0;
+  for (const [weekday, count] of countsByWeekday) {
+    if (count > bestWeekdayCount) {
+      bestWeekdayCount = count;
+      bestWeekday = WEEKDAY_NAMES[weekday];
+    }
+  }
+
+  return { rounds: rows.length, favoriteGame, bestWeekday, streakCount: streak.count };
 }
