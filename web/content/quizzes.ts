@@ -311,62 +311,6 @@ export const quizzes: QuizDefinition[] = [
     unlockTitle: "Themen-Analyse",
     unlockDescription: "Die richtigen Antworten und mehr Hintergrund zu jeder Frage, inklusive mit Plus",
   },
-  {
-    slug: "allgemeinwissen",
-    title: "Allgemeinwissen-Quiz",
-    categoryIcons: {
-      Geografie: "🌍",
-      Biologie: "🧬",
-      Geschichte: "🏛️",
-      Chemie: "⚗️",
-      Kunst: "🎨",
-    },
-    questions: [
-      {
-        category: "Geografie",
-        question: "Welches Land hat aktuell die meisten Einwohner der Welt?",
-        options: ["China", "Indien", "USA", "Indonesien"],
-        correctIndex: 1,
-        explanation:
-          "Indien hat China laut UN-Schätzungen um 2023 als bevölkerungsreichstes Land der Welt abgelöst.",
-      },
-      {
-        category: "Biologie",
-        question: "Wie viele Knochen hat ein erwachsener Mensch normalerweise?",
-        options: ["186", "206", "226", "246"],
-        correctIndex: 1,
-        explanation:
-          "Ein erwachsenes Skelett besteht aus 206 Knochen – Babys kommen mit deutlich mehr zur Welt, viele wachsen später zusammen.",
-      },
-      {
-        category: "Geschichte",
-        question: "In welchem Jahr fiel die Berliner Mauer?",
-        options: ["1987", "1989", "1991", "1993"],
-        correctIndex: 1,
-        explanation: "Am 9. November 1989 öffneten sich die Grenzübergänge in Berlin.",
-      },
-      {
-        category: "Chemie",
-        question: "Für welches Element steht das chemische Symbol „Au“?",
-        options: ["Silber", "Aluminium", "Gold", "Argon"],
-        correctIndex: 2,
-        explanation: "„Au“ kommt vom lateinischen Wort „aurum“ für Gold.",
-      },
-      {
-        category: "Kunst",
-        question: "Wer malte die Mona Lisa?",
-        options: ["Michelangelo", "Raffael", "Botticelli", "Leonardo da Vinci"],
-        correctIndex: 3,
-        explanation:
-          "Leonardo da Vinci begann das Gemälde um 1503 – es hängt heute im Louvre in Paris.",
-      },
-    ],
-    roundSize: 5,
-    ranks: STANDARD_RANKS,
-    unlockPriceCents: 299,
-    unlockTitle: "Themen-Analyse",
-    unlockDescription: "Wo du wirklich glänzt – nach Kategorie sortiert",
-  },
 ];
 
 export function getQuiz(slug: string): QuizDefinition | undefined {
