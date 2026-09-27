@@ -603,18 +603,21 @@ function ResultScreen({
             ✅ Freigeschaltet
           </p>
         ) : (
-          <div className="flex items-center justify-between gap-3.5">
-            <div>
-              <p className="font-display text-xl font-bold text-gold-dark">
-                {formatPrice(quiz.unlockPriceCents)}
-              </p>
-              <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
+          <div>
+            <p className="mb-2.5 text-[12.5px] text-ink-soft">Schaltet frei: {quiz.unlockDescription}.</p>
+            <div className="flex items-center justify-between gap-3.5">
+              <div>
+                <p className="font-display text-xl font-bold text-gold-dark">
+                  {formatPrice(quiz.unlockPriceCents)}
+                </p>
+                <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
+              </div>
+              <form action={createUnlockCheckout.bind(null, quiz.slug)}>
+                <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
+                  🔓 Freischalten
+                </button>
+              </form>
             </div>
-            <form action={createUnlockCheckout.bind(null, quiz.slug)}>
-              <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
-                🔓 Freischalten
-              </button>
-            </form>
           </div>
         )}
       </div>
