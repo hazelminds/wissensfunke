@@ -28,8 +28,8 @@ export interface GameModule {
    * "psych-result"/"psych-compat" sind die beiden handgeschriebenen
    * Ur-Tests (Einzelkauf); "psych-generic" sind die content-getriebenen
    * Tests aus content/psychTests.ts (Plus-Freischaltung statt Einzelkauf). */
-  variant?: "sliding" | "whoami" | "crossword" | "psych-result" | "psych-compat" | "psych-generic";
-  /** Nur für die Sliding-Puzzle-Variante: Rastergröße. */
+  variant?: "sliding" | "whoami" | "crossword" | "memory" | "psych-result" | "psych-compat" | "psych-generic";
+  /** Nur für Sliding-Puzzle/Memory: Rastergröße bzw. Schwierigkeitsstufe. */
   difficulty?: "easy" | "medium" | "hard";
   /** false = taucht nicht in /kategorie/[type] auf (z.B. der tägliche Anker,
    * der schon auf der Startseite prominent verlinkt ist). Default true. */
@@ -181,6 +181,48 @@ export const games: GameModule[] = [
     difficulty: "hard",
     isPremium: true,
     sortOrder: 17,
+  },
+  {
+    slug: "memory-leicht",
+    title: "Memory Leicht",
+    teaser: "6 Pärchen finden -- klassisches Memory, jede Runde ein neues Symbol-Set.",
+    emoji: "🃏",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 2,
+    type: "puzzle",
+    variant: "memory",
+    difficulty: "easy",
+    isPremium: false,
+    sortOrder: 18,
+  },
+  {
+    slug: "memory-mittel",
+    title: "Memory Mittel",
+    teaser: "8 Pärchen auf einem 4×4-Raster -- exklusiv für Plus-Mitglieder.",
+    emoji: "🃏",
+    category: "Logik",
+    level: "subscriber-only",
+    estMinutes: 3,
+    type: "puzzle",
+    variant: "memory",
+    difficulty: "medium",
+    isPremium: true,
+    sortOrder: 19,
+  },
+  {
+    slug: "memory-schwer",
+    title: "Memory Schwer",
+    teaser: "12 Pärchen, volle Merkfähigkeit gefragt -- exklusiv für Plus-Mitglieder.",
+    emoji: "🃏",
+    category: "Logik",
+    level: "subscriber-only",
+    estMinutes: 5,
+    type: "puzzle",
+    variant: "memory",
+    difficulty: "hard",
+    isPremium: true,
+    sortOrder: 20,
   },
   // "Wer bin ich?" -- drei Schwierigkeitsstufen. Eigene, unsichtbare
   // GameModule-Einträge (inCategoryBrowser: false, hoher sortOrder), damit

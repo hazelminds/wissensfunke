@@ -18,6 +18,7 @@ export interface UserStats {
   quiz: { count: number; avgPoints: number; best: (GameRef & { points: number }) | null };
   crossword: { count: number; bestTimeSeconds: number | null };
   sliding: { count: number; bestTimeSeconds: number | null; bestMoves: number | null };
+  memory: { count: number; bestTimeSeconds: number | null; bestMoves: number | null };
   whoami: { count: number };
 }
 
@@ -30,6 +31,7 @@ const EMPTY_STATS: UserStats = {
   quiz: { count: 0, avgPoints: 0, best: null },
   crossword: { count: 0, bestTimeSeconds: null },
   sliding: { count: 0, bestTimeSeconds: null, bestMoves: null },
+  memory: { count: 0, bestTimeSeconds: null, bestMoves: null },
   whoami: { count: 0 },
 };
 
@@ -103,9 +105,28 @@ export async function getUserStats(userId: string): Promise<UserStats> {
     bestMoves: slidingMoves.length ? Math.min(...slidingMoves) : null,
   };
 
+  const memoryRows = scoreRows.filter((s) => s.category === "puzzle" && s.slug.startsWith("memory-"));
+  const memoryMoves = memoryRows.map((s) => s.moves).filter((m): m is number => m !== null);
+  const memory = {
+    count: memoryRows.length,
+    bestTimeSeconds: memoryRows.length ? Math.min(...memoryRows.map((s) => s.time_seconds)) : null,
+    bestMoves: memoryMoves.length ? Math.min(...memoryMoves) : null,
+  };
+
   const whoami = { count: eventRows.filter((e) => e.slug.startsWith("wer-bin-ich-")).length };
 
-  return { totalRounds, favoriteGame, bestScore, roundsThisWeek, roundsLastWeek, quiz, crossword, sliding, whoami };
+  return {
+    totalRounds,
+    favoriteGame,
+    bestScore,
+    roundsThisWeek,
+    roundsLastWeek,
+    quiz,
+    crossword,
+    sliding,
+    memory,
+    whoami,
+  };
 }
 
 export interface WeeklyRecap {

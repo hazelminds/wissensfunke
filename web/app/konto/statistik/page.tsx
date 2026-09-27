@@ -133,6 +133,20 @@ export default async function StatistikPage() {
                 />
               )}
 
+              {stats.memory.count > 0 && (
+                <GameStatRow
+                  emoji="🃏"
+                  title="Memory"
+                  lines={[
+                    `${stats.memory.count} ${stats.memory.count === 1 ? "Runde" : "Runden"} gespielt`,
+                    stats.memory.bestTimeSeconds !== null
+                      ? `Schnellste Zeit: ${formatTimeLabel(stats.memory.bestTimeSeconds)} Min.`
+                      : null,
+                    stats.memory.bestMoves !== null ? `Wenigste Züge: ${stats.memory.bestMoves}` : null,
+                  ]}
+                />
+              )}
+
               {stats.whoami.count > 0 && (
                 <GameStatRow
                   emoji="🕵️"
