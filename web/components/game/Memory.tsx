@@ -49,7 +49,12 @@ export function Memory({
   challenge?: ChallengeInfo | null;
   plusActive?: boolean;
 }) {
-  const [cards, setCards] = useState<MemoryCard[]>(() => generateMemoryBoard(difficulty));
+  // Leer starten statt mit generateMemoryBoard() zu initialisieren: die Mischung
+  // ist zufällig, würde also bei SSR und Hydration je einmal unterschiedlich
+  // laufen und einen Hydration-Mismatch erzeugen (Server- und Client-Karten
+  // würden auseinanderlaufen). Board wird stattdessen im Effekt unten -- rein
+  // clientseitig, nach dem Mount -- einmalig erzeugt.
+  const [cards, setCards] = useState<MemoryCard[]>([]);
   const [matchedIds, setMatchedIds] = useState<Set<number>>(new Set());
   const [activeFlips, setActiveFlips] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -63,6 +68,8 @@ export function Memory({
   const cols = GRID_COLS[difficulty];
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCards(generateMemoryBoard(difficulty));
     logGameEventAction(slug, "started").catch(() => null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -119,7 +126,7 @@ export function Memory({
       const first = cards.find((c) => c.id === firstId);
       const second = cards.find((c) => c.id === secondId);
 
-      if (first && second && first.emoji === second.emoji) {
+      if (first && second && first.value === second.value) {
         // Größe VOR dem setState berechnen (aus dem geschlossenen matchedIds,
         // aktuell dank useCallback-Dependency) statt in der setMatchedIds-
         // Updater-Funktion -- die muss rein bleiben, sonst löst der
@@ -205,13 +212,22 @@ export function Memory({
                 <div className="hairline absolute inset-0 flex items-center justify-center rounded-xl bg-surface text-lg font-bold text-muted [backface-visibility:hidden]">
                   ?
                 </div>
-                <div
-                  className={`absolute inset-0 flex items-center justify-center rounded-xl text-3xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${
-                    isMatched ? "bg-green-soft" : "bg-primary-soft"
-                  }`}
-                >
-                  {card.emoji}
-                </div>
+                {card.kind === "image" ? (
+                  <div
+                    className={`absolute inset-0 rounded-xl bg-cover bg-center [backface-visibility:hidden] [transform:rotateY(180deg)] ${
+                      isMatched ? "ring-2 ring-green" : ""
+                    }`}
+                    style={{ backgroundImage: `url(${card.value})` }}
+                  />
+                ) : (
+                  <div
+                    className={`absolute inset-0 flex items-center justify-center rounded-xl text-3xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${
+                      isMatched ? "bg-green-soft" : "bg-primary-soft"
+                    }`}
+                  >
+                    {card.value}
+                  </div>
+                )}
               </div>
             </button>
           );
