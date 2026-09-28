@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { Crown, Loader2, Share2 } from "lucide-react";
 import { usePlusModal } from "@/components/PlusModalProvider";
+import { SharePreviewModal } from "@/components/SharePreviewModal";
 import {
   roundRectPath,
   wrapLines,
   primaryAppFonts,
   drawBrandMark,
   drawFooter,
-  shareOrDownloadImage,
 } from "@/lib/shareCard";
 import type { WeeklyRecap } from "@/lib/stats";
 
@@ -407,6 +407,7 @@ async function renderCardImage(recap: WeeklyRecap): Promise<Blob | null> {
  */
 export function WeeklyRecapCard({ recap, plusActive }: { recap: WeeklyRecap; plusActive: boolean }) {
   const [busy, setBusy] = useState(false);
+  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
   const { openPlusModal } = usePlusModal();
 
   async function handleClick() {
@@ -418,31 +419,37 @@ export function WeeklyRecapCard({ recap, plusActive }: { recap: WeeklyRecap; plu
     try {
       const blob = await renderCardImage(recap);
       if (!blob) return;
-      await shareOrDownloadImage(
-        blob,
-        "noggl-meine-woche.png",
-        "Noggl",
-        `Meine Woche bei Noggl: ${recap.rounds} ${recap.rounds === 1 ? "Runde" : "Runden"} gespielt!`,
-      );
+      setPreviewBlob(blob);
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={busy}
-      className="hairline flex w-full items-center justify-center gap-1.5 rounded-2xl px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-surface disabled:opacity-60"
-    >
-      {busy ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : plusActive ? (
-        <Share2 className="h-4 w-4" />
-      ) : (
-        <Crown className="h-4 w-4 text-gold" />
-      )}
-      {busy ? "Erstelle Bild…" : "Deine Woche als Bild teilen"}
-    </button>
+    <>
+      <button
+        onClick={handleClick}
+        disabled={busy}
+        className="hairline flex w-full items-center justify-center gap-1.5 rounded-2xl px-5 py-3.5 text-sm font-semibold text-ink transition hover:bg-surface disabled:opacity-60"
+      >
+        {busy ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : plusActive ? (
+          <Share2 className="h-4 w-4" />
+        ) : (
+          <Crown className="h-4 w-4 text-gold" />
+        )}
+        {busy ? "Erstelle Bild…" : "Deine Woche als Bild teilen"}
+      </button>
+
+      <SharePreviewModal
+        open={previewBlob !== null}
+        onClose={() => setPreviewBlob(null)}
+        blob={previewBlob}
+        fileName="noggl-meine-woche.png"
+        shareTitle="Noggl"
+        shareText={`Meine Woche bei Noggl: ${recap.rounds} ${recap.rounds === 1 ? "Runde" : "Runden"} gespielt!`}
+      />
+    </>
   );
 }

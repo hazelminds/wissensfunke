@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { Crown, Loader2, Share2 } from "lucide-react";
 import { usePlusModal } from "@/components/PlusModalProvider";
-import { wrapLines, safeFileSlug, primaryAppFonts, drawBrandMark, drawFooter, shareOrDownloadImage } from "@/lib/shareCard";
+import { SharePreviewModal } from "@/components/SharePreviewModal";
+import { wrapLines, safeFileSlug, primaryAppFonts, drawBrandMark, drawFooter } from "@/lib/shareCard";
 import { formatTimeLabel } from "@/lib/formatTime";
 
 const GOLD_FROM = "hsl(45,95%,58%)";
@@ -105,6 +106,7 @@ export function HighscoreShareCard({
   plusActive: boolean;
 }) {
   const [busy, setBusy] = useState(false);
+  const [previewBlob, setPreviewBlob] = useState<Blob | null>(null);
   const { openPlusModal } = usePlusModal();
 
   const headline = category === "quiz" ? `${points} Punkte` : `${formatTimeLabel(timeSeconds)} Min.`;
@@ -118,31 +120,37 @@ export function HighscoreShareCard({
     try {
       const blob = await renderCardImage({ gameTitle, headline });
       if (!blob) return;
-      await shareOrDownloadImage(
-        blob,
-        `noggl-bestleistung-${safeFileSlug(gameTitle)}.png`,
-        "Noggl",
-        `Neue Bestleistung bei "${gameTitle}": ${headline}!`,
-      );
+      setPreviewBlob(blob);
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <button
-      onClick={handleClick}
-      disabled={busy}
-      className="hairline inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-surface disabled:opacity-60"
-    >
-      {busy ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : plusActive ? (
-        <Share2 className="h-4 w-4" />
-      ) : (
-        <Crown className="h-4 w-4 text-gold" />
-      )}
-      {busy ? "Erstelle Bild…" : "Bestleistung als Bild teilen"}
-    </button>
+    <>
+      <button
+        onClick={handleClick}
+        disabled={busy}
+        className="hairline inline-flex items-center justify-center gap-1.5 rounded-full px-5 py-2.5 text-sm font-semibold text-ink transition hover:bg-surface disabled:opacity-60"
+      >
+        {busy ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : plusActive ? (
+          <Share2 className="h-4 w-4" />
+        ) : (
+          <Crown className="h-4 w-4 text-gold" />
+        )}
+        {busy ? "Erstelle Bild…" : "Bestleistung als Bild teilen"}
+      </button>
+
+      <SharePreviewModal
+        open={previewBlob !== null}
+        onClose={() => setPreviewBlob(null)}
+        blob={previewBlob}
+        fileName={`noggl-bestleistung-${safeFileSlug(gameTitle)}.png`}
+        shareTitle="Noggl"
+        shareText={`Neue Bestleistung bei "${gameTitle}": ${headline}!`}
+      />
+    </>
   );
 }
