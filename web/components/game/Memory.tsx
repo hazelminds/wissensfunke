@@ -184,7 +184,7 @@ export function Memory({
 
       {difficulty === "medium" && (
         <div className="relative mb-4">
-          <div className="flex items-center gap-2 overflow-x-auto pr-8">
+          <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pr-8">
             <span className="shrink-0 text-xs font-bold tracking-wide text-muted uppercase">Thema</span>
             {MEMORY_THEMES.map((theme) => (
               <button

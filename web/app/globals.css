@@ -113,6 +113,17 @@ body {
   border: 1px solid hsl(var(--border));
 }
 
+/* Scrollbar unsichtbar, Scroll-Funktion bleibt -- für horizontal
+ * scrollbare Reihen (z.B. Themenauswahl bei Memory), wo der native
+ * Scrollbalken nicht zur restlichen Optik passt. */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* 3D "gummy" button — the signature Noggl CTA style (Duolingo-Prinzip). */
 .btn-3d {
   font-family: var(--font-display), sans-serif;
