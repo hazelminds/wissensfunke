@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { type QuizDefinition, type QuizQuestion, formatPrice, rankFor } from "@/content/quizzes";
-import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { saveSeenQuestionsAction } from "@/lib/actions/seenQuestions";
 import {
@@ -20,6 +19,7 @@ import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
 import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
 import { ChallengeButton } from "@/components/ChallengeButton";
+import { UnlockChoiceModal } from "@/components/UnlockChoiceModal";
 
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean; selectedIndex: number };
@@ -489,6 +489,7 @@ function ResultScreen({
   challenge?: ChallengeInfo | null;
   finalResult: { points: number; timeSeconds: number } | null;
 }) {
+  const [showUnlockChoice, setShowUnlockChoice] = useState(false);
   const rank = rankFor(quiz, score, roundLength);
   const deferredReveal = quiz.revealTiming === "end";
   // Plus-exklusive Quizze (unlockPriceCents: 0) haben keinen separaten Kauf-Schritt --
@@ -615,15 +616,24 @@ function ResultScreen({
                 </p>
                 <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
               </div>
-              <form action={createUnlockCheckout.bind(null, quiz.slug)}>
-                <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
-                  🔓 Freischalten
-                </button>
-              </form>
+              <button
+                onClick={() => setShowUnlockChoice(true)}
+                className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]"
+              >
+                🔓 Freischalten
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      <UnlockChoiceModal
+        open={showUnlockChoice}
+        onClose={() => setShowUnlockChoice(false)}
+        quizSlug={quiz.slug}
+        quizTitle={quiz.title}
+        unlockPriceCents={quiz.unlockPriceCents}
+      />
 
       <div className="flex gap-2.5">
         <button
