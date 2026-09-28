@@ -13,7 +13,7 @@ import { ChallengeButton } from "@/components/ChallengeButton";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
-import { generateMemoryBoard, GRID_COLS, type MemoryCard, type MemoryDifficulty } from "@/content/memory";
+import { generateMemoryBoard, GRID_COLS, MEMORY_THEMES, type MemoryCard, type MemoryDifficulty } from "@/content/memory";
 
 export interface ChallengeInfo {
   name: string;
@@ -55,6 +55,9 @@ export function Memory({
   // würden auseinanderlaufen). Board wird stattdessen im Effekt unten -- rein
   // clientseitig, nach dem Mount -- einmalig erzeugt.
   const [cards, setCards] = useState<MemoryCard[]>([]);
+  // Nur für die mittlere Stufe relevant (dort gibt's Foto-Themen) -- Default
+  // ist das erste Thema in MEMORY_THEMES.
+  const [themeId, setThemeId] = useState(MEMORY_THEMES[0].id);
   const [matchedIds, setMatchedIds] = useState<Set<number>>(new Set());
   const [activeFlips, setActiveFlips] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
@@ -69,7 +72,7 @@ export function Memory({
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCards(generateMemoryBoard(difficulty));
+    setCards(generateMemoryBoard(difficulty, themeId));
     logGameEventAction(slug, "started").catch(() => null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -96,19 +99,23 @@ export function Memory({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [solved]);
 
-  const reset = useCallback(() => {
-    setCards(generateMemoryBoard(difficulty));
-    setMatchedIds(new Set());
-    setActiveFlips([]);
-    setMoves(0);
-    setStartTime(Date.now());
-    setElapsed(0);
-    setSolved(false);
-    setFinalResult(null);
-    setNewBest(null);
-    setLocked(false);
-    logGameEventAction(slug, "started").catch(() => null);
-  }, [difficulty, slug]);
+  const reset = useCallback(
+    (nextThemeId: string = themeId) => {
+      setCards(generateMemoryBoard(difficulty, nextThemeId));
+      setThemeId(nextThemeId);
+      setMatchedIds(new Set());
+      setActiveFlips([]);
+      setMoves(0);
+      setStartTime(Date.now());
+      setElapsed(0);
+      setSolved(false);
+      setFinalResult(null);
+      setNewBest(null);
+      setLocked(false);
+      logGameEventAction(slug, "started").catch(() => null);
+    },
+    [difficulty, slug, themeId],
+  );
 
   const flipCard = useCallback(
     (id: number) => {
@@ -175,6 +182,23 @@ export function Memory({
         </div>
       </div>
 
+      {difficulty === "medium" && (
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <span className="text-xs font-bold tracking-wide text-muted uppercase">Thema</span>
+          {MEMORY_THEMES.map((theme) => (
+            <button
+              key={theme.id}
+              onClick={() => theme.id !== themeId && reset(theme.id)}
+              className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition ${
+                theme.id === themeId ? "bg-primary text-white" : "hairline text-ink hover:bg-bg"
+              }`}
+            >
+              {theme.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       {challenge && !solved && (
         <div className="mb-4">
           <ChallengeBanner name={challenge.name} points={challenge.points} seconds={challenge.seconds} />
@@ -183,7 +207,7 @@ export function Memory({
 
       <div className="mb-4">
         <button
-          onClick={reset}
+          onClick={() => reset()}
           className="hairline inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-ink transition hover:bg-surface"
         >
           <RefreshCw className="h-4 w-4" /> Neu mischen

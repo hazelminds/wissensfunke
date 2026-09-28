@@ -199,7 +199,7 @@ export const games: GameModule[] = [
   {
     slug: "memory-mittel",
     title: "Memory Mittel",
-    teaser: "10 Tierwelt-Pärchen mit echten Fotos -- exklusiv für Plus-Mitglieder.",
+    teaser: "10 Pärchen mit echten Fotos, wähle dein Thema (Tierwelt, Städte, ...) -- exklusiv für Plus-Mitglieder.",
     emoji: "🐾",
     category: "Logik",
     level: "subscriber-only",
