@@ -183,19 +183,24 @@ export function Memory({
       </div>
 
       {difficulty === "medium" && (
-        <div className="mb-4 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold tracking-wide text-muted uppercase">Thema</span>
-          {MEMORY_THEMES.map((theme) => (
-            <button
-              key={theme.id}
-              onClick={() => theme.id !== themeId && reset(theme.id)}
-              className={`rounded-full px-3.5 py-1.5 text-xs font-bold transition ${
-                theme.id === themeId ? "bg-primary text-white" : "hairline text-ink hover:bg-bg"
-              }`}
-            >
-              {theme.label}
-            </button>
-          ))}
+        <div className="relative mb-4">
+          <div className="flex items-center gap-2 overflow-x-auto pr-8">
+            <span className="shrink-0 text-xs font-bold tracking-wide text-muted uppercase">Thema</span>
+            {MEMORY_THEMES.map((theme) => (
+              <button
+                key={theme.id}
+                onClick={() => theme.id !== themeId && reset(theme.id)}
+                className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-bold whitespace-nowrap transition ${
+                  theme.id === themeId ? "bg-primary text-white" : "hairline text-ink hover:bg-bg"
+                }`}
+              >
+                {theme.label}
+              </button>
+            ))}
+          </div>
+          {/* Ausblenden am rechten Rand -- Hinweis, dass sich die Themenreihe
+           * weiter nach rechts scrollen lässt, statt einfach abgeschnitten zu wirken. */}
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-bg to-transparent" />
         </div>
       )}
 
