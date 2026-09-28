@@ -427,7 +427,7 @@ export function SlidingPuzzle({
         </div>
       )}
 
-      {solved && <LeaderboardTeaser board="puzzle" />}
+      {solved && <LeaderboardTeaser board="puzzle" plusActive={plusActive} />}
     </div>
   );
 }

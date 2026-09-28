@@ -10,7 +10,7 @@ import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 
 type Answer = { correct: boolean };
 
-export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
+export function DailyMiniQuiz({ quizSet, plusActive = false }: { quizSet: DailyQuizSet; plusActive?: boolean }) {
   useEffect(() => {
     logGameEventAction("tages-mini-quiz", "started").catch(() => null);
   }, []);
@@ -57,6 +57,7 @@ export function DailyMiniQuiz({ quizSet }: { quizSet: DailyQuizSet }) {
         total={quizSet.questions.length}
         streakCount={streakCount}
         freezesUsed={freezesUsed}
+        plusActive={plusActive}
       />
     );
   }
@@ -161,11 +162,13 @@ function DoneCard({
   total,
   streakCount,
   freezesUsed,
+  plusActive,
 }: {
   score: number;
   total: number;
   streakCount: number;
   freezesUsed: number;
+  plusActive: boolean;
 }) {
   return (
     <div className="flex flex-col items-center gap-4 rounded-2xl border-2 border-line bg-surface p-6 text-center">
@@ -188,7 +191,7 @@ function DoneCard({
           <>Dein Streak steht jetzt bei <strong>{streakCount} {streakCount === 1 ? "Tag" : "Tagen"}</strong>.</>
         )}
       </p>
-      <LeaderboardTeaser board="quiz" />
+      <LeaderboardTeaser board="quiz" plusActive={plusActive} />
     </div>
   );
 }

@@ -32,6 +32,7 @@ export function WhoAmI({
   color,
   round,
   pendingSeenKeys,
+  plusActive = false,
 }: {
   slug: string;
   title: string;
@@ -41,6 +42,7 @@ export function WhoAmI({
    * Runde) für eingeloggte Nutzer:innen -- wird hier nur noch persistiert,
    * nie während des Renderns geschrieben (siehe app/quiz/[slug]/page.tsx). */
   pendingSeenKeys?: string[];
+  plusActive?: boolean;
 }) {
   const { hints, solution, aliases } = round;
   const total = hints.length;
@@ -228,7 +230,7 @@ export function WhoAmI({
         </div>
       )}
 
-      {status === "won" && <LeaderboardTeaser board="puzzle" />}
+      {status === "won" && <LeaderboardTeaser board="puzzle" plusActive={plusActive} />}
     </div>
   );
 }

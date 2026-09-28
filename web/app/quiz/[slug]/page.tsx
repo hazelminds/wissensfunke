@@ -167,7 +167,7 @@ async function QuizContent({
   if (slug === "tages-mini-quiz") {
     return (
       <DailyCapGate plusActive={plusActive}>
-        <DailyMiniQuiz quizSet={getDailyQuizSet()} />
+        <DailyMiniQuiz quizSet={getDailyQuizSet()} plusActive={plusActive} />
       </DailyCapGate>
     );
   }
@@ -281,6 +281,7 @@ async function QuizContent({
         color={game.type}
         round={round}
         pendingSeenKeys={pendingSeenKeys}
+        plusActive={plusActive}
       />
     );
     // "Leicht" zeigt zwar das immer gleiche Tagesrätsel (siehe oben), zählt

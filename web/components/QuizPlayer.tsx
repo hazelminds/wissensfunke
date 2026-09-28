@@ -675,7 +675,7 @@ function ResultScreen({
         </div>
       )}
 
-      <LeaderboardTeaser board="quiz" />
+      <LeaderboardTeaser board="quiz" plusActive={plusActive} />
     </div>
   );
 }
