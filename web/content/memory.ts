@@ -68,6 +68,28 @@ export const MEMORY_THEMES: MemoryTheme[] = [
       "/memory-staedte/kairo.jpg",
     ],
   },
+  {
+    id: "pflanzen",
+    label: "Pflanzen",
+    images: [
+      "/memory-pflanzen/rose.jpg",
+      "/memory-pflanzen/sonnenblume.jpg",
+      "/memory-pflanzen/kaktus.jpg",
+      "/memory-pflanzen/orchidee.jpg",
+      "/memory-pflanzen/tulpe.jpg",
+      "/memory-pflanzen/farn.jpg",
+      "/memory-pflanzen/bambus.jpg",
+      "/memory-pflanzen/efeu.jpg",
+      "/memory-pflanzen/lavendel.jpg",
+      "/memory-pflanzen/mohnblume.jpg",
+      "/memory-pflanzen/bonsai.jpg",
+      "/memory-pflanzen/venusfliegenfalle.jpg",
+      "/memory-pflanzen/palme.jpg",
+      "/memory-pflanzen/seerose.jpg",
+      "/memory-pflanzen/gaensebluemchen.jpg",
+      "/memory-pflanzen/sukkulente.jpg",
+    ],
+  },
 ];
 
 export const PAIR_COUNT: Record<MemoryDifficulty, number> = {
