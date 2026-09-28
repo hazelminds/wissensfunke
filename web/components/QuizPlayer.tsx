@@ -494,7 +494,10 @@ function ResultScreen({
   // Plus-exklusive Quizze (unlockPriceCents: 0) haben keinen separaten Kauf-Schritt --
   // die Themen-Analyse ist automatisch enthalten, kein zweiter Paywall obendrauf.
   const includedFree = quiz.unlockPriceCents === 0;
-  const effectiveRevealed = revealed || includedFree;
+  // Aktives Plus schaltet die Hintergrundinfos bei JEDEM Quiz frei, nicht nur
+  // bei den von Haus aus Plus-exklusiven -- sonst sähe ein zahlender
+  // Plus-Nutzer bei normalen (2,99€-)Quizzen trotzdem den Freischalten-Paywall.
+  const effectiveRevealed = revealed || includedFree || plusActive;
 
   useEffect(() => {
     if (roundLength > 0 && score === roundLength) {
@@ -594,7 +597,7 @@ function ResultScreen({
           </div>
         )}
 
-        {includedFree ? (
+        {includedFree || plusActive ? (
           <p className="flex items-center gap-1.5 text-[13.5px] font-extrabold text-green-dark">
             ✅ Enthalten mit Plus
           </p>
