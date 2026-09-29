@@ -4,11 +4,13 @@ import { getCurrentUser } from "@/lib/auth";
 import { isAdminUser } from "@/lib/admin";
 import { getAdminStats, listAdminUsers } from "@/lib/adminData";
 import { getAdminTicketList, getUnreadSupportCountForAdmin } from "@/lib/support";
+import { getFunnelStats } from "@/lib/funnel";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 import { AdminDashboardStats } from "@/components/admin/AdminDashboardStats";
 import { AdminUserTable } from "@/components/admin/AdminUserTable";
 import { AdminGamesTable } from "@/components/admin/AdminGamesTable";
 import { AdminSupportTable } from "@/components/admin/AdminSupportTable";
+import { AdminFunnelStats } from "@/components/admin/AdminFunnelStats";
 
 export default async function AdminPage() {
   const user = await getCurrentUser();
@@ -33,11 +35,12 @@ export default async function AdminPage() {
     );
   }
 
-  const [stats, users, tickets, unreadSupport] = await Promise.all([
+  const [stats, users, tickets, unreadSupport, funnelStats] = await Promise.all([
     getAdminStats(),
     listAdminUsers(),
     getAdminTicketList(),
     getUnreadSupportCountForAdmin(),
+    getFunnelStats(),
   ]);
 
   return (
@@ -53,6 +56,7 @@ export default async function AdminPage() {
           users={<AdminUserTable users={users} currentUserId={user.id} />}
           support={<AdminSupportTable tickets={tickets} />}
           supportUnread={unreadSupport}
+          funnel={<AdminFunnelStats stats={funnelStats} />}
         />
       </main>
     </div>

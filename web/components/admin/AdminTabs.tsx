@@ -7,6 +7,7 @@ const TABS = [
   { id: "users", label: "Benutzer" },
   { id: "support", label: "Support" },
   { id: "dashboard", label: "Dashboard" },
+  { id: "funnel", label: "Trichter" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -16,16 +17,18 @@ export function AdminTabs({
   games,
   users,
   support,
+  funnel,
   supportUnread = 0,
 }: {
   dashboard: ReactNode;
   games: ReactNode;
   users: ReactNode;
   support: ReactNode;
+  funnel: ReactNode;
   supportUnread?: number;
 }) {
   const [tab, setTab] = useState<TabId>("games");
-  const content: Record<TabId, ReactNode> = { dashboard, games, users, support };
+  const content: Record<TabId, ReactNode> = { dashboard, games, users, support, funnel };
 
   return (
     <div className="mt-8">
