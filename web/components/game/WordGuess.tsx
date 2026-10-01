@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Check, Crown, Share2, Trophy } from "lucide-react";
+import { Check, Crown, HelpCircle, Share2, Trophy } from "lucide-react";
 import {
   WORD_LENGTH,
   MAX_ATTEMPTS,
@@ -92,6 +92,7 @@ export function WordGuess({
   const [streakCount, setStreakCount] = useState(0);
   const [freezesUsed, setFreezesUsed] = useState(0);
   const [shared, setShared] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
   // Aktive Lösung ist ein eigener State statt direkt der Prop, weil
   // Plus-Bonusrunden (bis zu 4 zusätzlich zur Tageslösung) sie austauschen.
   const [activeSolution, setActiveSolution] = useState(solution);
@@ -295,14 +296,36 @@ export function WordGuess({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-2xl font-bold text-ink">Wort des Tages</h1>
-        <p className="mt-1 text-sm text-ink-soft">
-          {isBonus ? `Bonus-Runde ${bonusUsed} von ${MAX_BONUS_ROUNDS}` : `Worträtsel #${puzzleNumber}`} · errate
-          das {WORD_LENGTH}-Buchstaben-Wort in {MAX_ATTEMPTS} Versuchen.
-        </p>
-        <p className="mt-1 text-xs text-muted">
-          Buchstaben eingeben, mit Enter bestätigen -- es muss ein echtes {WORD_LENGTH}-Buchstaben-Wort sein.
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h1 className="font-display text-2xl font-bold text-ink">Wort des Tages</h1>
+            <p className="mt-1 text-sm text-ink-soft">
+              {isBonus ? `Bonus-Runde ${bonusUsed} von ${MAX_BONUS_ROUNDS}` : `Worträtsel #${puzzleNumber}`} ·
+              errate das {WORD_LENGTH}-Buchstaben-Wort in {MAX_ATTEMPTS} Versuchen.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowHelp((v) => !v)}
+            aria-label={showHelp ? "Erklärung schließen" : "Wie funktioniert das Spiel?"}
+            aria-expanded={showHelp}
+            className={`hairline flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition ${
+              showHelp ? "bg-primary text-white" : "text-ink-soft hover:bg-surface"
+            }`}
+          >
+            <HelpCircle className="h-5 w-5" />
+          </button>
+        </div>
+
+        {showHelp && (
+          <div className="hairline mt-3 rounded-2xl bg-surface p-4 text-[13px] leading-relaxed text-ink-soft">
+            Jeden Tag ein neues {WORD_LENGTH}-Buchstaben-Wort, {MAX_ATTEMPTS} Versuche, für alle dasselbe. Nach
+            jedem Versuch zeigt dir die Farbe, wie nah du dran bist: 🟩 grün = richtiger Buchstabe an der
+            richtigen Stelle, 🟨 gelb = Buchstabe ist im Wort, aber an anderer Stelle, grau = Buchstabe kommt
+            nicht vor. Tippe ein echtes {WORD_LENGTH}-Buchstaben-Wort und drück Enter — ungültige Wörter zählen
+            nicht als Versuch.
+          </div>
+        )}
       </div>
 
       <div className="mx-auto flex w-full max-w-xs flex-col gap-1.5">
