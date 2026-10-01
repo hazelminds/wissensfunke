@@ -22,43 +22,6 @@ import { PlusButton } from "@/components/PlusButton";
  * Tageslösung drauf (macht insgesamt 5 Runden/Tag für Plus). */
 const MAX_BONUS_ROUNDS = 4;
 
-const BONUS_STORAGE_KEY = "nog_wordguess_bonus";
-
-interface StoredBonusState {
-  date: string;
-  count: number;
-}
-
-/** Lokales Kalenderdatum, nicht UTC -- gleicher Grund wie in lib/dailyCap.ts:
- * toISOString() wäre UTC-basiert und würde der Zähler für Nutzer:innen
- * östlich von UTC erst Stunden nach ihrer lokalen Mitternacht zurücksetzen. */
-function todayKeyLocal(): string {
-  const d = new Date();
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function readBonusCount(): number {
-  try {
-    const raw = localStorage.getItem(BONUS_STORAGE_KEY);
-    if (!raw) return 0;
-    const saved = JSON.parse(raw) as StoredBonusState;
-    return saved.date === todayKeyLocal() ? saved.count : 0;
-  } catch {
-    return 0;
-  }
-}
-
-function writeBonusCount(count: number): void {
-  try {
-    localStorage.setItem(BONUS_STORAGE_KEY, JSON.stringify({ date: todayKeyLocal(), count }));
-  } catch {
-    // localStorage nicht verfügbar -- Bonusrunden-Zähler gilt nur für diese Sitzung.
-  }
-}
-
 const KEYBOARD_ROWS = [
   ["Q", "W", "E", "R", "T", "Z", "U", "I", "O", "P", "Ü"],
   ["A", "S", "D", "F", "G", "H", "J", "K", "L", "Ö", "Ä"],
@@ -71,8 +34,12 @@ const STORAGE_KEY = "nog_wordguess_state";
 
 interface StoredWordGuessState {
   puzzleNumber: number;
+  isBonus: boolean;
+  activeSolution: string;
   guesses: string[];
   status: "playing" | "won" | "lost";
+  bonusUsed: number;
+  playedToday: string[];
 }
 
 export function WordGuess({
@@ -99,14 +66,18 @@ export function WordGuess({
   const [isBonus, setIsBonus] = useState(false);
   const [bonusUsed, setBonusUsed] = useState(0);
   const [playedToday, setPlayedToday] = useState<string[]>([solution]);
+  // Konfetti nur beim tatsächlichen Live-Gewinn in dieser Sitzung, nie beim
+  // bloßen Wiederherstellen eines schon gewonnenen Stands (sonst würde jedes
+  // Verlassen-und-Zurückkommen die Feier erneut abspielen).
+  const [justWon, setJustWon] = useState(false);
   // Erst nach dem Wiederherstellungs-Versuch unten wird der Speicher-Effekt
   // scharf geschaltet -- sonst würde er den leeren Startzustand sofort über
   // einen schon gespeicherten Stand drüberschreiben.
   const [hydrated, setHydrated] = useState(false);
 
-  // Fortschritt für das heutige Rätsel wiederherstellen (Neuladen/erneuter
-  // Besuch soll das Ergebnis nicht verwerfen, wie beim Vorbild). Schlüssel
-  // ist die serverseitig berechnete puzzleNumber, kein eigenes Datum nötig.
+  // Fortschritt wiederherstellen (Neuladen/erneuter Besuch soll weder das
+  // Tagesergebnis noch eine laufende Bonusrunde verwerfen). Schlüssel ist
+  // die serverseitig berechnete puzzleNumber, kein eigenes Datum nötig.
   useEffect(() => {
     // SSR kennt localStorage nicht -- Wiederherstellung kann nur hier,
     // clientseitig nach dem Mount, passieren (gleiches Muster wie StreakBadge).
@@ -116,32 +87,39 @@ export function WordGuess({
         const saved = JSON.parse(raw) as StoredWordGuessState;
         if (saved.puzzleNumber === puzzleNumber) {
           // eslint-disable-next-line react-hooks/set-state-in-effect
+          setIsBonus(saved.isBonus);
+          setActiveSolution(saved.activeSolution);
           setGuesses(saved.guesses);
           setStatus(saved.status);
-          if (saved.status !== "playing") setStreakCount(recordDailyCompletion().count);
+          setBonusUsed(saved.bonusUsed);
+          setPlayedToday(saved.playedToday);
+          if (saved.status !== "playing" && !saved.isBonus) setStreakCount(recordDailyCompletion().count);
         }
       }
     } catch {
       // localStorage nicht verfügbar/kaputter Inhalt -- einfach frisch starten.
     }
-    setBonusUsed(readBonusCount());
     setHydrated(true);
     logGameEventAction("tages-wort", "started").catch(() => null);
   }, [puzzleNumber]);
 
-  // Bonusrunden selbst werden bewusst NICHT gespeichert (nur ihre Anzahl,
-  // s. o.) -- nur die eine Tageslösung bleibt bei Neuladen erhalten, das
-  // hält die Sache einfach, ohne pro Bonusrunde einen eigenen Spielstand
-  // verwalten zu müssen.
   useEffect(() => {
-    if (!hydrated || isBonus) return;
+    if (!hydrated) return;
     try {
-      const toSave: StoredWordGuessState = { puzzleNumber, guesses, status };
+      const toSave: StoredWordGuessState = {
+        puzzleNumber,
+        isBonus,
+        activeSolution,
+        guesses,
+        status,
+        bonusUsed,
+        playedToday,
+      };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
     } catch {
       // localStorage nicht verfügbar -- Fortschritt gilt dann nur für diese Sitzung.
     }
-  }, [hydrated, isBonus, puzzleNumber, guesses, status]);
+  }, [hydrated, puzzleNumber, isBonus, activeSolution, guesses, status, bonusUsed, playedToday]);
 
   const evaluations = useMemo(
     () => guesses.map((g) => evaluateGuess(g, activeSolution)),
@@ -165,6 +143,7 @@ export function WordGuess({
   const finishRound = useCallback(
     async (won: boolean) => {
       setStatus(won ? "won" : "lost");
+      if (won) setJustWon(true);
       // Streak/Serie hängt nur an der EINEN Tageslösung -- Bonusrunden sind
       // zusätzliche Übungsrunden für Plus, zählen nicht nochmal dafür.
       if (!isBonus) {
@@ -183,14 +162,13 @@ export function WordGuess({
     const next = getBonusWord(playedToday);
     setActiveSolution(next);
     setIsBonus(true);
+    setJustWon(false);
     setGuesses([]);
     setCurrent("");
     setStatus("playing");
     setError(null);
     setFreezesUsed(0);
-    const nextUsed = bonusUsed + 1;
-    setBonusUsed(nextUsed);
-    writeBonusCount(nextUsed);
+    setBonusUsed((n) => n + 1);
     setPlayedToday((prev) => [...prev, next]);
     logGameEventAction("tages-wort", "started").catch(() => null);
   }, [plusActive, bonusUsed, playedToday]);
@@ -479,7 +457,7 @@ export function WordGuess({
         </p>
       )}
 
-      {status === "won" && <Confetti />}
+      {status === "won" && justWon && <Confetti />}
     </div>
   );
 }
