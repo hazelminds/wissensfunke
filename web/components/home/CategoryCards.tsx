@@ -9,9 +9,20 @@ const categories: {
   icon: typeof Brain;
   free: string;
   plus: string;
+  /** Überschreibt gameTypeMeta[id].label nur für diese Startseiten-Kachel --
+   * "Puzzle" deckt inzwischen auch Wörter-/Ratespiele ab, soll aber (noch)
+   * nicht überall umbenannt werden (Kategorie-Seite, Admin-Tabelle, ...
+   * bleiben vorerst bei gameTypeMeta.label). */
+  label?: string;
 }[] = [
   { id: "quiz", icon: Brain, free: "5 Fragen pro Runde", plus: "30+ Fragen & Themenspecials" },
-  { id: "puzzle", icon: Puzzle, free: "Tagesrätsel & 3 Starter", plus: "Erweiterte Rätsel-Sets" },
+  {
+    id: "puzzle",
+    icon: Puzzle,
+    free: "Tagesrätsel & 3 Starter",
+    plus: "Erweiterte Rätsel-Sets",
+    label: "Puzzle & Rätsel",
+  },
   {
     id: "psych",
     icon: Heart,
@@ -61,7 +72,7 @@ export function CategoryCards() {
               </div>
 
               <h3 className="relative mt-5 font-display text-xl font-bold text-ink">
-                {meta.label}
+                {c.label ?? meta.label}
               </h3>
               <p className="relative mt-2 text-sm leading-relaxed text-ink-soft">
                 {meta.description}
