@@ -213,11 +213,11 @@ export const games: GameModule[] = [
   {
     slug: "memory-schwer",
     title: "Memory Schwer",
-    teaser: "12 Pärchen, volle Merkfähigkeit gefragt -- exklusiv für Plus-Mitglieder.",
+    teaser: "16 Pärchen mit echten Fotos, volle Merkfähigkeit gefragt -- exklusiv für Plus-Mitglieder.",
     emoji: "🃏",
     category: "Logik",
     level: "subscriber-only",
-    estMinutes: 5,
+    estMinutes: 6,
     type: "puzzle",
     variant: "memory",
     difficulty: "hard",

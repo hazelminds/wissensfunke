@@ -1,5 +1,5 @@
 /** Memory (Pärchen finden) -- Standard-Set ist Emoji, damit jede Runde ohne
- * neue Asset-Pflege auskommt. Die mittlere Stufe zeigt stattdessen wählbare
+ * neue Asset-Pflege auskommt. Mittel und Schwer zeigen stattdessen wählbare
  * Foto-Themen (KI-generiert, siehe MEMORY_THEMES) -- Auswahl-UI in Memory.tsx. */
 
 export type MemoryDifficulty = "easy" | "medium" | "hard";
@@ -19,10 +19,11 @@ export interface MemoryTheme {
   images: string[];
 }
 
-/** Foto-Themen für die mittlere Stufe -- die Auswahl oben in Memory.tsx
+/** Foto-Themen für Mittel und Schwer -- die Auswahl oben in Memory.tsx
  * zeigt genau diese Liste, in dieser Reihenfolge. Neues Thema hinzufügen:
  * Bilder unter public/memory-<id>/ ablegen und hier eintragen, mehr ist
- * nicht nötig. */
+ * nicht nötig. Jedes Thema braucht mindestens 16 Bilder (Schwer zieht 16
+ * aus dem Pool). */
 export const MEMORY_THEMES: MemoryTheme[] = [
   {
     id: "tierwelt",
@@ -533,7 +534,7 @@ export const MEMORY_THEMES: MemoryTheme[] = [
 export const PAIR_COUNT: Record<MemoryDifficulty, number> = {
   easy: 6,
   medium: 10,
-  hard: 12,
+  hard: 16,
 };
 
 /** Spaltenzahl fürs CSS-Grid -- Reihenzahl ergibt sich daraus automatisch
@@ -559,11 +560,11 @@ export interface MemoryCard {
   value: string;
 }
 
-/** `themeId` gilt nur für die mittlere Stufe (Foto-Themen) -- fehlt er oder
+/** `themeId` gilt nur für Mittel/Schwer (Foto-Themen) -- fehlt er oder
  * passt er zu keinem MEMORY_THEMES-Eintrag, wird das erste Thema genommen. */
 export function generateMemoryBoard(difficulty: MemoryDifficulty, themeId?: string): MemoryCard[] {
   const pairCount = PAIR_COUNT[difficulty];
-  const usesPhotoTheme = difficulty === "medium";
+  const usesPhotoTheme = difficulty === "medium" || difficulty === "hard";
   const theme = MEMORY_THEMES.find((t) => t.id === themeId) ?? MEMORY_THEMES[0];
   const kind: MemoryCard["kind"] = usesPhotoTheme ? "image" : "emoji";
   const pool = usesPhotoTheme ? theme.images : EMOJI_POOL;

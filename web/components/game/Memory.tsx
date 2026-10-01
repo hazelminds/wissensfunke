@@ -55,7 +55,7 @@ export function Memory({
   // würden auseinanderlaufen). Board wird stattdessen im Effekt unten -- rein
   // clientseitig, nach dem Mount -- einmalig erzeugt.
   const [cards, setCards] = useState<MemoryCard[]>([]);
-  // Nur für die mittlere Stufe relevant (dort gibt's Foto-Themen) -- Default
+  // Nur für Mittel/Schwer relevant (dort gibt's Foto-Themen) -- Default
   // ist das erste Thema in MEMORY_THEMES.
   const [themeId, setThemeId] = useState(MEMORY_THEMES[0].id);
   const [matchedIds, setMatchedIds] = useState<Set<number>>(new Set());
@@ -182,7 +182,7 @@ export function Memory({
         </div>
       </div>
 
-      {difficulty === "medium" && (
+      {(difficulty === "medium" || difficulty === "hard") && (
         <div className="relative mb-4">
           <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pr-8">
             <span className="shrink-0 text-xs font-bold tracking-wide text-muted uppercase">Thema</span>
