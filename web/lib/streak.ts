@@ -18,8 +18,14 @@ export interface StreakState {
 
 const EMPTY_STREAK: StreakState = { count: 0, lastCompletedDate: "" };
 
+/** Lokales Kalenderdatum, nicht UTC -- toISOString() wäre UTC-basiert und
+ * würde die Streak für Nutzer:innen östlich von UTC (z. B. UTC+8) erst
+ * Stunden nach ihrer lokalen Mitternacht umschalten (siehe lib/dailyCap.ts). */
 function dateKey(date: Date): string {
-  return date.toISOString().slice(0, 10);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function yesterdayKey(): string {
