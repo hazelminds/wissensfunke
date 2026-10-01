@@ -1,4 +1,4 @@
-import { Users, ShoppingBag, Coins, Flame, UserPlus, Eye } from "lucide-react";
+import { Users, ShoppingBag, Coins, Flame, UserPlus, Eye, UserCheck } from "lucide-react";
 import type { AdminStats } from "@/lib/adminData";
 import { AdminGameStatsChart } from "@/components/admin/AdminGameStatsChart";
 import { AdminPageViewsChart } from "@/components/admin/AdminPageViewsChart";
@@ -33,11 +33,17 @@ export function AdminDashboardStats({ stats }: { stats: AdminStats }) {
       </div>
 
       <p className="mt-6 mb-3 flex items-center gap-2 text-[11px] font-bold text-muted uppercase">
-        <Eye className="h-3.5 w-3.5" /> Seitenaufrufe
+        <Eye className="h-3.5 w-3.5" /> Besucher &amp; Seitenaufrufe
+      </p>
+      <p className="mb-3 text-[11.5px] text-muted">
+        Besucher = eindeutige Personen (anonymer, täglich rotierender Hash, kein Cookie). Aufrufe = rohe Anzahl
+        aller Seitenwechsel, eine Person kann also mehrere Aufrufe erzeugen.
       </p>
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Kpi icon={<Eye className="h-5 w-5" />} label="Heute" value={stats.pageViewsToday} />
-        <Kpi icon={<Eye className="h-5 w-5" />} label="Gestern" value={stats.pageViewsYesterday} />
+        <Kpi icon={<UserCheck className="h-5 w-5" />} label="Besucher heute" value={stats.uniqueVisitorsToday} />
+        <Kpi icon={<Eye className="h-5 w-5" />} label="Aufrufe heute" value={stats.pageViewsToday} />
+        <Kpi icon={<UserCheck className="h-5 w-5" />} label="Besucher gestern" value={stats.uniqueVisitorsYesterday} />
+        <Kpi icon={<Eye className="h-5 w-5" />} label="Aufrufe gestern" value={stats.pageViewsYesterday} />
       </div>
 
       <AdminGameStatsChart />

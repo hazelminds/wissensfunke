@@ -264,6 +264,7 @@ export interface Database {
           country: string;
           device: string;
           created_at: string;
+          visitor_hash: string | null;
         };
         Insert: {
           id?: number;
@@ -272,6 +273,7 @@ export interface Database {
           country?: string;
           device?: string;
           created_at?: string;
+          visitor_hash?: string | null;
         };
         Update: {
           id?: number;
@@ -280,6 +282,7 @@ export interface Database {
           country?: string;
           device?: string;
           created_at?: string;
+          visitor_hash?: string | null;
         };
         Relationships: [];
       };
@@ -323,6 +326,7 @@ export interface Database {
           country: string;
           device: string;
           views: number;
+          unique_visitors: number;
         };
         Insert: {
           day: string;
@@ -330,6 +334,7 @@ export interface Database {
           country?: string;
           device?: string;
           views?: number;
+          unique_visitors?: number;
         };
         Update: {
           day?: string;
@@ -337,6 +342,7 @@ export interface Database {
           country?: string;
           device?: string;
           views?: number;
+          unique_visitors?: number;
         };
         Relationships: [];
       };

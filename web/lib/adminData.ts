@@ -223,6 +223,8 @@ export interface AdminStats {
   newSignupsLastMonth: number;
   pageViewsToday: number;
   pageViewsYesterday: number;
+  uniqueVisitorsToday: number;
+  uniqueVisitorsYesterday: number;
 }
 
 function isSameUtcDay(iso: string, ref: Date): boolean {
@@ -249,6 +251,8 @@ export async function getAdminStats(): Promise<AdminStats> {
       newSignupsLastMonth: 0,
       pageViewsToday: 0,
       pageViewsYesterday: 0,
+      uniqueVisitorsToday: 0,
+      uniqueVisitorsYesterday: 0,
     };
   }
   const supabase = getSupabaseAdmin();
@@ -261,7 +265,7 @@ export async function getAdminStats(): Promise<AdminStats> {
   const [{ data: usersPage }, { data: purchases }, { data: pageViews }] = await Promise.all([
     supabase.auth.admin.listUsers({ perPage: 1000 }),
     supabase.from("purchases").select("quiz_slug, amount_cents").eq("status", "paid"),
-    supabase.from("page_views").select("created_at").gte("created_at", new Date(Date.now() - 2 * 86400000).toISOString()),
+    supabase.from("page_views").select("created_at, visitor_hash").gte("created_at", new Date(Date.now() - 2 * 86400000).toISOString()),
   ]);
 
   const paid = purchases ?? [];
@@ -298,5 +302,11 @@ export async function getAdminStats(): Promise<AdminStats> {
     }).length,
     pageViewsToday: (pageViews ?? []).filter((v) => isSameUtcDay(v.created_at, now)).length,
     pageViewsYesterday: (pageViews ?? []).filter((v) => isSameUtcDay(v.created_at, yesterday)).length,
+    uniqueVisitorsToday: new Set(
+      (pageViews ?? []).filter((v) => isSameUtcDay(v.created_at, now) && v.visitor_hash).map((v) => v.visitor_hash),
+    ).size,
+    uniqueVisitorsYesterday: new Set(
+      (pageViews ?? []).filter((v) => isSameUtcDay(v.created_at, yesterday) && v.visitor_hash).map((v) => v.visitor_hash),
+    ).size,
   };
 }

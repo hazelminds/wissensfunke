@@ -132,8 +132,20 @@ export function AdminPageViewsChart() {
         <p className="py-6 text-center text-sm text-muted">Noch keine Seitenaufrufe in diesem Zeitraum.</p>
       ) : (
         <>
-          <p className="mb-4 text-sm text-ink-soft">
-            <span className="font-display text-xl font-extrabold text-ink">{stats.total}</span> Aufrufe insgesamt
+          <p className="mb-1 flex flex-wrap items-baseline gap-x-5 gap-y-1 text-sm text-ink-soft">
+            <span>
+              <span className="font-display text-xl font-extrabold text-ink">{stats.uniqueVisitors}</span>{" "}
+              Besucher
+            </span>
+            <span>
+              <span className="font-display text-xl font-extrabold text-ink">{stats.total}</span> Aufrufe
+              insgesamt
+            </span>
+          </p>
+          <p className="mb-4 text-[11px] text-muted">
+            Besucher-Hash rotiert täglich (Datenschutz) -- bei Zeiträumen über einen Tag hinaus ist das die Summe
+            der täglich eindeutigen Besucher, keine Entdopplung über mehrere Tage hinweg. Eindeutige Personen
+            genau für heute/gestern stehen in den Kacheln oben im Dashboard.
           </p>
 
           <div className="flex items-end gap-1.5 overflow-x-auto pb-1">
@@ -142,7 +154,7 @@ export function AdminPageViewsChart() {
                 <div
                   className="w-full rounded-t-sm bg-gradient-to-t from-primary to-coral"
                   style={{ height: `${Math.max(4, (d.views / maxDayViews) * 80)}px` }}
-                  title={`${d.date}: ${d.views}`}
+                  title={`${d.date}: ${d.uniqueVisitors} Besucher, ${d.views} Aufrufe`}
                 />
                 <span className="rotate-45 text-[9px] whitespace-nowrap text-muted">{d.date.slice(8, 10)}.</span>
               </div>
