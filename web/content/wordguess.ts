@@ -3,10 +3,13 @@
  * tages-raetsel/tages-mini-quiz: ein 5-Buchstaben-Wort pro Kalendertag,
  * für alle gleich, deterministisch per Datum ausgewählt, kein Zufall.
  *
- * Lösung UND erlaubte Rateversuche kommen bewusst aus demselben kuratierten
- * Pool (WORD_LIST) statt aus einem separaten riesigen Wörterbuch -- jeder
- * gültige Ratewürfel ist dadurch garantiert ein echtes Wort, ohne dass ein
- * zweiter, viel größerer Wörterbuch-Datensatz gepflegt werden müsste.
+ * Zwei getrennte Listen: WORD_LIST sind die Lösungs-Kandidaten (bewusst
+ * kuratiert, erkennbare Alltagswörter -- das soll als Tageslösung auch
+ * fair zu erraten sein). EXTRA_VALID_GUESSES erweitert nur, was als
+ * Ratewort akzeptiert wird, ohne je selbst Lösung zu werden -- sonst
+ * würden viele ganz normale deutsche Wörter (z. B. "ERNTE") beim Tippen
+ * fälschlich als "kein Wort" abgelehnt, nur weil die Lösungs-Liste
+ * bewusst schlank gehalten ist.
  */
 
 import { dayNumber } from "./daily";
@@ -39,7 +42,19 @@ export const WORD_LIST: string[] = [
   "ORGEL", "ROBBE", "TAUBE", "HENNE", "GEIER", "KETTE", "GABEL",
 ];
 
-const WORD_SET = new Set(WORD_LIST);
+// Nur als Ratewort gültig, nie als Tageslösung -- 70 weitere geprüft
+// exakt 5-buchstabige deutsche Wörter, keine Dopplungen mit WORD_LIST.
+const EXTRA_VALID_GUESSES: string[] = [
+  "ERNTE", "SAMEN", "KEIME", "ZWEIG", "RINDE", "BLATT", "HECKE", "WEIDE", "SUMPF", "GEHEN",
+  "ESSEN", "SEHEN", "GEBEN", "LESEN", "REDEN", "BADEN", "MALEN", "RUFEN", "BLUSE", "WESTE",
+  "TRUHE", "ETAGE", "KEKSE", "TORTE", "WURST", "QUARK", "CREME", "SOSSE", "KOHLE", "OTTER",
+  "BIBER", "DACHS", "STIER", "STUTE", "PUTER", "ERPEL", "KÜKEN", "RABEN", "KRÄHE", "MOTTE",
+  "ZECKE", "WANZE", "TULPE", "NELKE", "PALME", "FARNE", "MOOSE", "BUSCH", "DUNST", "FROST",
+  "EISIG", "KLIMA", "ZONEN", "UHREN", "MÜNZE", "KABEL", "AKKUS", "CHIPS", "NOTEN", "LEHRE",
+  "PAUSE", "BOXEN", "PREIS", "MIETE", "ÄRGER", "TROST", "GLÜCK", "UNMUT", "DEMUT", "SORGE",
+];
+
+const WORD_SET = new Set([...WORD_LIST, ...EXTRA_VALID_GUESSES]);
 
 export function getDailyWord(date: Date = new Date()): string {
   return WORD_LIST[dayNumber(date) % WORD_LIST.length];
