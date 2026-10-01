@@ -284,6 +284,7 @@ export function Memory({
 
       {solved && (
         <div className="hairline mt-5 flex flex-col items-center gap-1 rounded-2xl bg-green-soft p-5 text-center">
+          <Confetti />
           <Trophy className="mb-1 h-6 w-6 text-green" />
           <p className="font-display text-xl font-extrabold text-ink">Alle Paare gefunden!</p>
           <p className="text-sm text-muted">
@@ -326,7 +327,6 @@ export function Memory({
 
       {newBest && (
         <div className="mt-5 flex flex-col items-center gap-3">
-          <Confetti />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}
