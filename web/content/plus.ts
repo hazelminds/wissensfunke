@@ -36,6 +36,11 @@ export const plusFeatures: PlusFeature[] = [
     title: "Individueller Nutzername",
     description: "Wähl deinen eigenen Namen für die Bestenliste, statt einer anonymen Kennung.",
   },
+  {
+    emoji: "🧩",
+    title: "Mehr Motive & Runden",
+    description: "14 Foto-Themen bei Memory Mittel/Schwer, bis zu 5 Worträtsel-Runden am Tag statt nur einer.",
+  },
 ];
 
 export interface PlusTier {
