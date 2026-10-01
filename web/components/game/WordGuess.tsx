@@ -265,7 +265,19 @@ export function WordGuess({ solution, puzzleNumber }: { solution: string; puzzle
                 return (
                   <button
                     key={key}
-                    onClick={() => (key === "ENTER" ? submitGuess() : key === "⌫" ? backspace() : typeLetter(key))}
+                    type="button"
+                    // Fokus sofort wieder abgeben: bleibt ein Button unter Windows-
+                    // Chrome fokussiert (anders als macOS/Linux, dort bekommen
+                    // angeklickte Buttons oft gar keinen Fokus), löst ein späterer
+                    // physischer Enter/Leertaste-Druck DIESEN Button zusätzlich noch
+                    // per nativer Browser-Aktivierung aus -- kollidiert mit dem
+                    // globalen Tastatur-Listener oben und blockiert das Weitertippen.
+                    onClick={(e) => {
+                      e.currentTarget.blur();
+                      if (key === "ENTER") submitGuess();
+                      else if (key === "⌫") backspace();
+                      else typeLetter(key);
+                    }}
                     className={`flex h-11 items-center justify-center rounded-lg text-xs font-bold transition-colors ${
                       isAction ? "min-w-[52px] px-2" : "min-w-[30px] flex-1"
                     } ${bgClass}`}
