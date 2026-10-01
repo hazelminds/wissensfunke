@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { RefreshCw, Trophy } from "lucide-react";
 import { recordDailyCompletion } from "@/lib/streak";
 import { recordServerStreakCompletion } from "@/lib/actions/streak";
@@ -69,6 +69,25 @@ export function Memory({
   const [locked, setLocked] = useState(false);
 
   const cols = GRID_COLS[difficulty];
+
+  // Themenreihe ist horizontal scrollbar, aber eine normale Maus liefert nur
+  // vertikales Wheel-Delta -- ohne diese Umleitung ließe sie sich mit reiner
+  // Maus (kein Touchpad, kein sichtbarer Scrollbalken -- siehe .scrollbar-hide)
+  // gar nicht weiterschieben. Nativer Listener statt onWheel, weil React
+  // Wheel-Handler standardmäßig passiv anhängt und preventDefault dort sonst
+  // nicht greift.
+  const themeScrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = themeScrollRef.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (e.deltaY === 0 || e.deltaX !== 0) return;
+      el.scrollLeft += e.deltaY;
+      e.preventDefault();
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, []);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -184,7 +203,7 @@ export function Memory({
 
       {(difficulty === "medium" || difficulty === "hard") && (
         <div className="relative mb-4">
-          <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pr-8">
+          <div ref={themeScrollRef} className="scrollbar-hide flex items-center gap-2 overflow-x-auto pr-8">
             <span className="shrink-0 text-xs font-bold tracking-wide text-muted uppercase">Thema</span>
             {MEMORY_THEMES.map((theme) => (
               <button
