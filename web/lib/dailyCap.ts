@@ -16,8 +16,15 @@ interface DailyPlayState {
   count: number;
 }
 
+/** Lokales Kalenderdatum, nicht UTC -- toISOString() wäre UTC-basiert und
+ * würde das Limit für Nutzer:innen östlich von UTC (z. B. UTC+8) erst
+ * Stunden nach ihrer lokalen Mitternacht zurücksetzen. */
 function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function readState(): DailyPlayState {
