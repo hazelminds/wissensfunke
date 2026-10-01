@@ -167,6 +167,15 @@ body {
   }
 }
 
+/* Reihen-Wackeln bei ungültiger Eingabe (Worträtsel) -- kurzer, gedämpfter
+ * Seitwärts-Ausschlag statt eines harten Fehler-Dialogs. */
+@keyframes shake {
+  10%, 90% { transform: translateX(-1px); }
+  20%, 80% { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-4px); }
+  40%, 60% { transform: translateX(4px); }
+}
+
 /* Rechtstexte (Impressum/Datenschutz/AGB/Widerruf) — schlichte Lauftext-Typografie. */
 .legal-prose h2 {
   font-family: var(--font-display), sans-serif;

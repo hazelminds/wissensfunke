@@ -285,7 +285,11 @@ const starterRiddles: DailyRiddle[] = [
 
 export const dailyRiddles: DailyRiddle[] = [...starterRiddles, ...moreDailyRiddles];
 
-function dayNumber(date: Date): number {
+/** Epochentage seit 1970-01-01 UTC -- Basis für jede deterministische
+ * "ein Eintrag pro Kalendertag, für alle gleich"-Rotation (siehe auch
+ * content/wordguess.ts). Exportiert, damit andere tägliche Anker denselben
+ * Tag-Zähler nutzen, statt ihn jeweils neu zu duplizieren. */
+export function dayNumber(date: Date): number {
   return Math.floor(date.getTime() / 86_400_000);
 }
 

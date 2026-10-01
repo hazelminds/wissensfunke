@@ -84,6 +84,18 @@ export const games: GameModule[] = [
     sortOrder: 2,
     inCategoryBrowser: false,
   },
+  {
+    slug: "tages-wort",
+    title: "Wort des Tages",
+    teaser: "Errate das 5-Buchstaben-Wort in 6 Versuchen — für alle dasselbe Wort.",
+    emoji: "🔤",
+    category: "Wörter",
+    level: "daily-free",
+    estMinutes: 3,
+    type: "puzzle",
+    isPremium: false,
+    sortOrder: 3,
+  },
 
   // Puzzle-Kategorie -- Reihenfolge 1:1 wie im Base44-Vorbild
   {

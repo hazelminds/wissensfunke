@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { games } from "@/content/games";
 import { getQuiz } from "@/content/quizzes";
 import { getDailyQuizSet, getDailyRiddle } from "@/content/daily";
+import { getDailyWord, getPuzzleNumber } from "@/content/wordguess";
 import {
   getDailyWhoAmIRound,
   getRandomWhoAmIRound,
@@ -25,6 +26,7 @@ import {
 import { QuizPlayer } from "@/components/QuizPlayer";
 import { DailyMiniQuiz } from "@/components/DailyMiniQuiz";
 import { DailyRiddle } from "@/components/DailyRiddle";
+import { WordGuess } from "@/components/game/WordGuess";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DailyCapGate } from "@/components/DailyCapGate";
 import { PlusOnlyLock } from "@/components/PlusOnlyLock";
@@ -81,13 +83,16 @@ export default async function QuizPage({
   const backHref =
     slug === "wer-bin-ich-leicht" || slug === "wer-bin-ich-mittel" || slug === "wer-bin-ich-schwer"
       ? "/quiz/wer-bin-ich"
-      : slug === "tages-raetsel" || slug === "tages-mini-quiz"
+      : slug === "tages-raetsel" || slug === "tages-mini-quiz" || slug === "tages-wort"
         ? "/"
         : `/kategorie/${game.type}`;
 
   return (
     <div className="min-h-screen bg-bg">
-      <SiteHeader backHref="/" showStreak={slug === "tages-raetsel" || slug === "tages-mini-quiz"} />
+      <SiteHeader
+        backHref="/"
+        showStreak={slug === "tages-raetsel" || slug === "tages-mini-quiz" || slug === "tages-wort"}
+      />
       <main className="mx-auto flex max-w-xl flex-col gap-8 px-5 pt-8 pb-20">
         <Link
           href={backHref}
@@ -149,6 +154,10 @@ async function QuizContent({
   // 2 Gratis-Runden/Tag für Gäste und eingeloggte Nicht-Plus-Nutzer:innen.
   if (slug === "tages-raetsel") {
     return <DailyRiddle riddle={getDailyRiddle()} />;
+  }
+
+  if (slug === "tages-wort") {
+    return <WordGuess solution={getDailyWord()} puzzleNumber={getPuzzleNumber()} />;
   }
 
   // Ab hier: Weekly-Freemium-Spiele -- unterliegen dem 2-Gratis-Runden-Limit,
