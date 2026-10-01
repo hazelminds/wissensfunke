@@ -156,14 +156,17 @@ async function QuizContent({
     return <DailyRiddle riddle={getDailyRiddle()} />;
   }
 
+  const user = await getCurrentUser();
+  const plusActive = previewUnlocked || (user ? (await getPlusStatus(user.id)).active : false);
+
+  // Die eine Tageslösung ist für alle gratis -- plusActive schaltet nur die
+  // zusätzlichen Bonusrunden frei (kein harter Wall wie bei subscriber-only).
   if (slug === "tages-wort") {
-    return <WordGuess solution={getDailyWord()} puzzleNumber={getPuzzleNumber()} />;
+    return <WordGuess solution={getDailyWord()} puzzleNumber={getPuzzleNumber()} plusActive={plusActive} />;
   }
 
   // Ab hier: Weekly-Freemium-Spiele -- unterliegen dem 2-Gratis-Runden-Limit,
   // AUSSER für echte Plus-Mitglieder (Admin-Geschenk oder später echtes Abo).
-  const user = await getCurrentUser();
-  const plusActive = previewUnlocked || (user ? (await getPlusStatus(user.id)).active : false);
 
   // Alles, was auf der Kachel sichtbar das "Plus"-Abzeichen trägt (isPremium/
   // level: "subscriber-only"), ist echt Plus-exklusiv: kein Gratis-Anteil wie
