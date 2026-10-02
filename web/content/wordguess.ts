@@ -23,8 +23,8 @@ const LAUNCH_DATE = new Date("2026-10-01T00:00:00Z");
 
 // Alle Großbuchstaben, ohne ß (im Deutschen in Versalschreibung ohnehin
 // durch "SS" ersetzt, z. B. "WEISS") -- damit jede Position im Raster
-// einem einzelnen Tile entspricht. 207 Wörter, keine Dopplungen, alle
-// geprüft exakt 5 Zeichen lang -- reicht für rund 6,8 Monate Tageslösungen
+// einem einzelnen Tile entspricht. 272 Wörter, keine Dopplungen, alle
+// geprüft exakt 5 Zeichen lang -- reicht für knapp 9 Monate Tageslösungen
 // ohne Wiederholung (Plus-Bonusrunden ziehen zufällig aus demselben Pool
 // und können daher schon vorher mal wiederholen, siehe getBonusWord).
 export const WORD_LIST: string[] = [
@@ -49,9 +49,16 @@ export const WORD_LIST: string[] = [
   "NELKE", "PALME", "FARNE", "MOOSE", "BUSCH", "DUNST", "FROST", "EISIG", "KLIMA", "ZONEN",
   "UHREN", "MÜNZE", "KABEL", "AKKUS", "CHIPS", "NOTEN", "LEHRE", "PAUSE", "BOXEN", "PREIS",
   "MIETE", "ÄRGER", "TROST", "GLÜCK", "UNMUT", "DEMUT", "SORGE",
+  "ZIEGE", "RATTE", "MEISE", "FINKE", "KOBRA", "KANNE", "DOSEN", "TÜTEN", "KÖRBE", "NADEL",
+  "SEIDE", "APFEL", "HAFER", "SPECK", "BROTE", "ESSIG", "CURRY", "REISE", "KÄLTE", "WÄRME",
+  "HITZE", "FÜSSE", "ZÄHNE", "KEHLE", "HÜFTE", "FERSE", "WADEN", "BRAUE", "ANGST", "PANIK",
+  "EIFER", "STILL", "WEISE", "KRANK", "HÖREN", "LEBEN", "HOLEN", "LEGEN", "NÄHEN", "BAUEN",
+  "MÄHEN", "IMKER", "JÄGER", "STADT", "STAAT", "HEUTE", "IMMER", "SCHUH", "PULLI", "DIELE",
+  "KÜCHE", "AUTOS", "BOOTE", "FÄHRE", "BERGE", "WÜSTE", "KASSE", "KONTO", "EICHE", "BUCHE",
+  "AHORN", "ROSEN", "LILIE", "GROSS", "HEISS",
 ];
 
-// Nur als Ratewort gültig, nie als Tageslösung -- 48 weitere geprüft
+// Nur als Ratewort gültig, nie als Tageslösung -- 73 weitere geprüft
 // exakt 5-buchstabige deutsche Wörter, keine Dopplungen mit WORD_LIST.
 const EXTRA_VALID_GUESSES: string[] = [
   "HECHT", "LARVE", "RAUPE", "KÄFER", "WESPE", "MÜCKE", "FEIGE", "ORKAN", "MUTIG", "TREUE",
@@ -59,6 +66,9 @@ const EXTRA_VALID_GUESSES: string[] = [
   "PARKS", "JAHRE", "HEFTE", "TEXTE", "WORTE", "TEAMS", "IDEEN", "TRAUM", "ZIELE", "PLANE",
   "VERSE", "REIME", "KLANG", "WEINE", "BIERE", "MILCH", "HAARE", "OHREN", "AUGEN", "HÄNDE",
   "BEINE", "HABEN", "SAGEN", "ENDEN", "FRAGE", "GRUND", "SINNE", "ZWECK",
+  "ECHSE", "ASSEL", "ZWIRN", "KNOPF", "GLATT", "TAUEN", "FERNE", "TIEFE", "BREIT", "FEGEN",
+  "CELLO", "MÄUSE", "RÄDER", "OASEN", "HÖHLE", "TÄLER", "MEERE", "BÄLLE", "TOREN", "NETZE",
+  "RINGE", "ERLEN", "MASSE", "ATOME", "KOMET",
 ];
 
 const WORD_SET = new Set([...WORD_LIST, ...EXTRA_VALID_GUESSES]);
