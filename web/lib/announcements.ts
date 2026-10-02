@@ -30,11 +30,11 @@ function toAnnouncement(row: {
   };
 }
 
-/** Die aktuell anzuzeigende Ankündigung für die Startseite -- aktiv UND
- * heute innerhalb ihres Zeitraums. Mehrere Treffer sollten im Admin
- * vermieden werden, aber falls doch: die zuletzt erstellte gewinnt. */
-export async function getCurrentAnnouncement(): Promise<Announcement | null> {
-  if (!isSupabaseConfigured()) return null;
+/** Alle aktuell gültigen Ankündigungen für die Startseite -- aktiv UND
+ * heute innerhalb ihres Zeitraums, älteste zuerst. Mehrere gleichzeitig
+ * gültige lässt der Banner im Karussell durchrotieren. */
+export async function getCurrentAnnouncements(): Promise<Announcement[]> {
+  if (!isSupabaseConfigured()) return [];
   const supabase = getSupabaseAdmin();
   const today = berlinToday();
   const { data } = await supabase
@@ -43,10 +43,8 @@ export async function getCurrentAnnouncement(): Promise<Announcement | null> {
     .eq("active", true)
     .lte("start_date", today)
     .gte("end_date", today)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-  return data ? toAnnouncement(data) : null;
+    .order("created_at", { ascending: true });
+  return (data ?? []).map(toAnnouncement);
 }
 
 /** Alle Ankündigungen fürs Admin-Dashboard, neueste zuerst. */

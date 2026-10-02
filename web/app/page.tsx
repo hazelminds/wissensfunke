@@ -6,15 +6,15 @@ import { CategoryCards } from "@/components/home/CategoryCards";
 import { FeaturedGames } from "@/components/home/FeaturedGames";
 import { FaqAccordion } from "@/components/home/FaqAccordion";
 import { AnnouncementBanner } from "@/components/home/AnnouncementBanner";
-import { getCurrentAnnouncement } from "@/lib/announcements";
+import { getCurrentAnnouncements } from "@/lib/announcements";
 
 export default async function HomePage() {
-  const announcement = await getCurrentAnnouncement();
+  const announcements = await getCurrentAnnouncements();
 
   return (
     <div className="min-h-screen bg-bg">
       <SiteHeader />
-      {announcement && <AnnouncementBanner id={announcement.id} message={announcement.message} />}
+      {announcements.length > 0 && <AnnouncementBanner announcements={announcements} />}
       <main>
         <Hero />
         <GameOfDay />
