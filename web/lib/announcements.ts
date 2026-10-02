@@ -1,6 +1,7 @@
 import "server-only";
 import { getSupabaseAdmin } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/auth";
+import { berlinToday } from "@/lib/berlinDate";
 
 export interface Announcement {
   id: string;
@@ -27,13 +28,6 @@ function toAnnouncement(row: {
     endDate: row.end_date,
     createdAt: row.created_at,
   };
-}
-
-/** Heutiges Kalenderdatum in Europa/Berlin als YYYY-MM-DD -- der Zeitraum
- * einer Ankündigung ist tagesgenau gemeint (00:01 bis 23:59 des jeweiligen
- * Tages), nicht UTC, da die Zielgruppe überwiegend in der DACH-Region ist. */
-export function berlinToday(): string {
-  return new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Berlin" });
 }
 
 /** Die aktuell anzuzeigende Ankündigung für die Startseite -- aktiv UND
