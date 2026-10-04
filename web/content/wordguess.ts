@@ -58,8 +58,11 @@ export const WORD_LIST: string[] = [
   "AHORN", "ROSEN", "LILIE", "GROSS", "HEISS",
 ];
 
-// Nur als Ratewort gültig, nie als Tageslösung -- 73 weitere geprüft
-// exakt 5-buchstabige deutsche Wörter, keine Dopplungen mit WORD_LIST.
+// Nur als Ratewort gültig, nie als Tageslösung -- 143 weitere geprüft
+// exakt 5-buchstabige deutsche Wörter, keine Dopplungen mit WORD_LIST. Diese
+// Liste bewusst viel größer als die Lösungsliste (wie beim Original-Wordle):
+// kostet nichts, da nie Tageslösung, verhindert aber, dass echte Wörter beim
+// Tippen fälschlich als "ungültig" abgelehnt werden.
 const EXTRA_VALID_GUESSES: string[] = [
   "HECHT", "LARVE", "RAUPE", "KÄFER", "WESPE", "MÜCKE", "FEIGE", "ORKAN", "MUTIG", "TREUE",
   "MACHT", "KRAFT", "STARK", "SANFT", "RASCH", "LEISE", "LAUTE", "PFADE", "GASSE", "ALLEE",
@@ -69,6 +72,13 @@ const EXTRA_VALID_GUESSES: string[] = [
   "ECHSE", "ASSEL", "ZWIRN", "KNOPF", "GLATT", "TAUEN", "FERNE", "TIEFE", "BREIT", "FEGEN",
   "CELLO", "MÄUSE", "RÄDER", "OASEN", "HÖHLE", "TÄLER", "MEERE", "BÄLLE", "TOREN", "NETZE",
   "RINGE", "ERLEN", "MASSE", "ATOME", "KOMET",
+  "SÄGEN", "WAGEN", "RASEN", "WEBEN", "LOBEN", "LADEN", "JAGEN", "TOBEN", "GAREN", "NAGEN",
+  "OFFEN", "EIGEN", "GENAU", "VIELE", "MANCH", "JEDER", "DIESE", "KEINE", "RECHT", "GANZE",
+  "LETZT", "ERSTE", "GUTEN", "WÖLFE", "BÄREN", "HASEN", "GÄNSE", "ENTEN", "LÖWEN", "AFFEN",
+  "KRÖTE", "BEERE", "KOKOS", "MATTE", "VASEN", "TÜREN", "WÄNDE", "ZÄUNE", "LEUTE", "GÄSTE",
+  "PAARE", "RUHIG", "WEGEN", "GEGEN", "NEBEN", "UNTER", "DURCH", "WEDER", "SOWIE", "FALLS",
+  "DAMIT", "DAHER", "DAVOR", "DABEI", "DARAN", "DARIN", "DAVON", "WORAN", "WOVON", "WOMIT",
+  "ZEHEN", "LOCKE", "BÄRTE", "NASEN", "TÖPFE", "SIEBE", "HOSEN", "RÖCKE", "MOTOR", "HUPEN",
 ];
 
 const WORD_SET = new Set([...WORD_LIST, ...EXTRA_VALID_GUESSES]);
