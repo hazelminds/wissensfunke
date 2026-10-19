@@ -28,7 +28,15 @@ export interface GameModule {
    * "psych-result"/"psych-compat" sind die beiden handgeschriebenen
    * Ur-Tests (Einzelkauf); "psych-generic" sind die content-getriebenen
    * Tests aus content/psychTests.ts (Plus-Freischaltung statt Einzelkauf). */
-  variant?: "sliding" | "whoami" | "crossword" | "memory" | "psych-result" | "psych-compat" | "psych-generic";
+  variant?:
+    | "sliding"
+    | "whoami"
+    | "crossword"
+    | "memory"
+    | "colorconnect"
+    | "psych-result"
+    | "psych-compat"
+    | "psych-generic";
   /** Nur für Sliding-Puzzle/Memory: Rastergröße bzw. Schwierigkeitsstufe. */
   difficulty?: "easy" | "medium" | "hard";
   /** false = taucht nicht in /kategorie/[type] auf (z.B. der tägliche Anker,
@@ -151,6 +159,48 @@ export const games: GameModule[] = [
     difficulty: "hard",
     isPremium: true,
     sortOrder: 14,
+  },
+  {
+    slug: "farbverbinden-leicht",
+    title: "Farbverbinden Leicht",
+    teaser: "Verbinde die gleichfarbigen Punkte, ohne dass sich Linien kreuzen -- 6×8 Felder.",
+    emoji: "🔵",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 2,
+    type: "puzzle",
+    variant: "colorconnect",
+    difficulty: "easy",
+    isPremium: false,
+    sortOrder: 66,
+  },
+  {
+    slug: "farbverbinden-mittel",
+    title: "Farbverbinden Mittel",
+    teaser: "Mehr Farbpaare auf gleichem Raster -- enger geht's knifflig zu.",
+    emoji: "🟢",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 4,
+    type: "puzzle",
+    variant: "colorconnect",
+    difficulty: "medium",
+    isPremium: false,
+    sortOrder: 67,
+  },
+  {
+    slug: "farbverbinden-schwer",
+    title: "Farbverbinden Schwer",
+    teaser: "Zehn Farbpaare auf engstem Raum, keine Linie darf sich kreuzen -- für echte Knobler.",
+    emoji: "🟣",
+    category: "Logik",
+    level: "subscriber-only",
+    estMinutes: 7,
+    type: "puzzle",
+    variant: "colorconnect",
+    difficulty: "hard",
+    isPremium: true,
+    sortOrder: 68,
   },
   {
     slug: "kreuzwortraetsel-leicht",
