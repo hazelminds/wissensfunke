@@ -33,6 +33,7 @@ import { PlusOnlyLock } from "@/components/PlusOnlyLock";
 import { SlidingPuzzle } from "@/components/game/SlidingPuzzle";
 import { Memory } from "@/components/game/Memory";
 import { ColorConnect } from "@/components/game/ColorConnect";
+import { Timeline } from "@/components/game/Timeline";
 import { WhoAmI } from "@/components/game/WhoAmI";
 import { Crossword } from "@/components/game/Crossword";
 import { RelationshipTest } from "@/components/game/RelationshipTest";
@@ -228,6 +229,21 @@ async function QuizContent({
     return (
       <DailyCapGate plusActive={plusActive}>
         <ColorConnect
+          slug={slug}
+          title={game.title}
+          color={game.type}
+          difficulty={game.difficulty}
+          challenge={challengeInfo}
+          plusActive={plusActive}
+        />
+      </DailyCapGate>
+    );
+  }
+
+  if (game.variant === "timeline") {
+    return (
+      <DailyCapGate plusActive={plusActive}>
+        <Timeline
           slug={slug}
           title={game.title}
           color={game.type}

@@ -34,6 +34,7 @@ export interface GameModule {
     | "crossword"
     | "memory"
     | "colorconnect"
+    | "timeline"
     | "psych-result"
     | "psych-compat"
     | "psych-generic";
@@ -201,6 +202,48 @@ export const games: GameModule[] = [
     difficulty: "hard",
     isPremium: true,
     sortOrder: 68,
+  },
+  {
+    slug: "zeitstrahl-leicht",
+    title: "Zeitstrahl Leicht",
+    teaser: "Ordne historische Ereignisse chronologisch ein -- ein Fehler beendet die Runde.",
+    emoji: "🕰️",
+    category: "Wissen",
+    level: "weekly-freemium",
+    estMinutes: 2,
+    type: "puzzle",
+    variant: "timeline",
+    difficulty: "easy",
+    isPremium: false,
+    sortOrder: 69,
+  },
+  {
+    slug: "zeitstrahl-mittel",
+    title: "Zeitstrahl Mittel",
+    teaser: "Mehr Ereignisse, engere Jahre -- die Einordnung wird knifflig.",
+    emoji: "🕰️",
+    category: "Wissen",
+    level: "weekly-freemium",
+    estMinutes: 3,
+    type: "puzzle",
+    variant: "timeline",
+    difficulty: "medium",
+    isPremium: false,
+    sortOrder: 70,
+  },
+  {
+    slug: "zeitstrahl-schwer",
+    title: "Zeitstrahl Schwer",
+    teaser: "Viele Ereignisse liegen nur wenige Jahre auseinander -- für echte Geschichtsfüchse.",
+    emoji: "🕰️",
+    category: "Wissen",
+    level: "subscriber-only",
+    estMinutes: 5,
+    type: "puzzle",
+    variant: "timeline",
+    difficulty: "hard",
+    isPremium: true,
+    sortOrder: 71,
   },
   {
     slug: "kreuzwortraetsel-leicht",
