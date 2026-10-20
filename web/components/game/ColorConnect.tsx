@@ -214,6 +214,26 @@ export function ColorConnect({
     if (solved) return;
     const cell = cellFromPoint(e.clientX, e.clientY);
     if (cell === null) return;
+
+    // Zelle gehört schon zu einer gezeichneten Linie (an irgendeiner Stelle,
+    // nicht nur an den beiden Punkten) -- dort wieder aufnehmen: Linie bis
+    // zu dieser Stelle zurückschneiden, Weiterziehen hängt von da an neu an.
+    // Ohne das ließ sich eine einmal begonnene Linie nur komplett neu von
+    // einem der beiden Punkte aus zeichnen, nie von der Mitte aus weiter --
+    // genau das fühlte sich an, als würde das Ziehen nicht mehr gehen.
+    const ownerIdx = paths.findIndex((p) => p.includes(cell));
+    if (ownerIdx !== -1) {
+      const idx = paths[ownerIdx].indexOf(cell);
+      setPaths((prev) => {
+        const copy = prev.slice();
+        copy[ownerIdx] = prev[ownerIdx].slice(0, idx + 1);
+        return copy;
+      });
+      setActiveColor(ownerIdx);
+      boardRef.current?.setPointerCapture?.(e.pointerId);
+      return;
+    }
+
     const colorIdx = puzzle.dots.findIndex(([a, b]) => a === cell || b === cell);
     if (colorIdx === -1) return;
     setPaths((prev) => {
@@ -318,7 +338,6 @@ export function ColorConnect({
                 strokeWidth={0.56}
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                vectorEffect="non-scaling-stroke"
               />
             );
           })}
