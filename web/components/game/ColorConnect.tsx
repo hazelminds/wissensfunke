@@ -335,7 +335,7 @@ export function ColorConnect({
                 points={points}
                 fill="none"
                 stroke={puzzle.colors[idx]}
-                strokeWidth={0.56}
+                strokeWidth={0.48}
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
