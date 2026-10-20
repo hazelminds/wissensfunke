@@ -65,6 +65,7 @@ export function Timeline({
   const [roundOver, setRoundOver] = useState(false);
   const [cleared, setCleared] = useState(false);
   const [wrongYear, setWrongYear] = useState<number | null>(null);
+  const [lastCorrectYear, setLastCorrectYear] = useState<number | null>(null);
   const [finalResult, setFinalResult] = useState<{ points: number; seconds: number } | null>(null);
   const [newBest, setNewBest] = useState<{ points: number; seconds: number } | null>(null);
 
@@ -117,6 +118,7 @@ export function Timeline({
     setRoundOver(false);
     setCleared(false);
     setWrongYear(null);
+    setLastCorrectYear(null);
     setFinalResult(null);
     setNewBest(null);
     setDragging(false);
@@ -187,6 +189,7 @@ export function Timeline({
       setPlaced(nextPlaced);
       setDeck(nextDeck);
       setCorrectCount((c) => c + 1);
+      setLastCorrectYear(candidate.year);
       if (nextDeck.length === 0) {
         setCleared(true);
         setRoundOver(true);
@@ -197,6 +200,7 @@ export function Timeline({
       setPlaced(nextPlaced);
       setDeck(deck.slice(1));
       setWrongYear(candidate.year);
+      setLastCorrectYear(null);
       setRoundOver(true);
     }
   };
@@ -246,12 +250,17 @@ export function Timeline({
           <GapSlot active={dragging && targetGap === 0} />
           {displayed.map((ev, i) => {
             const isWrong = wrongYear !== null && ev.year === wrongYear;
+            const isJustCorrect = lastCorrectYear !== null && ev.year === lastCorrectYear;
             return (
               <div key={ev.year}>
                 <div
                   data-placed-card
                   className={`hairline rounded-xl px-4 py-3 ${
-                    isWrong ? "border-2 border-red-500 bg-red-500/10" : "bg-surface"
+                    isWrong
+                      ? "border-2 border-red-500 bg-red-500/10"
+                      : isJustCorrect
+                        ? "border-2 border-green bg-green-soft"
+                        : "bg-surface"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
