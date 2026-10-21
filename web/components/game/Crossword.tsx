@@ -12,6 +12,7 @@ import { ChallengeButton } from "@/components/ChallengeButton";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
+import { HighscoreCelebration } from "@/components/HighscoreCelebration";
 
 export interface ChallengeInfo {
   name: string;
@@ -423,6 +424,7 @@ export function Crossword({
 
       {newBest && (
         <div className="flex flex-col items-center gap-3">
+          <HighscoreCelebration />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}

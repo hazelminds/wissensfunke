@@ -17,6 +17,7 @@ import { LeaderboardTeaser } from "@/components/LeaderboardTeaser";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
+import { HighscoreCelebration } from "@/components/HighscoreCelebration";
 import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
 import { ChallengeButton } from "@/components/ChallengeButton";
 import { UnlockChoiceModal } from "@/components/UnlockChoiceModal";
@@ -677,6 +678,7 @@ function ResultScreen({
       {newBest && (
         <div className="flex flex-col items-center gap-3">
           <Confetti />
+          <HighscoreCelebration />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={quiz.title}

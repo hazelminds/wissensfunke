@@ -13,6 +13,7 @@ import { ChallengeButton } from "@/components/ChallengeButton";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
+import { HighscoreCelebration } from "@/components/HighscoreCelebration";
 import { generateRound, type TimelineDifficulty, type TimelineEvent } from "@/content/timeline";
 
 export interface ChallengeInfo {
@@ -362,6 +363,7 @@ export function Timeline({
 
       {newBest && (
         <div className="mt-5 flex flex-col items-center gap-3">
+          <HighscoreCelebration />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}

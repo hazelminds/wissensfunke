@@ -13,6 +13,7 @@ import { ChallengeButton } from "@/components/ChallengeButton";
 import { HighscoreBanner } from "@/components/HighscoreBanner";
 import { HighscoreShareCard } from "@/components/HighscoreShareCard";
 import { Confetti } from "@/components/Confetti";
+import { HighscoreCelebration } from "@/components/HighscoreCelebration";
 import { generateMemoryBoard, GRID_COLS, MEMORY_THEMES, type MemoryCard, type MemoryDifficulty } from "@/content/memory";
 
 export interface ChallengeInfo {
@@ -327,6 +328,7 @@ export function Memory({
 
       {newBest && (
         <div className="mt-5 flex flex-col items-center gap-3">
+          <HighscoreCelebration />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}
