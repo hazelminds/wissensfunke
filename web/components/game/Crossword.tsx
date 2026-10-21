@@ -419,9 +419,10 @@ export function Crossword({
         />
       )}
 
+      {solved && <Confetti />}
+
       {newBest && (
         <div className="flex flex-col items-center gap-3">
-          <Confetti />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}

@@ -358,9 +358,10 @@ export function Timeline({
         </div>
       )}
 
+      {cleared && <Confetti />}
+
       {newBest && (
         <div className="mt-5 flex flex-col items-center gap-3">
-          <Confetti />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}
