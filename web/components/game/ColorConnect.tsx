@@ -427,9 +427,10 @@ export function ColorConnect({
         </div>
       )}
 
+      {solved && <Confetti />}
+
       {newBest && (
         <div className="mt-5 flex flex-col items-center gap-3">
-          <Confetti />
           <HighscoreBanner />
           <HighscoreShareCard
             gameTitle={title}
