@@ -38,9 +38,7 @@ export default function ImpressumPage() {
       <section>
         <h2>Verbraucherstreitbeilegung</h2>
         <p>
-          Die EU-Plattform zur Online-Streitbeilegung wurde zum 20. Juli 2025 abgeschaltet
-          (Verordnung (EU) 2024/3228) und ist seither nicht mehr erreichbar; ein Verweis darauf
-          entfällt. Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor
+          Wir sind nicht bereit und nicht verpflichtet, an einem Streitbeilegungsverfahren vor
           einer Verbraucherschlichtungsstelle teilzunehmen.
         </p>
       </section>
