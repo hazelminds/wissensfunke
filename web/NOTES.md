@@ -40,3 +40,19 @@ berücksichtigt werden müssen. Wird automatisch über `CLAUDE.md` geladen.
   eigenen Backend (nicht direkt aus Stripe) für die monatliche VAT-Meldung im Template ihres
   VAT-Anbieters. Für Noggl muss perspektivisch ein ähnlicher Export/Upload gebaut werden, sobald
   klar ist, welcher Zahlungsanbieter wie welche Daten liefert -- noch nicht konkret geplant.
+
+## Hosting/Infrastruktur
+
+- **Vercel (App-Hosting) läuft noch auf dem kostenlosen Hobby-Tarif.** Laut Vercels eigenen
+  Nutzungsbedingungen/Fair-Use-Guidelines ist Hobby ausdrücklich nur für private,
+  nicht-kommerzielle Nutzung erlaubt -- Noggl hat aber Einmalkäufe und ein geplantes Abo, ist
+  also kommerziell. Risiko: Vercel kann ein Projekt bei Verstoß pausieren.
+  **TODO: Vor dem Umzug auf die echte Domain (noggl.games) und bevor echte Zahlungen live gehen,
+  Vercel auf den Pro-Tarif (ca. 20 $/Monat + nutzungsbasiert) umstellen und Tania aktiv daran
+  erinnern, falls das Thema wieder aufkommt (Domain-Umzug, Payment-Launch).** Stand jetzt
+  (Besprechung im Oktober 2026) noch nicht umgestellt, bewusst zurückgestellt bis kurz vor Livegang.
+- **Supabase (Datenbank/Auth) läuft auf dem kostenlosen Free-Tarif** -- bei aktueller Größe
+  unkritisch (500 MB DB / 50.000 MAU Freigrenze reicht erstmal). Serverstandort/Region des
+  Supabase-Projekts ist noch nicht bekannt/bestätigt -- für die Datenschutzerklärung
+  (app/rechtliches/datenschutz/page.tsx, Abschnitt 4) noch nachzutragen, sobald Tania das im
+  Supabase-Dashboard (Project Settings → General) nachschaut.
