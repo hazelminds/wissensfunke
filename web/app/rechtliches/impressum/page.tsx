@@ -21,13 +21,6 @@ export default function ImpressumPage() {
       </section>
 
       <section>
-        <h3>Vertreten durch</h3>
-        <p>
-          <Placeholder>ZU ERGÄNZEN: Name(n) der/des Geschäftsführer(s)/Director(s)</Placeholder>
-        </p>
-      </section>
-
-      <section>
         <h3>Kontakt</h3>
         <p>
           Telefon: <Placeholder>ZU ERGÄNZEN</Placeholder>
@@ -54,20 +47,12 @@ export default function ImpressumPage() {
       </section>
 
       <section>
-        <h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3>
+        <h2>Verbraucherstreitbeilegung</h2>
         <p>
-          <Placeholder>ZU ERGÄNZEN, sofern presserechtlich/redaktionell relevant</Placeholder>
-        </p>
-      </section>
-
-      <section>
-        <h2>EU-Streitschlichtung</h2>
-        <p>
-          <Placeholder>
-            ZU PRÜFEN: Aktueller Status der EU-Online-Streitbeilegungsplattform (Verweis ggf.
-            entfallen oder angepasst nötig) sowie Angaben zur Teilnahme/Nicht-Teilnahme an einem
-            Verbraucherschlichtungsverfahren nach VSBG.
-          </Placeholder>
+          Die EU-Plattform zur Online-Streitbeilegung wurde zum 20. Juli 2025 abgeschaltet
+          (Verordnung (EU) 2024/3228) und ist seither nicht mehr erreichbar; ein Verweis darauf
+          entfällt. Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor
+          einer Verbraucherschlichtungsstelle teilzunehmen.
         </p>
       </section>
 
