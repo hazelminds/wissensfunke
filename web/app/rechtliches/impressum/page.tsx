@@ -1,12 +1,8 @@
 import { LegalPage } from "@/components/LegalPage";
 
-function Placeholder({ children }: { children: React.ReactNode }) {
-  return <span className="placeholder">{children}</span>;
-}
-
 export default function ImpressumPage() {
   return (
-    <LegalPage title="Impressum" updated="Entwurf, noch nicht final">
+    <LegalPage title="Impressum" updated="31. Oktober 2026" draft={false}>
       <section>
         <h2>Angaben gemäß § 5 DDG (Digitale-Dienste-Gesetz)</h2>
         <p>
@@ -22,11 +18,7 @@ export default function ImpressumPage() {
 
       <section>
         <h3>Kontakt</h3>
-        <p>
-          Telefon: <Placeholder>ZU ERGÄNZEN</Placeholder>
-          <br />
-          E-Mail: <Placeholder>ZU ERGÄNZEN</Placeholder>
-        </p>
+        <p>E-Mail: info@noggl.games</p>
       </section>
 
       <section>
@@ -40,10 +32,7 @@ export default function ImpressumPage() {
 
       <section>
         <h3>Umsatzsteuer</h3>
-        <p>
-          EU-USt-OSS-Registrierung liegt vor.{" "}
-          <Placeholder>ZU ERGÄNZEN: konkrete USt-IdNr./OSS-Registrierungsnummer hier eintragen</Placeholder>
-        </p>
+        <p>EU-USt-OSS-Registrierung liegt vor.</p>
       </section>
 
       <section>

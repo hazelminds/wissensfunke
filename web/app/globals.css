@@ -197,19 +197,26 @@ body {
 }
 
 /* Rechtstexte (Impressum/Datenschutz/AGB/Widerruf) — schlichte Lauftext-Typografie. */
+/* Abstand zwischen Überschrift/Absätzen/Liste innerhalb eines Abschnitts
+ * läuft über Flex-Gap statt Margin -- vorher sorgte ein negativer
+ * Bottom-Margin auf h2/h3 dafür, dass der Text regelrecht an der
+ * Überschrift klebte. */
+.legal-prose section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 .legal-prose h2 {
   font-family: var(--font-display), sans-serif;
   font-weight: 600;
   font-size: 17px;
   color: var(--nog-ink);
-  margin: 4px 0 -8px;
 }
 .legal-prose h3 {
   font-family: var(--font-display), sans-serif;
   font-weight: 600;
   font-size: 15px;
   color: var(--nog-ink);
-  margin: 4px 0 -8px;
 }
 .legal-prose ul {
   margin: 0;
