@@ -26,8 +26,11 @@ export default function AgbPage() {
             Auswertung ist ein kostenpflichtiger Einmalkauf.
           </li>
           <li>
-            Ein optionales Abonnement (aktuell noch nicht aktiv) gibt Zugriff auf alle
-            Tiefenauswertungen, ein Archiv sowie Werbefreiheit.
+            „Plus&quot; (aktuell noch nicht käuflich erwerbbar) gibt gegen Aufpreis Zugriff auf alle
+            Tiefenauswertungen, unbegrenztes Spielen ohne Tageslimit, Streak-Schutz, die volle
+            Bestenliste, einen individuellen Nutzernamen sowie zusätzliche Motive/Runden bei
+            einzelnen Spielen — wahlweise als zeitlich begrenztes Tages-Ticket oder als
+            Monats-Abo (siehe 3.).
           </li>
         </ul>
         <p>
@@ -39,15 +42,19 @@ export default function AgbPage() {
       <section>
         <h2>3. Vertragsschluss und Preise</h2>
         <p>
-          Der Preis einer Tiefenauswertung wird vor dem Klick auf „Freischalten&quot; angezeigt. Mit
-          Klick auf „Freischalten&quot; wirst du zur Zahlungsseite des jeweiligen Zahlungsdienstleisters
+          Der Preis wird vor dem Klick auf „Freischalten&quot; bzw. „Jetzt holen&quot; angezeigt. Mit
+          diesem Klick wirst du zur Zahlungsseite des jeweiligen Zahlungsdienstleisters
           weitergeleitet; der Vertrag kommt mit erfolgreichem Zahlungsabschluss zustande.
         </p>
         <p>
-          Aktuelle Beispielpreise: Einmalkauf einer Tiefenauswertung{" "}
-          <Placeholder>ab 2,99 €, endgültige Preisstruktur noch nicht final</Placeholder>; Abo{" "}
-          <Placeholder>bis 4,99 €/Monat, noch nicht final</Placeholder>. Alle Preise verstehen sich
-          als Endpreise inkl. der jeweils geltenden gesetzlichen Umsatzsteuer (EU-USt-OSS-Verfahren).
+          Aktuelle Preise: Einmalkauf einer Tiefenauswertung 2,99 €; Plus Tages-Ticket (einmalig,
+          für den jeweiligen Tag) 4,99 €; Plus Monats-Abo 9,99 € pro Monat. Alle Preise verstehen
+          sich als Endpreise inkl. der jeweils geltenden gesetzlichen Umsatzsteuer
+          (EU-USt-OSS-Verfahren).{" "}
+          <Placeholder>
+            Plus-Preise gelten für den Zeitpunkt des Livegangs der Plus-Bezahlfunktion -- bei
+            Änderung vor Launch hier nachziehen.
+          </Placeholder>
         </p>
       </section>
 
@@ -62,12 +69,17 @@ export default function AgbPage() {
       </section>
 
       <section>
-        <h2>5. Abonnement (sobald aktiv)</h2>
+        <h2>5. Plus Monats-Abo (sobald aktiv)</h2>
+        <p>
+          Das Tages-Ticket ist ein Einmalkauf für den jeweiligen Tag und verlängert sich nicht
+          automatisch. Die folgenden Punkte gelten nur für das Monats-Abo:
+        </p>
         <ul>
           <li>Abrechnung monatlich im Voraus, automatische Verlängerung bis zur Kündigung.</li>
           <li>
             Kündigung jederzeit mit einem Klick über einen Kündigungsbutton im Konto möglich —
-            gleich leicht zugänglich wie der Abschluss.
+            gleich leicht zugänglich wie der Abschluss.{" "}
+            <Placeholder>Der Kündigungsbutton selbst ist im Konto-Bereich noch nicht gebaut.</Placeholder>
           </li>
           <li>
             <Placeholder>
