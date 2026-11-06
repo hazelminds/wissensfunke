@@ -13,6 +13,7 @@ import {
 } from "@/lib/analytics";
 import { logPageView, getPageViewStats, type PageViewStats } from "@/lib/pageViews";
 import { getFunnelStats, type FunnelStats } from "@/lib/funnel";
+import { getCohortStats, type CohortStats } from "@/lib/cohort";
 
 /** Wird direkt aus den Spiel-Komponenten aufgerufen (nicht über ein Formular) --
  * verschluckt jeden Fehler, damit ein DB-Hänger nie den Spielfluss stört. */
@@ -72,4 +73,9 @@ export async function getPageViewStatsAction(fromISO: string, toISO: string): Pr
 export async function getFunnelStatsAction(fromISO: string, toISO: string): Promise<FunnelStats> {
   await requireAdmin();
   return getFunnelStats(new Date(fromISO), new Date(toISO));
+}
+
+export async function getCohortStatsAction(): Promise<CohortStats> {
+  await requireAdmin();
+  return getCohortStats();
 }

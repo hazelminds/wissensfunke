@@ -9,6 +9,7 @@ const TABS = [
   { id: "questionReports", label: "Fragen-Feedback" },
   { id: "dashboard", label: "Dashboard" },
   { id: "funnel", label: "Trichter" },
+  { id: "cohort", label: "Kohorten" },
   { id: "announcements", label: "Ankündigung" },
 ] as const;
 
@@ -21,6 +22,7 @@ export function AdminTabs({
   support,
   questionReports,
   funnel,
+  cohort,
   announcements,
   supportUnread = 0,
   questionReportsUnread = 0,
@@ -31,6 +33,7 @@ export function AdminTabs({
   support: ReactNode;
   questionReports: ReactNode;
   funnel: ReactNode;
+  cohort: ReactNode;
   announcements: ReactNode;
   supportUnread?: number;
   questionReportsUnread?: number;
@@ -43,6 +46,7 @@ export function AdminTabs({
     support,
     questionReports,
     funnel,
+    cohort,
     announcements,
   };
   const unreadByTab: Partial<Record<TabId, number>> = {

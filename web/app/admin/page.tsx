@@ -13,6 +13,7 @@ import { AdminGamesTable } from "@/components/admin/AdminGamesTable";
 import { AdminSupportTable } from "@/components/admin/AdminSupportTable";
 import { AdminQuestionReportsTable } from "@/components/admin/AdminQuestionReportsTable";
 import { AdminFunnelStats } from "@/components/admin/AdminFunnelStats";
+import { AdminCohortStats } from "@/components/admin/AdminCohortStats";
 import { AdminAnnouncements } from "@/components/admin/AdminAnnouncements";
 
 export default async function AdminPage() {
@@ -65,6 +66,7 @@ export default async function AdminPage() {
           questionReports={<AdminQuestionReportsTable reports={questionReports} />}
           questionReportsUnread={unresolvedQuestionReports}
           funnel={<AdminFunnelStats />}
+          cohort={<AdminCohortStats />}
           announcements={<AdminAnnouncements announcements={announcements} />}
         />
       </main>
