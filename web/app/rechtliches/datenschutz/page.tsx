@@ -175,17 +175,19 @@ export default function DatenschutzPage() {
           </li>
           <li>
             <strong>Kaufbezogene Daten (Kaufreferenz, Betrag, Zeitpunkt, E-Mail, Nachweis zum
-            Widerrufsverzicht):</strong> Diese bewahren wir mindestens 5 Jahre auf, auch wenn du
-            dein Konto zwischenzeitlich löschen lässt — maßgeblich ist hier nicht deutsches,
-            sondern{" "}
+            Widerrufsverzicht):</strong> Diese bewahren wir so lange auf, wie es die am Sitz von
+            Hazelminds Communications Pte. Ltd. (Singapur) geltenden handels- und
+            steuerrechtlichen Aufbewahrungspflichten vorschreiben — auch wenn du dein Konto
+            zwischenzeitlich löschen lässt.{" "}
             <Placeholder>
-              singapurisches Recht, da Hazelminds Communications Pte. Ltd. eine singapurische
-              Gesellschaft ist: Section 199 Companies Act und das Einkommensteuerrecht verlangen
-              jeweils eine Aufbewahrung von mindestens 5 Jahren ab Ende des betreffenden
-              Geschäfts-/Steuerjahres (nicht die oft für deutsche Unternehmen zitierten 10 Jahre
-              nach HGB/AO) -- vor Livegang durch die Kanzlei/Steuerberatung bestätigen lassen.
-            </Placeholder>{" "}
-            Rechtsgrundlage für die Aufbewahrung trotz Löschwunsch: Art. 17 Abs. 3 Buchst. b DSGVO.
+              Intern zur Einordnung (nicht Teil der Kanzlei-Formulierung): nach aktuellem Stand
+              Section 199 Companies Act und Einkommensteuerrecht Singapur, jeweils mindestens 5
+              Jahre ab Ende des betreffenden Geschäfts-/Steuerjahres -- NICHT die oft für
+              deutsche Unternehmen zitierten 10 Jahre nach HGB/AO, die hier nicht gelten. Ob die
+              Rechtsgrundlage dafür Art. 17 Abs. 3 Buchst. b oder e DSGVO ist (Buchst. b nennt
+              nur Union-/Mitgliedstaatenrecht, nicht ausdrücklich Drittstaatenrecht wie
+              singapurisches Recht), braucht anwaltliche Prüfung vor Livegang.
+            </Placeholder>
           </li>
           <li>
             <strong>Seitenaufruf-Rohdaten</strong> (siehe 2g): spätestens nach 90 Tagen zu
