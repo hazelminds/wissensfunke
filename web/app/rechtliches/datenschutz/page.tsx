@@ -164,12 +164,38 @@ export default function DatenschutzPage() {
         <h2>6. Speicherdauer</h2>
         <p>
           Wir speichern personenbezogene Daten nur so lange, wie es für den jeweiligen Zweck
-          erforderlich ist oder gesetzliche Aufbewahrungspflichten bestehen.{" "}
-          <Placeholder>
-            ZU ERGÄNZEN: konkrete Löschfristen je Datenkategorie (Konto nach Löschung, Kaufbelege
-            nach handels-/steuerrechtlichen Fristen, Logs nach X Tagen).
-          </Placeholder>
+          erforderlich ist oder gesetzliche Aufbewahrungspflichten bestehen. Das unterscheidet
+          sich deutlich danach, ob du etwas gekauft hast oder nicht:
         </p>
+        <ul>
+          <li>
+            <strong>Konto ohne Kauf:</strong> Wir löschen dein Konto und die zugehörigen Daten auf
+            Anfrage (über den Support-Bereich). Es gelten dafür keine gesetzlichen
+            Aufbewahrungsfristen.
+          </li>
+          <li>
+            <strong>Kaufbezogene Daten (Kaufreferenz, Betrag, Zeitpunkt, E-Mail, Nachweis zum
+            Widerrufsverzicht):</strong> Diese bewahren wir mindestens 5 Jahre auf, auch wenn du
+            dein Konto zwischenzeitlich löschen lässt — maßgeblich ist hier nicht deutsches,
+            sondern{" "}
+            <Placeholder>
+              singapurisches Recht, da Hazelminds Communications Pte. Ltd. eine singapurische
+              Gesellschaft ist: Section 199 Companies Act und das Einkommensteuerrecht verlangen
+              jeweils eine Aufbewahrung von mindestens 5 Jahren ab Ende des betreffenden
+              Geschäfts-/Steuerjahres (nicht die oft für deutsche Unternehmen zitierten 10 Jahre
+              nach HGB/AO) -- vor Livegang durch die Kanzlei/Steuerberatung bestätigen lassen.
+            </Placeholder>{" "}
+            Rechtsgrundlage für die Aufbewahrung trotz Löschwunsch: Art. 17 Abs. 3 Buchst. b DSGVO.
+          </li>
+          <li>
+            <strong>Seitenaufruf-Rohdaten</strong> (siehe 2g): spätestens nach 90 Tagen zu
+            anonymen Tages-Summen verdichtet, die Einzel-Zeilen werden danach gelöscht.
+          </li>
+          <li>
+            <strong>Spiel-Statistik</strong> (siehe 2e):{" "}
+            <Placeholder>noch keine feste Löschfrist definiert.</Placeholder>
+          </li>
+        </ul>
       </section>
 
       <section>
