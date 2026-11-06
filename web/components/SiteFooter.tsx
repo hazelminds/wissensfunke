@@ -70,8 +70,7 @@ export function SiteFooter() {
             <div>
               <p className="mb-3 font-semibold text-ink">Hinweis</p>
               <p className="leading-relaxed text-ink-soft">
-                Keine Beratung oder Diagnose. Ergebnisse sind Unterhaltung. Rechtstexte liegen als
-                Entwurf vor.
+                Keine Beratung oder Diagnose. Ergebnisse sind Unterhaltung.
               </p>
             </div>
           </div>
