@@ -71,6 +71,18 @@ export default function DatenschutzPage() {
           Betreff und Inhalt deiner Nachricht sowie den Antwortverlauf, um deine Anfrage zu
           bearbeiten. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.
         </p>
+        <h3>g) Anonyme Seitenaufruf-Statistik</h3>
+        <p>
+          Zur Verbesserung des Angebots erfassen wir Seitenaufrufe (aufgerufene Seite, verlinkende
+          Domain, Land laut technischem Edge-Header unseres Hosting-Anbieters, grober Gerätetyp).
+          Dabei werden weder Cookies gesetzt noch deine IP-Adresse gespeichert: für die Kennzahl
+          „eindeutige Besucher&quot; bilden wir stattdessen serverseitig einen Hash aus
+          Kalendertag, IP-Adresse und Browser-Kennung, der täglich wechselt und sich nicht auf
+          deine IP-Adresse zurückrechnen lässt — Besuche lassen sich damit nicht über mehrere Tage
+          hinweg zu einem Profil verknüpfen, vergleichbar mit datenschutzfreundlichen
+          Analyse-Tools wie Plausible. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes
+          Interesse an der Reichweitenmessung ohne dauerhaften Personenbezug).
+        </p>
       </section>
 
       <section>
@@ -132,9 +144,10 @@ export default function DatenschutzPage() {
         <p>
           Wir setzen technisch notwendige Cookies zur Anmeldeverwaltung (Session) sowie
           localStorage für den geräte-lokalen Streak-Fallback ohne Konto ein. Für die eigene
-          Spiel-Statistik (siehe 2e) werden keine Cookies gesetzt und kein lokaler Speicher
-          verwendet. Aktuell setzen wir keine Analyse- oder Werbe-Tracking-Cookies bzw. -Pixel ein
-          (z. B. kein Meta/Facebook-Pixel, kein Google Analytics).{" "}
+          Spiel- und Seitenaufruf-Statistik (siehe 2e und 2g) werden keine Cookies gesetzt und
+          kein lokaler Speicher verwendet. Aktuell setzen wir keine Analyse- oder
+          Werbe-Tracking-Cookies bzw. -Pixel ein (z. B. kein Meta/Facebook-Pixel, kein Google
+          Analytics).{" "}
           <Placeholder>
             ZU AKTUALISIEREN, sobald Analyse- oder Werbe-Tracking (z. B. Meta-Pixel) hinzukommt --
             dafür vorab eine Einwilligung per Cookie-Consent-Banner einholen (§ 25 TTDSG/TDDDG
