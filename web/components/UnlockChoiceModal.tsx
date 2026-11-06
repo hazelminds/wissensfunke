@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { formatPrice } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { usePlusModal } from "@/components/PlusModalProvider";
+import { UnlockPurchaseForm } from "@/components/UnlockPurchaseForm";
 
 /** Zwischenschritt beim Klick auf "Freischalten": Einzelkauf bleibt die
  * prominente Standardoption (bringt pro Runde mehr als ein Plus-Abo), Plus
@@ -80,11 +81,12 @@ export function UnlockChoiceModal({
               </span>
               <span className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</span>
             </div>
-            <form action={createUnlockCheckout.bind(null, quizSlug)}>
-              <button type="submit" className="btn-3d btn-3d-primary w-full py-3 text-[14px]">
-                Jetzt Insights freischalten
-              </button>
-            </form>
+            <UnlockPurchaseForm
+              action={createUnlockCheckout.bind(null, quizSlug)}
+              buttonClassName="btn-3d btn-3d-primary w-full py-3 text-[14px]"
+            >
+              Jetzt Insights freischalten
+            </UnlockPurchaseForm>
           </div>
 
           <div className="my-4 flex items-center gap-2.5 text-[10.5px] font-semibold text-muted">

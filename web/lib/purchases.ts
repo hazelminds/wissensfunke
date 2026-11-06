@@ -29,6 +29,7 @@ export async function upsertPurchase(input: UpsertPurchaseInput) {
       currency: input.currency ?? "eur",
       status: input.paid ? "paid" : "pending",
       paid_at: input.paid ? new Date().toISOString() : null,
+      widerruf_verzicht_bestaetigt_um: input.withdrawalWaiverAcceptedAt,
     },
     { onConflict: "provider,provider_reference" },
   );

@@ -15,6 +15,11 @@ export interface CheckoutRequest {
   cancelUrl: string;
   /** Eingeloggter Nutzer, falls vorhanden — verknüpft den Kauf dauerhaft mit dem Konto. */
   userId: string | null;
+  /** ISO-Zeitstempel, zu dem die Person im Checkout-Flow (vor der Weiterleitung
+   * zur Zahlungsseite) der vorzeitigen Vertragsausführung ausdrücklich
+   * zugestimmt und den Verlust ihres Widerrufsrechts zur Kenntnis genommen
+   * hat (§ 356 Abs. 5 BGB) — vom Server gesetzt, nicht vom Client übernommen. */
+  withdrawalWaiverAcceptedAt: string;
 }
 
 export interface CheckoutResult {
@@ -33,6 +38,9 @@ export interface PaymentVerification {
   userId: string | null;
   /** Zweite Referenz des Anbieters (z. B. Stripe payment_intent), falls vorhanden. */
   secondaryReference: string | null;
+  /** Aus der CheckoutRequest zurückgespiegelt (Anbieter speichert sie i. d. R.
+   * in ihren eigenen Metadaten) -- siehe CheckoutRequest.withdrawalWaiverAcceptedAt. */
+  withdrawalWaiverAcceptedAt: string | null;
 }
 
 export interface PaymentProvider {

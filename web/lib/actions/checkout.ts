@@ -34,6 +34,18 @@ export async function createUnlockCheckout(quizSlug: string, formData?: FormData
   if (typeof name === "string" && name) extraParams.set("name", name);
   const extraSuffix = extraParams.size > 0 ? `&${extraParams.toString()}` : "";
 
+  // § 356 Abs. 5 BGB: Widerrufsrecht erlischt bei digitalen Inhalten nur mit
+  // ausdrücklicher, dokumentierter Zustimmung zum vorzeitigen Vertragsbeginn
+  // + Kenntnis vom Verlust des Widerrufsrechts, bezogen auf GENAU diesen Kauf.
+  // Der Button im UI ist bis zum Anhaken serverseitig deaktiviert; dieser
+  // Check ist nur das Sicherheitsnetz, falls JS fehlt oder das Formular
+  // manipuliert wird. Der Zeitstempel kommt bewusst vom Server, nicht vom
+  // Client, damit er sich nicht fälschen lässt.
+  if (formData?.get("widerrufVerzicht") !== "on") {
+    redirect(`/quiz/${quizSlug}${extraParams.size > 0 ? `?${extraParams.toString()}` : ""}`);
+  }
+  const withdrawalWaiverAcceptedAt = new Date().toISOString();
+
   let redirectUrl: string;
   try {
     const result = await provider.createCheckout({
@@ -43,9 +55,7 @@ export async function createUnlockCheckout(quizSlug: string, formData?: FormData
       currency: "eur",
       title: `${unlockable.unlockTitle} — ${unlockable.title}`,
       description: "Einmalkauf, digitaler Inhalt, sofortiger Zugriff. Kein Abo.",
-      // § 356 Abs. 5 BGB: Widerrufsrecht erlischt bei digitalen Inhalten nur mit
-      // ausdrücklicher, dokumentierter Zustimmung — Checkbox/Consent-Text folgt,
-      // sobald die Rechtstexte stehen (siehe Briefing Abschnitt 8).
+      withdrawalWaiverAcceptedAt,
       // Anbieter hängen ihre eigene Referenz selbst an diese Basis-URL an
       // (Stripe z. B. per `{CHECKOUT_SESSION_ID}`-Templating) — siehe die
       // jeweilige createCheckout()-Implementierung in lib/payments/*.

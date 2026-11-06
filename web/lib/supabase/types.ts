@@ -21,6 +21,7 @@ export interface Database {
           status: "pending" | "paid" | "failed";
           created_at: string;
           paid_at: string | null;
+          widerruf_verzicht_bestaetigt_um: string | null;
         };
         Insert: {
           id?: string;
@@ -35,6 +36,7 @@ export interface Database {
           status?: "pending" | "paid" | "failed";
           created_at?: string;
           paid_at?: string | null;
+          widerruf_verzicht_bestaetigt_um?: string | null;
         };
         Update: {
           id?: string;
@@ -49,6 +51,7 @@ export interface Database {
           status?: "pending" | "paid" | "failed";
           created_at?: string;
           paid_at?: string | null;
+          widerruf_verzicht_bestaetigt_um?: string | null;
         };
         Relationships: [];
       };

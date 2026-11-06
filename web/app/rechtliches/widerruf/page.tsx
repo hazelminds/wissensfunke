@@ -64,12 +64,9 @@ export default function WiderrufPage() {
           </li>
         </ol>
         <p>
-          <Placeholder>
-            ZU BAUEN (noch nicht umgesetzt): Diese ausdrückliche Zustimmung + Kenntnisbestätigung
-            muss als aktive, dokumentierte Checkbox im Checkout-Flow eingeholt werden (siehe
-            Kommentar in lib/actions/checkout.ts) — ohne das ist die vorzeitige Erlöschung nicht
-            wirksam vereinbart und Käufer:innen behalten das volle 14-Tage-Widerrufsrecht.
-          </Placeholder>
+          Diese Zustimmung holst du beim Kauf über eine eigene, nicht vorangehakte Checkbox direkt
+          im Freischalten-Vorgang ein — ein bloßer Hinweis in dieser Belehrung würde dafür nicht
+          ausreichen.
         </p>
       </section>
 

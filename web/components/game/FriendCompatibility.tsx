@@ -15,6 +15,7 @@ import { formatPrice } from "@/content/quizzes";
 import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { logGameEventAction } from "@/lib/actions/analytics";
+import { UnlockPurchaseForm } from "@/components/UnlockPurchaseForm";
 
 type Screen = "start" | "quiz" | "share" | "compare";
 
@@ -355,20 +356,23 @@ export function FriendCompatibility({
             ✅ Freigeschaltet
           </p>
         ) : (
-          <div className="flex items-center justify-between gap-3.5">
+          <div className="flex flex-col gap-3">
             <div>
               <p className="font-display text-xl font-bold text-gold-dark">
                 {formatPrice(unlockPriceCents)}
               </p>
               <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
             </div>
-            <form action={createUnlockCheckout.bind(null, "freundes-kompatibilitaet")}>
-              {sharedCode && <input type="hidden" name="von" value={sharedCode} />}
-              {sharedName && <input type="hidden" name="name" value={sharedName} />}
-              <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
-                🔓 Freischalten
-              </button>
-            </form>
+            <UnlockPurchaseForm
+              action={createUnlockCheckout.bind(null, "freundes-kompatibilitaet")}
+              hiddenFields={{
+                ...(sharedCode ? { von: sharedCode } : {}),
+                ...(sharedName ? { name: sharedName } : {}),
+              }}
+              buttonClassName="btn-3d btn-3d-primary w-full px-5 py-3.5 text-[14.5px]"
+            >
+              🔓 Freischalten
+            </UnlockPurchaseForm>
           </div>
         )}
       </div>

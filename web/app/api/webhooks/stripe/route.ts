@@ -39,6 +39,7 @@ export async function POST(request: Request) {
         userId: session.metadata?.userId || null,
         secondaryReference:
           typeof session.payment_intent === "string" ? session.payment_intent : null,
+        withdrawalWaiverAcceptedAt: session.metadata?.widerrufVerzichtBestaetigtUm || null,
       });
     }
   }

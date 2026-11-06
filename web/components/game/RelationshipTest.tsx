@@ -16,6 +16,7 @@ import { createUnlockCheckout } from "@/lib/actions/checkout";
 import { incrementTodayPlayCount } from "@/lib/dailyCap";
 import { logGameEventAction } from "@/lib/actions/analytics";
 import { ResultShareCard } from "@/components/ResultShareCard";
+import { UnlockPurchaseForm } from "@/components/UnlockPurchaseForm";
 
 type Screen = "start" | "quiz" | "result";
 
@@ -270,18 +271,19 @@ export function RelationshipTest({
             ✅ Freigeschaltet
           </p>
         ) : (
-          <div className="flex items-center justify-between gap-3.5">
+          <div className="flex flex-col gap-3">
             <div>
               <p className="font-display text-xl font-bold text-gold-dark">
                 {formatPrice(unlockPriceCents)}
               </p>
               <p className="text-[10.5px] font-bold text-muted">EINMALIG · KEIN ABO</p>
             </div>
-            <form action={createUnlockCheckout.bind(null, "beziehungstyp")}>
-              <button type="submit" className="btn-3d btn-3d-primary px-5 py-3.5 text-[14.5px]">
-                🔓 Freischalten
-              </button>
-            </form>
+            <UnlockPurchaseForm
+              action={createUnlockCheckout.bind(null, "beziehungstyp")}
+              buttonClassName="btn-3d btn-3d-primary w-full px-5 py-3.5 text-[14.5px]"
+            >
+              🔓 Freischalten
+            </UnlockPurchaseForm>
           </div>
         )}
       </div>
