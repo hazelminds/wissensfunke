@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { getUnlockable } from "@/content/unlockables";
 import { getPaymentProvider, PaymentProviderNotConfiguredError } from "@/lib/payments";
 import { getCurrentUser } from "@/lib/auth";
@@ -39,12 +40,16 @@ export async function createUnlockCheckout(quizSlug: string, formData?: FormData
   // + Kenntnis vom Verlust des Widerrufsrechts, bezogen auf GENAU diesen Kauf.
   // Der Button im UI ist bis zum Anhaken serverseitig deaktiviert; dieser
   // Check ist nur das Sicherheitsnetz, falls JS fehlt oder das Formular
-  // manipuliert wird. Der Zeitstempel kommt bewusst vom Server, nicht vom
-  // Client, damit er sich nicht fälschen lässt.
+  // manipuliert wird. Zeitstempel + IP kommen bewusst vom Server, nicht vom
+  // Client, damit sie sich nicht fälschen lassen -- beides zusammen ist die
+  // Nachweis-Dokumentation für diesen einen Kauf, falls es mal Streit gibt.
   if (formData?.get("widerrufVerzicht") !== "on") {
     redirect(`/quiz/${quizSlug}${extraParams.size > 0 ? `?${extraParams.toString()}` : ""}`);
   }
   const withdrawalWaiverAcceptedAt = new Date().toISOString();
+  const h = await headers();
+  const forwardedFor = h.get("x-forwarded-for");
+  const withdrawalWaiverIp = forwardedFor ? forwardedFor.split(",")[0].trim() : h.get("x-real-ip");
 
   let redirectUrl: string;
   try {
@@ -56,6 +61,7 @@ export async function createUnlockCheckout(quizSlug: string, formData?: FormData
       title: `${unlockable.unlockTitle} — ${unlockable.title}`,
       description: "Einmalkauf, digitaler Inhalt, sofortiger Zugriff. Kein Abo.",
       withdrawalWaiverAcceptedAt,
+      withdrawalWaiverIp,
       // Anbieter hängen ihre eigene Referenz selbst an diese Basis-URL an
       // (Stripe z. B. per `{CHECKOUT_SESSION_ID}`-Templating) — siehe die
       // jeweilige createCheckout()-Implementierung in lib/payments/*.

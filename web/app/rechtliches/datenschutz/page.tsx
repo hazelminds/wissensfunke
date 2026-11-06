@@ -53,7 +53,11 @@ export default function DatenschutzPage() {
           Karten- oder sonstige Zahlungsdaten geben wir zu keinem Zeitpunkt selbst entgegen und
           speichern sie auch nicht: die eigentliche Zahlungsabwicklung findet ausschließlich beim
           Zahlungsdienstleister statt, wir erhalten im Anschluss lediglich eine
-          Zahlungsbestätigung. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.
+          Zahlungsbestätigung. Zusätzlich speichern wir zu jedem Kauf digitaler Inhalte
+          Zeitpunkt und IP-Adresse deiner Zustimmung, dass die Freischaltung sofort beginnt und du
+          dadurch dein Widerrufsrecht für diesen Kauf verlierst (§ 356 Abs. 5 BGB) — als Nachweis
+          für genau diese eine Erklärung, nicht zu Tracking-Zwecken. Rechtsgrundlage: Art. 6
+          Abs. 1 lit. b und c DSGVO (Vertragserfüllung bzw. Nachweispflicht).
         </p>
         <h3>e) Spiel-Nutzung (eigene Statistik)</h3>
         <p>

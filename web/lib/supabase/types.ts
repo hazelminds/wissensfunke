@@ -22,6 +22,7 @@ export interface Database {
           created_at: string;
           paid_at: string | null;
           widerruf_verzicht_bestaetigt_um: string | null;
+          widerruf_verzicht_ip: string | null;
         };
         Insert: {
           id?: string;
@@ -37,6 +38,7 @@ export interface Database {
           created_at?: string;
           paid_at?: string | null;
           widerruf_verzicht_bestaetigt_um?: string | null;
+          widerruf_verzicht_ip?: string | null;
         };
         Update: {
           id?: string;
@@ -52,6 +54,7 @@ export interface Database {
           created_at?: string;
           paid_at?: string | null;
           widerruf_verzicht_bestaetigt_um?: string | null;
+          widerruf_verzicht_ip?: string | null;
         };
         Relationships: [];
       };

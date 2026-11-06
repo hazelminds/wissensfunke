@@ -30,6 +30,7 @@ export async function upsertPurchase(input: UpsertPurchaseInput) {
       status: input.paid ? "paid" : "pending",
       paid_at: input.paid ? new Date().toISOString() : null,
       widerruf_verzicht_bestaetigt_um: input.withdrawalWaiverAcceptedAt,
+      widerruf_verzicht_ip: input.withdrawalWaiverIp,
     },
     { onConflict: "provider,provider_reference" },
   );

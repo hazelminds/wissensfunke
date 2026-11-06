@@ -20,6 +20,12 @@ export interface CheckoutRequest {
    * zugestimmt und den Verlust ihres Widerrufsrechts zur Kenntnis genommen
    * hat (§ 356 Abs. 5 BGB) — vom Server gesetzt, nicht vom Client übernommen. */
   withdrawalWaiverAcceptedAt: string;
+  /** IP-Adresse zum Zeitpunkt dieser Zustimmung (aus Request-Headern, nicht
+   * vom Client übernommen) -- gehört zur Nachweis-Dokumentation für genau
+   * diesen Kauf, anders als bei der anonymen Seitenaufruf-Statistik, wo
+   * bewusst keine IP gespeichert wird. null, wenn sich keine Client-IP aus
+   * den Headern ermitteln ließ. */
+  withdrawalWaiverIp: string | null;
 }
 
 export interface CheckoutResult {
@@ -41,6 +47,8 @@ export interface PaymentVerification {
   /** Aus der CheckoutRequest zurückgespiegelt (Anbieter speichert sie i. d. R.
    * in ihren eigenen Metadaten) -- siehe CheckoutRequest.withdrawalWaiverAcceptedAt. */
   withdrawalWaiverAcceptedAt: string | null;
+  /** Siehe CheckoutRequest.withdrawalWaiverIp. */
+  withdrawalWaiverIp: string | null;
 }
 
 export interface PaymentProvider {

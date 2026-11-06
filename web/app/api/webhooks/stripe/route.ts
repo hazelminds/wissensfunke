@@ -40,6 +40,7 @@ export async function POST(request: Request) {
         secondaryReference:
           typeof session.payment_intent === "string" ? session.payment_intent : null,
         withdrawalWaiverAcceptedAt: session.metadata?.widerrufVerzichtBestaetigtUm || null,
+        withdrawalWaiverIp: session.metadata?.widerrufVerzichtIp || null,
       });
     }
   }
