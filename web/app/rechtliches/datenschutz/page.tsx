@@ -175,18 +175,24 @@ export default function DatenschutzPage() {
           </li>
           <li>
             <strong>Kaufbezogene Daten (Kaufreferenz, Betrag, Zeitpunkt, E-Mail, Nachweis zum
-            Widerrufsverzicht):</strong> Diese bewahren wir so lange auf, wie es die am Sitz von
-            Hazelminds Communications Pte. Ltd. (Singapur) geltenden handels- und
-            steuerrechtlichen Aufbewahrungspflichten vorschreiben — auch wenn du dein Konto
-            zwischenzeitlich löschen lässt.{" "}
+            Widerrufsverzicht):</strong> Diese bewahren wir so lange auf, wie es zur
+            Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen erforderlich ist —
+            insbesondere, solange die am Sitz von Hazelminds Communications Pte. Ltd. (Singapur)
+            geltenden handels- und steuerrechtlichen Aufbewahrungspflichten laufen, auch wenn du
+            dein Konto zwischenzeitlich löschen lässt. Rechtsgrundlage: Art. 17 Abs. 3 Buchst. e
+            DSGVO.{" "}
             <Placeholder>
-              Intern zur Einordnung (nicht Teil der Kanzlei-Formulierung): nach aktuellem Stand
-              Section 199 Companies Act und Einkommensteuerrecht Singapur, jeweils mindestens 5
+              Intern zur Einordnung (nicht Teil der Kanzlei-Formulierung): bewusst über Buchst. e
+              (Rechtsansprüche) statt Buchst. b (Union-/Mitgliedstaatenrecht) begründet, weil
+              Buchst. b ein Drittstaaten-Recht wie das singapurische nicht eindeutig abdeckt --
+              Buchst. e braucht dafür keine bestimmte Rechtsordnung, nur eine nachvollziehbare
+              Notwendigkeit. Nach aktuellem Stand laufen die zugrundeliegenden singapurischen
+              Fristen (Section 199 Companies Act, Einkommensteuerrecht) jeweils mindestens 5
               Jahre ab Ende des betreffenden Geschäfts-/Steuerjahres -- NICHT die oft für
-              deutsche Unternehmen zitierten 10 Jahre nach HGB/AO, die hier nicht gelten. Ob die
-              Rechtsgrundlage dafür Art. 17 Abs. 3 Buchst. b oder e DSGVO ist (Buchst. b nennt
-              nur Union-/Mitgliedstaatenrecht, nicht ausdrücklich Drittstaatenrecht wie
-              singapurisches Recht), braucht anwaltliche Prüfung vor Livegang.
+              deutsche Unternehmen zitierten 10 Jahre nach HGB/AO, die hier nicht gelten. Beides
+              (Wahl von Buchst. e, konkrete Fristen) vor Livegang anwaltlich bestätigen lassen --
+              bis dahin bewusst als robustere, weniger eindeutig angreifbare Zwischenlösung so
+              stehen gelassen.
             </Placeholder>
           </li>
           <li>
