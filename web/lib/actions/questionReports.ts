@@ -7,6 +7,7 @@ import {
   reportQuestion,
   getQuestionReports,
   resolveQuestionReport,
+  reopenQuestionReport,
   type QuestionReportRow,
 } from "@/lib/questionReports";
 
@@ -42,5 +43,11 @@ export async function getQuestionReportsAction(): Promise<QuestionReportRow[]> {
 export async function resolveQuestionReportAction(id: string): Promise<void> {
   await requireAdmin();
   await resolveQuestionReport(id);
+  revalidatePath("/admin");
+}
+
+export async function reopenQuestionReportAction(id: string): Promise<void> {
+  await requireAdmin();
+  await reopenQuestionReport(id);
   revalidatePath("/admin");
 }

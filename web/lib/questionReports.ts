@@ -79,3 +79,11 @@ export async function resolveQuestionReport(id: string): Promise<void> {
     .update({ status: "resolved", resolved_at: new Date().toISOString() })
     .eq("id", id);
 }
+
+/** Falls sich eine als erledigt markierte Meldung doch noch als berechtigt
+ * herausstellt -- Daten (Grund, Fragentext, ...) bleiben beim Erledigen
+ * ohnehin erhalten, das hier macht sie nur wieder zur offenen Meldung. */
+export async function reopenQuestionReport(id: string): Promise<void> {
+  const supabase = getSupabaseAdmin();
+  await supabase.from("question_reports").update({ status: "open", resolved_at: null }).eq("id", id);
+}
