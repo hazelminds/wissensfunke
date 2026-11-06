@@ -10,8 +10,8 @@ export default function WiderrufPage() {
       <p>
         <Placeholder>
           Basiert auf der gesetzlichen Muster-Widerrufsbelehrung (Anlage 1 zu Art. 246a § 1 Abs. 2
-          EGBGB), angepasst für digitale Inhalte nach § 356 Abs. 5 BGB. Kontaktdaten unten
-          ergänzen und vor Livegang anwaltlich bestätigen lassen.
+          EGBGB), angepasst für digitale Inhalte nach § 356 Abs. 5 BGB. Vor Livegang anwaltlich
+          bestätigen lassen.
         </Placeholder>
       </p>
 
@@ -23,12 +23,9 @@ export default function WiderrufPage() {
           beträgt vierzehn Tage ab dem Tag des Vertragsschlusses.
         </p>
         <p>
-          Um dein Widerrufsrecht auszuüben, musst du uns —{" "}
-          <Placeholder>
-            Hazelminds Communications Pte. Ltd., 1 North Bridge Road, #B1-35, High Street Centre,
-            Singapore 179094, Telefon: ZU ERGÄNZEN, E-Mail: ZU ERGÄNZEN
-          </Placeholder>{" "}
-          — mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine
+          Um dein Widerrufsrecht auszuüben, musst du uns — Hazelminds Communications Pte. Ltd.,
+          1 North Bridge Road, #B1-35, High Street Centre, Singapore 179094, E-Mail:
+          info@noggl.games — mittels einer eindeutigen Erklärung (z. B. ein mit der Post versandter Brief oder eine
           E-Mail) über deinen Entschluss, diesen Vertrag zu widerrufen, informieren. Du kannst
           dafür das untenstehende Muster-Widerrufsformular verwenden, das jedoch nicht
           vorgeschrieben ist.
@@ -83,7 +80,8 @@ export default function WiderrufPage() {
           zurücksenden.)
         </p>
         <p>
-          An <Placeholder>Hazelminds Communications Pte. Ltd., Adresse/E-Mail wie oben</Placeholder>:
+          An Hazelminds Communications Pte. Ltd., 1 North Bridge Road, #B1-35, High Street
+          Centre, Singapore 179094, E-Mail: info@noggl.games:
         </p>
         <p>
           Hiermit widerrufe(n) ich/wir den von mir/uns abgeschlossenen Vertrag über den Kauf der
