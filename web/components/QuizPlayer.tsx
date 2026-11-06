@@ -577,6 +577,8 @@ function ResultScreen({
                       {q.options[q.correctIndex]}
                     </p>
                     <p className="text-muted">{q.explanation}</p>
+                  </div>
+                  <div className="mt-2 ml-[34px]">
                     <ReportQuestionButton quizSlug={quiz.slug} questionText={q.question} />
                   </div>
                 </div>
