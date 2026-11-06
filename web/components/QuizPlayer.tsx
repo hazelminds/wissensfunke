@@ -21,6 +21,7 @@ import { HighscoreCelebration } from "@/components/HighscoreCelebration";
 import { ChallengeBanner, ChallengeCompare } from "@/components/ChallengeCompare";
 import { ChallengeButton } from "@/components/ChallengeButton";
 import { UnlockChoiceModal } from "@/components/UnlockChoiceModal";
+import { ReportQuestionButton } from "@/components/ReportQuestionButton";
 
 type Screen = "start" | "quiz" | "result";
 type Answer = { category: string; correct: boolean; selectedIndex: number };
@@ -445,8 +446,9 @@ function QuizScreen({
       </div>
 
       {answered && !deferredReveal && (
-        <div className="rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-ink">
+        <div className="flex flex-col gap-2 rounded-xl bg-primary-soft p-4 text-sm leading-relaxed text-ink">
           {question.explanation}
+          <ReportQuestionButton quizSlug={quiz.slug} questionText={question.question} />
         </div>
       )}
 
@@ -575,6 +577,7 @@ function ResultScreen({
                       {q.options[q.correctIndex]}
                     </p>
                     <p className="text-muted">{q.explanation}</p>
+                    <ReportQuestionButton quizSlug={quiz.slug} questionText={q.question} />
                   </div>
                 </div>
               );

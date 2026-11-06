@@ -382,6 +382,39 @@ export interface Database {
         };
         Relationships: [];
       };
+      question_reports: {
+        Row: {
+          id: string;
+          quiz_slug: string;
+          question_text: string;
+          reason: string | null;
+          user_id: string | null;
+          status: "open" | "resolved";
+          created_at: string;
+          resolved_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          quiz_slug: string;
+          question_text: string;
+          reason?: string | null;
+          user_id?: string | null;
+          status?: "open" | "resolved";
+          created_at?: string;
+          resolved_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          quiz_slug?: string;
+          question_text?: string;
+          reason?: string | null;
+          user_id?: string | null;
+          status?: "open" | "resolved";
+          created_at?: string;
+          resolved_at?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
