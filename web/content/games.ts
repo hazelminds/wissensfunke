@@ -35,6 +35,7 @@ export interface GameModule {
     | "memory"
     | "colorconnect"
     | "timeline"
+    | "colorsort"
     | "psych-result"
     | "psych-compat"
     | "psych-generic";
@@ -244,6 +245,48 @@ export const games: GameModule[] = [
     difficulty: "hard",
     isPremium: true,
     sortOrder: 71,
+  },
+  {
+    slug: "farben-sortieren-leicht",
+    title: "Farben sortieren Leicht",
+    teaser: "Gieße die Flaschen um, bis jede Farbe allein in ihrer eigenen Flasche landet -- 5 Farben.",
+    emoji: "🧪",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 2,
+    type: "puzzle",
+    variant: "colorsort",
+    difficulty: "easy",
+    isPremium: false,
+    sortOrder: 72,
+  },
+  {
+    slug: "farben-sortieren-mittel",
+    title: "Farben sortieren Mittel",
+    teaser: "Acht Farben, mehr Flaschen -- der Überblick wird knapper.",
+    emoji: "🧪",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 4,
+    type: "puzzle",
+    variant: "colorsort",
+    difficulty: "medium",
+    isPremium: false,
+    sortOrder: 73,
+  },
+  {
+    slug: "farben-sortieren-schwer",
+    title: "Farben sortieren Schwer",
+    teaser: "Elf Farben auf engem Raum -- für echte Sortier-Profis.",
+    emoji: "🧪",
+    category: "Logik",
+    level: "subscriber-only",
+    estMinutes: 7,
+    type: "puzzle",
+    variant: "colorsort",
+    difficulty: "hard",
+    isPremium: true,
+    sortOrder: 74,
   },
   {
     slug: "kreuzwortraetsel-leicht",
