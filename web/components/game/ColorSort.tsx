@@ -46,6 +46,31 @@ function fmtTime(s: number): string {
   return `${m}:${sec.toString().padStart(2, "0")}`;
 }
 
+// Kleine Farb-Helfer fürs Glas-Leuchten -- jede Flüssigkeits-Schicht kriegt
+// einen Verlauf von hell (oben, wie ein Lichtreflex) zu dunkel (unten),
+// plus ein Umgebungsleuchten in der jeweils obersten Farbe der Flasche.
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+}
+function mix(hex: string, target: [number, number, number], amt: number): string {
+  const [r, g, b] = hexToRgb(hex);
+  const [tr, tg, tb] = target;
+  const nr = Math.round(r + (tr - r) * amt);
+  const ng = Math.round(g + (tg - g) * amt);
+  const nb = Math.round(b + (tb - b) * amt);
+  return `rgb(${nr}, ${ng}, ${nb})`;
+}
+const lighten = (hex: string, amt: number) => mix(hex, [255, 255, 255], amt);
+const darken = (hex: string, amt: number) => mix(hex, [0, 0, 0], amt);
+function rgba(hex: string, alpha: number): string {
+  const [r, g, b] = hexToRgb(hex);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+const METAL_GRADIENT = "linear-gradient(135deg,#8a8f98,#e8ecf1 30%,#5c6270 55%,#d7dbe2 75%,#6b707c)";
+const METAL_CAP_GRADIENT = "linear-gradient(135deg,#9aa1ad,#f1f4f8 35%,#5b616d 55%,#e3e7ec 75%,#7a818d)";
+
 export function ColorSort({
   slug,
   title,
@@ -179,32 +204,81 @@ export function ColorSort({
       </div>
 
       <div className="relative">
-        <div className="hairline mx-auto flex max-w-[560px] flex-wrap items-end justify-center gap-3 rounded-2xl bg-surface p-6">
+        <div className="hairline mx-auto flex max-w-[560px] flex-wrap items-end justify-center gap-3.5 rounded-2xl bg-surface p-6">
           {tubes.map((tube, i) => {
             const isSelected = selected === i;
             const emptySlots = capacity - tube.length;
+            const topHex = tube.length ? puzzle.colors[tube[tube.length - 1]] : null;
+            const frameGlow = isSelected
+              ? "0 10px 22px -6px hsl(var(--primary) / 0.55), 0 0 0 2px hsl(var(--primary) / 0.9)"
+              : topHex
+                ? `0 6px 14px -6px rgba(0,0,0,.55), 0 0 16px -5px ${rgba(topHex, 0.45)}`
+                : "0 6px 14px -6px rgba(0,0,0,.4)";
             return (
               <button
                 key={i}
                 onClick={() => onTubeClick(i)}
-                className="flex flex-col-reverse overflow-hidden rounded-b-xl rounded-t-md border-2 bg-bg/40 transition-transform"
-                style={{
-                  width: size.width,
-                  height: size.segment * capacity + 6,
-                  borderColor: isSelected ? "hsl(var(--primary))" : "hsl(var(--border))",
-                  transform: isSelected ? "translateY(-10px)" : "none",
-                  boxShadow: isSelected ? "0 6px 14px -4px hsl(var(--primary) / 0.5)" : "none",
-                }}
+                className="flex flex-col items-center bg-transparent transition-transform"
+                style={{ transform: isSelected ? "translateY(-10px)" : "none" }}
               >
-                {tube.map((colorIdx, segIdx) => (
+                {/* Metallischer Verschluss */}
+                <div
+                  className="relative z-10 -mb-px"
+                  style={{
+                    width: size.width * 0.52,
+                    height: 9,
+                    borderRadius: "4px 4px 1px 1px",
+                    background: METAL_CAP_GRADIENT,
+                    boxShadow: "0 1px 2px rgba(0,0,0,.4)",
+                  }}
+                />
+                {/* Metallrahmen */}
+                <div
+                  style={{
+                    width: size.width,
+                    padding: 3,
+                    borderRadius: "11px 11px 26px 26px",
+                    background: METAL_GRADIENT,
+                    boxShadow: frameGlow,
+                  }}
+                >
+                  {/* Glas-Innenraum mit glänzend verlaufender Füllung */}
                   <div
-                    key={segIdx}
-                    style={{ height: size.segment, backgroundColor: puzzle.colors[colorIdx] }}
-                  />
-                ))}
-                {Array.from({ length: emptySlots }).map((_, idx) => (
-                  <div key={`empty-${idx}`} style={{ height: size.segment }} />
-                ))}
+                    className="relative flex flex-col-reverse overflow-hidden"
+                    style={{
+                      width: "100%",
+                      height: size.segment * capacity,
+                      borderRadius: "9px 9px 23px 23px",
+                      background:
+                        "linear-gradient(180deg, hsla(0,0%,100%,.08), hsla(0,0%,100%,.015)), hsl(255 24% 9%)",
+                    }}
+                  >
+                    <div
+                      className="pointer-events-none absolute left-1.5 rounded-full"
+                      style={{
+                        top: 6,
+                        bottom: 8,
+                        width: 4,
+                        background: "linear-gradient(180deg, hsla(0,0%,100%,.35), hsla(0,0%,100%,.03))",
+                      }}
+                    />
+                    {tube.map((colorIdx, segIdx) => {
+                      const hex = puzzle.colors[colorIdx];
+                      return (
+                        <div
+                          key={segIdx}
+                          style={{
+                            height: size.segment,
+                            background: `linear-gradient(180deg, ${lighten(hex, 0.32)}, ${hex} 55%, ${darken(hex, 0.22)})`,
+                          }}
+                        />
+                      );
+                    })}
+                    {Array.from({ length: emptySlots }).map((_, idx) => (
+                      <div key={`empty-${idx}`} style={{ height: size.segment }} />
+                    ))}
+                  </div>
+                </div>
               </button>
             );
           })}
