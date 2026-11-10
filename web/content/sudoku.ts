@@ -26,7 +26,7 @@ export interface SudokuLayout {
 }
 
 export const LAYOUTS: Record<SudokuDifficulty, SudokuLayout> = {
-  easy: { targetGivens: 38 },
+  easy: { targetGivens: 46 },
   medium: { targetGivens: 30 },
   hard: { targetGivens: 24 },
 };
