@@ -36,6 +36,7 @@ export interface GameModule {
     | "colorconnect"
     | "timeline"
     | "colorsort"
+    | "sudoku"
     | "psych-result"
     | "psych-compat"
     | "psych-generic";
@@ -287,6 +288,48 @@ export const games: GameModule[] = [
     difficulty: "hard",
     isPremium: true,
     sortOrder: 74,
+  },
+  {
+    slug: "sudoku-leicht",
+    title: "Sudoku Leicht",
+    teaser: "Der Klassiker -- jede Zahl nur einmal pro Zeile, Spalte und Block.",
+    emoji: "🔢",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 6,
+    type: "puzzle",
+    variant: "sudoku",
+    difficulty: "easy",
+    isPremium: false,
+    sortOrder: 75,
+  },
+  {
+    slug: "sudoku-mittel",
+    title: "Sudoku Mittel",
+    teaser: "Weniger Vorgaben, mehr Kopfrechnen.",
+    emoji: "🔢",
+    category: "Logik",
+    level: "weekly-freemium",
+    estMinutes: 9,
+    type: "puzzle",
+    variant: "sudoku",
+    difficulty: "medium",
+    isPremium: false,
+    sortOrder: 76,
+  },
+  {
+    slug: "sudoku-schwer",
+    title: "Sudoku Schwer",
+    teaser: "Nur noch das Nötigste vorgegeben -- für geübte Löser:innen.",
+    emoji: "🔢",
+    category: "Logik",
+    level: "subscriber-only",
+    estMinutes: 14,
+    type: "puzzle",
+    variant: "sudoku",
+    difficulty: "hard",
+    isPremium: true,
+    sortOrder: 77,
   },
   {
     slug: "kreuzwortraetsel-leicht",
