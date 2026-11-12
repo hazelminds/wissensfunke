@@ -96,12 +96,20 @@ export async function SiteHeader({
               </form>
             </>
           ) : (
-            <Link
-              href="/login"
-              className="hairline hidden items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface sm:inline-flex"
-            >
-              <LogIn className="h-4 w-4" /> Anmelden
-            </Link>
+            <>
+              <Link
+                href="/registrieren"
+                className="hidden text-sm font-semibold text-ink-soft transition hover:text-ink sm:inline"
+              >
+                Registrieren
+              </Link>
+              <Link
+                href="/login"
+                className="hairline hidden items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-ink transition hover:bg-surface sm:inline-flex"
+              >
+                <LogIn className="h-4 w-4" /> Anmelden
+              </Link>
+            </>
           )}
           <NavbarMobileMenu isLoggedIn={!!user} username={username} isAdmin={isAdmin} />
         </div>

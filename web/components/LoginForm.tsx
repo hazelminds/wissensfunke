@@ -39,7 +39,8 @@ export function LoginForm() {
         {pending ? "Sende Link …" : "Anmelde-Link senden"}
       </button>
       <p className="text-center text-[12px] text-muted">
-        Kein Passwort nötig — wir schicken dir einen Login-Link per E-Mail.
+        Kein Passwort nötig — wir schicken dir einen Login-Link per E-Mail. Noch kein Konto? Wird beim
+        ersten Mal automatisch für dich angelegt.
       </p>
     </form>
   );

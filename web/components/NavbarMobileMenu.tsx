@@ -73,13 +73,22 @@ export function NavbarMobileMenu({
               <UserIcon className="h-4 w-4" /> {username || "Konto"}
             </Link>
           ) : (
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="hairline mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold text-ink"
-            >
-              <LogIn className="h-4 w-4" /> Anmelden
-            </Link>
+            <>
+              <Link
+                href="/login"
+                onClick={() => setOpen(false)}
+                className="hairline mt-2 inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-semibold text-ink"
+              >
+                <LogIn className="h-4 w-4" /> Anmelden
+              </Link>
+              <Link
+                href="/registrieren"
+                onClick={() => setOpen(false)}
+                className="mt-1 py-2 text-center text-sm font-semibold text-ink-soft hover:text-ink"
+              >
+                Noch kein Konto? Registrieren
+              </Link>
+            </>
           )}
         </nav>
       )}
