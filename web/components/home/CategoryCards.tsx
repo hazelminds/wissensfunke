@@ -9,11 +9,14 @@ const categories: {
   icon: typeof Brain;
   free: string;
   plus: string;
-  /** Überschreibt gameTypeMeta[id].label nur für diese Startseiten-Kachel --
-   * "Puzzle" deckt inzwischen auch Wörter-/Ratespiele ab, soll aber (noch)
-   * nicht überall umbenannt werden (Kategorie-Seite, Admin-Tabelle, ...
-   * bleiben vorerst bei gameTypeMeta.label). */
+  /** Überschreibt gameTypeMeta[id].label/.description nur für diese
+   * Startseiten-Kachel -- "Puzzle" deckt inzwischen vor allem Logikspiele
+   * ab (Sudoku, Farbverbinden, Farben sortieren, Schiebepuzzle, Memory --
+   * 16 von 26 Spielen der Kategorie), soll aber (noch) nicht überall
+   * umbenannt werden (Kategorie-Seite, Admin-Tabelle, ... bleiben vorerst
+   * bei gameTypeMeta.label/.description). */
   label?: string;
+  description?: string;
 }[] = [
   { id: "quiz", icon: Brain, free: "5 Fragen pro Runde", plus: "30+ Fragen & Themenspecials" },
   {
@@ -21,7 +24,8 @@ const categories: {
     icon: Puzzle,
     free: "Tagesrätsel & 3 Starter",
     plus: "Erweiterte Rätsel-Sets",
-    label: "Puzzle & Rätsel",
+    label: "Logik & Rätsel",
+    description: "Sudoku, Farbverbinden & Kreuzworträtsel — zum Knobeln zwischendurch.",
   },
   {
     id: "psych",
@@ -75,7 +79,7 @@ export function CategoryCards() {
                 {c.label ?? meta.label}
               </h3>
               <p className="relative mt-2 text-sm leading-relaxed text-ink-soft">
-                {meta.description}
+                {c.description ?? meta.description}
               </p>
 
               <div className="relative mt-5 space-y-2.5">
