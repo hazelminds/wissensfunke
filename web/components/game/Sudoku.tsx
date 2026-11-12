@@ -126,7 +126,7 @@ export function Sudoku({
   const enterDigit = (digit: number) => {
     if (solved || selected === null) return;
     if (puzzle.puzzle[selected] !== 0) return; // vorgegebene Zelle, nicht editierbar
-    if (digit !== 0 && grid[selected] !== puzzle.solution[selected]) {
+    if (digit !== 0 && digit !== puzzle.solution[selected]) {
       setMistakes((m) => m + 1);
     }
     setGrid((prev) => {
