@@ -1,10 +1,14 @@
+import "server-only";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
 /**
  * Service-Role-Client — umgeht RLS. NUR in vertrauenswürdigem Server-Code
  * verwenden (Webhook-Handler, Server Actions), nie an den Browser
- * durchreichen. Lazy, aus demselben Grund wie lib/stripe.ts.
+ * durchreichen. Lazy, aus demselben Grund wie lib/stripe.ts. Der
+ * `server-only`-Import lässt den Build hart fehlschlagen, falls diese
+ * Datei je aus Versehen in Client-Code importiert wird -- genau wie bei
+ * lib/stripe.ts und lib/payments/*.ts.
  */
 let cached: ReturnType<typeof createSupabaseClient<Database>> | null = null;
 
