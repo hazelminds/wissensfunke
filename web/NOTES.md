@@ -56,3 +56,30 @@ berücksichtigt werden müssen. Wird automatisch über `CLAUDE.md` geladen.
   Supabase-Projekts ist noch nicht bekannt/bestätigt -- für die Datenschutzerklärung
   (app/rechtliches/datenschutz/page.tsx, Abschnitt 4) noch nachzutragen, sobald Tania das im
   Supabase-Dashboard (Project Settings → General) nachschaut.
+
+## Sicherheit -- Dashboard-Checkliste vor Domain-Umzug/Livegang
+
+Code-seitige Sicherheitsprüfung im November 2026 gemacht (RLS-Lücke bei `announcements`
+geschlossen, Server-Action für Scores gegen gefälschte Fantasie-Highscores abgesichert,
+Next.js auf 16.4.6 gehoben, Abhängigkeiten gepatcht -- alles bereits erledigt und live).
+Folgende Punkte kann nur Tania selbst prüfen (Dashboard-Einstellungen, kein Code) --
+**bei Gelegenheit, spätestens aber zusammen mit dem Umzug auf noggl.games aktiv ansprechen:**
+
+- **Supabase → Authentication → Policies:** "Leaked password protection" (prüft neue Passwörter
+  gegen bekannte Datenlecks) aktivieren, falls noch nicht an.
+- **Supabase → Authentication → Rate Limits:** Standardwerte für E-Mail-Versand (Magic Link/
+  Passwort-Reset) reichen meist, aber einmal gegenchecken -- verhindert, dass jemand ein fremdes
+  Postfach mit Anmelde-Mails flutet.
+- **Supabase → Authentication → URL Configuration:** beim Domain-Umzug nur die echte Domain
+  (`https://noggl.games/auth/callback`) + ggf. noch localhost für Tests eintragen, keine alten/
+  überflüssigen Adressen stehen lassen (siehe auch README-Hinweis dazu).
+- **Vercel → Project Settings → Environment Variables:** Secrets (`SUPABASE_SERVICE_ROLE_KEY`,
+  `STRIPE_SECRET_KEY`/`STRIPE_WEBHOOK_SECRET`, `MICROPAYMENT_*`) nur für "Production" gesetzt
+  lassen, nicht versehentlich auch für "Preview" (Preview-URLs sind weniger kontrolliert/teils
+  erratbar).
+- **2FA auf den eigenen Zugängen:** Supabase-Dashboard-Login und Vercel-Account selbst mit
+  Zwei-Faktor-Login absichern, falls noch nicht geschehen -- das sind die "Generalschlüssel" zu
+  allem.
+- Geprüft und bereits unauffällig: kein echter Schlüssel/Secret ist je in der Git-Historie
+  gelandet (nur leere Platzhalter in `.env.example`), `.gitignore` schützt `.env*`-Dateien
+  korrekt.
