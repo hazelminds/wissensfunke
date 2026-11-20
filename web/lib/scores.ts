@@ -14,6 +14,40 @@ export interface SubmitScoreResult {
   previousBest: number | null;
 }
 
+/** Oberste Grenze je Kategorie, großzügig über dem höchsten real erreichbaren
+ * Wert der jeweiligen Spiel-Formeln -- rein zur Plausibilitätsprüfung, kein
+ * Ersatz für eine echte Neuberechnung der jeweiligen Spiel-Formel serverseitig
+ * (die würde jede einzelne Formel hier duplizieren). Verhindert nur das
+ * Offensichtlichste: ein frei erfundener Fantasie-Highscore über die
+ * Server-Action direkt, ohne je zu spielen.
+ *
+ * Quiz: (richtig/gesamt)*500, Max. 500.
+ * Puzzle: höchste bekannte Formel ist Zeitstrahl Schwer (53 Karten im Deck
+ * bei poolSize 55, siehe content/timeline.ts) mit Karten*120 + 400 Bonus,
+ * also bis zu 6760 -- alle anderen Spiele (Memory/Schiebepuzzle bis 2500,
+ * Farbverbinden/Farben sortieren bis 2200, Sudoku bis 2000, Crossword/
+ * WhoAmI bis 1000) liegen klar darunter. */
+const MAX_POINTS_BY_CATEGORY: Record<ScoreCategory, number> = {
+  quiz: 600,
+  puzzle: 8000,
+};
+
+const NOOP_RESULT: SubmitScoreResult = { isNewBest: false, previousBest: null };
+
+function isPlausibleScore(
+  category: ScoreCategory,
+  slug: string,
+  points: number,
+  timeSeconds: number,
+  moves: number | null,
+): boolean {
+  if (!games.some((g) => g.slug === slug)) return false;
+  if (!Number.isFinite(points) || points < 0 || points > MAX_POINTS_BY_CATEGORY[category]) return false;
+  if (!Number.isFinite(timeSeconds) || timeSeconds < 0 || timeSeconds > 86400) return false;
+  if (moves !== null && (!Number.isFinite(moves) || moves < 0)) return false;
+  return true;
+}
+
 /** Eine Zeile pro abgeschlossener Runde -- nur für eingeloggte Nutzer:innen
  * (Gäste haben keine dauerhafte Identität, die auf einer Bestenliste Sinn
  * ergäbe). Wird für jede Runde geschrieben, unabhängig vom Plus-Status --
@@ -32,7 +66,12 @@ export async function submitScore(
   timeSeconds: number,
   moves: number | null,
 ): Promise<SubmitScoreResult> {
-  if (!isSupabaseConfigured()) return { isNewBest: false, previousBest: null };
+  if (!isSupabaseConfigured()) return NOOP_RESULT;
+  // Server-seitige Plausibilitätsprüfung -- die Werte kommen vom Client
+  // (dort wird die Punktzahl berechnet), eine manipulierte Anfrage direkt an
+  // diese Server-Action könnte sonst beliebige Fantasie-Highscores in die
+  // Bestenliste schreiben.
+  if (!isPlausibleScore(category, slug, points, timeSeconds, moves)) return NOOP_RESULT;
   const supabase = getSupabaseAdmin();
 
   const { data: priorRows } = await supabase
